@@ -20,6 +20,11 @@ private val DarkColorScheme = darkColorScheme(
 //    primary = Purple80,
 //    secondary = PurpleGrey80,
 //    tertiary = Pink80
+    primary = mainBlue,
+    secondary = skyBlue,
+    tertiary = lightYellow,
+    surface = Color.White,
+    onSurface = Color.Black
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -60,7 +65,7 @@ fun WhaleTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = mainBlue.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

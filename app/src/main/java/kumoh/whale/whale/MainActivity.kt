@@ -28,12 +28,16 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun test(){
+    Text("테스트")
+}
 
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     WhaleTheme {
-
+        test()
     }
 }
