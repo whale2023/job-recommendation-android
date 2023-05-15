@@ -46,8 +46,8 @@ import kumoh.whale.whale.R
 import kumoh.whale.whale.signup.SignUpActivity
 import kumoh.whale.whale.ui.theme.Shapes
 import kumoh.whale.whale.ui.theme.WhaleTheme
-import kumoh.whale.whale.ui.theme.mainBlue
-import kumoh.whale.whale.ui.theme.skyBlue
+import kumoh.whale.whale.ui.theme.color.mainBlue
+import kumoh.whale.whale.ui.theme.color.skyBlue
 
 class LoginActivity : ComponentActivity() {
 
