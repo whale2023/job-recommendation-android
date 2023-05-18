@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -41,16 +42,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kgb.plum.presentation.R
+import kgb.plum.presentation.viewmodel.ExViewModel
 import kgb.plum.presentation.viewmodel.LoginViewModel
 import kumoh.whale.whale.ui.theme.Shapes
 import kumoh.whale.whale.ui.theme.WhaleTheme
 import kumoh.whale.whale.ui.theme.colors
 
+@AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
+
+    private val viewModel : ExViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println(viewModel.getUserInfo().toString())
         setContent {
             WhaleTheme {
                 // A surface container using the 'background' color from the theme
