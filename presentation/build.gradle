@@ -1,25 +1,20 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
 
 android {
-    namespace 'kumoh.whale.whale'
+    namespace 'kgb.plum.presentation'
     compileSdk 33
 
     defaultConfig {
-        applicationId "kumoh.whale.whale"
         minSdk 28
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -41,24 +36,15 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.3'
     }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
 }
 
 dependencies {
-
     //reference
     implementation project(":domain")
-    implementation project(":data")
-    implementation project(":presentation")
 
     //Hilt 의존성
     implementation "com.google.dagger:hilt-android:$dagger_version"
     kapt "com.google.dagger:hilt-android-compiler:$dagger_version"
-
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
