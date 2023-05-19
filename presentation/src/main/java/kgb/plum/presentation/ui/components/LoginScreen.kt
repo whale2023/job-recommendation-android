@@ -35,8 +35,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import kgb.plum.domain.model.state.LoginState
 import kgb.plum.presentation.R
+import kgb.plum.presentation.model.Screen
 import kgb.plum.presentation.util.ShowToast
 import kgb.plum.presentation.viewmodel.LoginViewModel
 import kumoh.whale.whale.ui.theme.Shapes
@@ -45,8 +49,9 @@ import kumoh.whale.whale.ui.theme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = viewModel()){
+fun LoginScreen(navController : NavHostController){
     val context = LocalContext.current
+    val loginViewModel = hiltViewModel<LoginViewModel>()
     Surface {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,7 +91,13 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()){
             Spacer(modifier = Modifier.size(20.dp))
             Button(
                 onClick = {
-                    ShowToast(context, loginViewModel.login().state())
+                    val state = loginViewModel.login()
+                    ShowToast(context, state.state())
+                    if(state == LoginState.SUCCESS){
+                        navController.navigate(Screen.Main.name){
+                            popUpTo(Screen.Login.name) { inclusive = true }
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -103,18 +114,10 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()){
                 style = TextStyle(textDecoration = TextDecoration.Underline),
                 color = Color.Gray,
                 modifier = Modifier.clickable {
-
+                    navController.navigate(Screen.SignUp.name)
                 }
             )
             Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    WhaleTheme {
-        LoginScreen()
     }
 }
