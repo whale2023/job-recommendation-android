@@ -1,13 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
+package kgb.plum.presentation.ui.components
 
-package kumoh.whale.whale.login
-
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -32,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -42,40 +36,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dagger.hilt.android.AndroidEntryPoint
 import kgb.plum.presentation.R
-import kgb.plum.presentation.viewmodel.ExViewModel
+import kgb.plum.presentation.util.ShowToast
 import kgb.plum.presentation.viewmodel.LoginViewModel
 import kumoh.whale.whale.ui.theme.Shapes
 import kumoh.whale.whale.ui.theme.WhaleTheme
 import kumoh.whale.whale.ui.theme.colors
 
-@AndroidEntryPoint
-class LoginActivity : ComponentActivity() {
-
-    private val viewModel : ExViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        println(viewModel.getUserInfo().toString())
-        setContent {
-            WhaleTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    LoginScreen()
-                }
-            }
-        }
-    }
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
-    loginViewModel: LoginViewModel = viewModel()
-){
+fun LoginScreen(loginViewModel: LoginViewModel = viewModel()){
+    val context = LocalContext.current
     Surface {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,7 +67,7 @@ fun LoginScreen(
                 onValueChange = { id ->
                     loginViewModel.setId(id)
                 },
-                label = {Text("Email")},
+                label = { Text("Email") },
                 singleLine = true,
                 colors = TextFieldDefaults.outlinedTextFieldColors(unfocusedBorderColor = MaterialTheme.colors.primary, focusedBorderColor = MaterialTheme.colors.background),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -104,7 +75,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.size(12.dp))
             OutlinedTextField(
                 colors = TextFieldDefaults.outlinedTextFieldColors(unfocusedBorderColor = MaterialTheme.colors.primary, focusedBorderColor = MaterialTheme.colors.background),
-                label = {Text("PW")},
+                label = { Text("PW") },
                 value = loginViewModel.pw.observeAsState(initial = "").value,
                 onValueChange = { pw ->
                     loginViewModel.setPw(pw)
@@ -115,7 +86,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.size(20.dp))
             Button(
                 onClick = {
-                    loginViewModel.isLogin
+                    ShowToast(context, loginViewModel.login().state())
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.5f)

@@ -5,7 +5,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kgb.plum.data.repository.ExRepositoryImpl
+import kgb.plum.data.repository.LoginRepositoryImpl
 import kgb.plum.domain.repository.ExRepository
+import kgb.plum.domain.repository.LoginRepository
 import javax.inject.Singleton
 
 @Module
@@ -15,4 +17,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindExRepository(exRepositoryImpl: ExRepositoryImpl) : ExRepository
+
+    @Binds
+    @Singleton
+    fun bindLoginRepository(loginRepositoryImpl: LoginRepositoryImpl) : LoginRepository
 }
