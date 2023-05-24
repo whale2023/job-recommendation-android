@@ -1,7 +1,6 @@
 package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -22,24 +19,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kgb.plum.domain.model.state.LoginState
 import kgb.plum.presentation.R
 import kgb.plum.presentation.model.Screen
+import kgb.plum.presentation.ui.common.buttons.PrimaryButton
+import kgb.plum.presentation.ui.common.buttons.UnderlinedButton
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.LoginViewModel
-import kumoh.whale.whale.ui.theme.Shapes
+import kumoh.whale.whale.ui.theme.WhaleTheme
 import kumoh.whale.whale.ui.theme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,7 +81,7 @@ fun LoginScreen(navController : NavHostController){
                 singleLine = true
             )
             Spacer(modifier = Modifier.size(20.dp))
-            Button(
+            PrimaryButton(
                 onClick = {
                     val state = loginViewModel.login()
                     showToast(context, state.state())
@@ -97,22 +94,26 @@ fun LoginScreen(navController : NavHostController){
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.primary),
-                shape = Shapes.medium
-            ) {
-                Text(text = stringResource(id = R.string.sign_in_with_email))
-            }
-            Spacer(modifier = Modifier.fillMaxHeight(0.08f))
-            Text(
+                id = R.string.sign_in_with_email
+            )
+            UnderlinedButton(
                 text = stringResource(id = R.string.sign_up),
-                fontSize = 20.sp,
-                style = TextStyle(textDecoration = TextDecoration.Underline),
-                color = Color.Gray,
-                modifier = Modifier.clickable {
-                    navController.navigate(Screen.SignUp.name)
+                modifier = Modifier.fillMaxWidth(0.7f),
+                onClick = {
+                    navController.navigate(Screen.SignUp.name){
+                        popUpTo(Screen.Login.name) { inclusive = true }
+                    }
                 }
             )
             Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         }
+    }
+}
+
+@Preview
+@Composable
+fun LoginScreenPreview(){
+    WhaleTheme {
+        LoginScreen(navController = rememberNavController())
     }
 }
