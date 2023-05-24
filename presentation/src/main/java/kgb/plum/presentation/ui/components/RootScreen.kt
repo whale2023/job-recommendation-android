@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.Screen
+import kgb.plum.presentation.ui.components.signup.SignUpScreen
 import kumoh.whale.whale.ui.theme.colors
 
 @Composable
@@ -15,15 +16,16 @@ fun RootScreen(){
     val navController = rememberNavController()
     NavHost(
         navController = navController,
+        modifier = Modifier.background(MaterialTheme.colors.background),
         startDestination = Screen.Login.name) {
         composable(Screen.Login.name) {
            LoginScreen(navController = navController)
         }
         composable(Screen.SignUp.name) {
-            SignUpScreen()
+            SignUpScreen(navController = navController)
         }
         composable(Screen.Main.name) {
-            MainScreen()
+            MainScreen(navController = navController)
         }
     }
 }

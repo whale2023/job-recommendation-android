@@ -23,6 +23,7 @@ fun PrimaryButton(
     modifier : Modifier = Modifier,
     text: String = "",
     @StringRes id: Int? = null,
+    state: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
@@ -34,7 +35,8 @@ fun PrimaryButton(
             contentColor = MaterialTheme.colors.onPrimary,
             disabledContainerColor = MaterialTheme.colors.background,
             disabledContentColor = MaterialTheme.colors.onBackground
-        )
+        ),
+        enabled = state
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
