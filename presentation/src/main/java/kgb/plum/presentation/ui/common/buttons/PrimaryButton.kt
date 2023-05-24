@@ -1,4 +1,4 @@
-package kgb.plum.presentation.ui.common
+package kgb.plum.presentation.ui.common.buttons
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import kumoh.whale.whale.ui.theme.Padding
 import kumoh.whale.whale.ui.theme.WhaleTheme
 import kumoh.whale.whale.ui.theme.colors
-import kumoh.whale.whale.ui.theme.underlineDisplay
 
 @Composable
-fun UnderlinedButton(
+fun PrimaryButton(
     modifier : Modifier = Modifier,
     text: String = "",
     @StringRes id: Int? = null,
@@ -31,10 +30,10 @@ fun UnderlinedButton(
         shape = MaterialTheme.shapes.large,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colors.surface,
-            contentColor = MaterialTheme.colors.textFiledBackgroundVariant,
+            containerColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary,
             disabledContainerColor = MaterialTheme.colors.background,
-            disabledContentColor = MaterialTheme.colors.disabledSecondary
+            disabledContentColor = MaterialTheme.colors.onBackground
         )
     ) {
         Row(
@@ -43,7 +42,7 @@ fun UnderlinedButton(
         ){
             Text(
                 text = id?.let { stringResource(id = id) } ?: text,
-                style = MaterialTheme.typography.underlineDisplay,
+                style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(Padding.small)
             )
         }
@@ -52,8 +51,8 @@ fun UnderlinedButton(
 
 @Preview
 @Composable
-fun UnderlinedButtonPreview() {
+fun PrimaryButtonPreview() {
     WhaleTheme {
-        UnderlinedButton(text = "로그인 하기") {}
+        PrimaryButton(text = "로그인 하기") {}
     }
 }

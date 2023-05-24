@@ -1,4 +1,4 @@
-package kgb.plum.presentation.ui.common
+package kgb.plum.presentation.ui.common.buttons
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
@@ -48,7 +48,7 @@ fun SecondaryButton(
         ){
             Text(
                 text = id?.let { stringResource(id = id) } ?: text,
-                style = MaterialTheme.typography.displayMedium,
+                style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(Padding.small)
             )
         }

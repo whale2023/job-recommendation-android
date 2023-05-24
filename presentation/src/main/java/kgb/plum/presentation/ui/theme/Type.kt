@@ -88,5 +88,5 @@ val Typography = Typography(
 val Typography.underlineDisplay: TextStyle
     @Composable get() = displayMedium.copy(
         textDecoration = TextDecoration.Underline,
-        fontSize = 20.sp
+        fontSize = 18.sp
     )
