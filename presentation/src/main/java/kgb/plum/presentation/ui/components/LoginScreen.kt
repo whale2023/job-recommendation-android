@@ -1,7 +1,5 @@
 package kgb.plum.presentation.ui.components
 
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -32,19 +30,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import kgb.plum.domain.model.state.LoginState
 import kgb.plum.presentation.R
 import kgb.plum.presentation.model.Screen
-import kgb.plum.presentation.util.ShowToast
+import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.LoginViewModel
 import kumoh.whale.whale.ui.theme.Shapes
-import kumoh.whale.whale.ui.theme.WhaleTheme
 import kumoh.whale.whale.ui.theme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,7 +87,7 @@ fun LoginScreen(navController : NavHostController){
             Button(
                 onClick = {
                     val state = loginViewModel.login()
-                    ShowToast(context, state.state())
+                    showToast(context, state.state())
                     if(state == LoginState.SUCCESS){
                         navController.navigate(Screen.Main.name){
                             popUpTo(Screen.Login.name) { inclusive = true }

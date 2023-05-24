@@ -34,7 +34,8 @@ sealed class ColorSet {
                 error = Red400,
                 tertiary = LightPurple,
                 onTertiary = Black
-            )
+            ),
+            textFiledBackgroundVariant = Grey500
         )
     }
 }
