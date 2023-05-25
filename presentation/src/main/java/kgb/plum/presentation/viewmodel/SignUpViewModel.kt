@@ -53,4 +53,12 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     fun setCertificationNumber(text: String) {
         _certificationNumber.value = text
     }
+
+    fun setPw(text: String) {
+        _pw.value = text
+    }
+
+    fun setPwCheck(text: String) {
+        _pwCheck.value = text
+    }
 }
