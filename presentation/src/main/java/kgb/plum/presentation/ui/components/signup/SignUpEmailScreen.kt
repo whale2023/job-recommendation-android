@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.SignUpScreen
 import kgb.plum.presentation.ui.common.buttons.PrimaryButton
+import kgb.plum.presentation.ui.common.buttons.SecondaryButton
 import kgb.plum.presentation.viewmodel.SignUpViewModel
 import kumoh.whale.whale.ui.theme.Padding
 import kumoh.whale.whale.ui.theme.WhaleTheme
@@ -99,7 +100,7 @@ fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewMod
                         Spacer(modifier = Modifier.size(24.dp))
                         Row(
                         ) {
-                            PrimaryButton (
+                            SecondaryButton (
                                 text = "인증 재요청",
                                 onClick = {
 
