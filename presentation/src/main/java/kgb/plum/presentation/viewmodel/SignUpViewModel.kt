@@ -61,4 +61,12 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     fun setPwCheck(text: String) {
         _pwCheck.value = text
     }
+
+    fun setDisabilityType(text: String) {
+        _disabilityType.value = text
+    }
+
+    fun setDisabilityLevel(text: String) {
+        _disabilityLevel.value = text
+    }
 }

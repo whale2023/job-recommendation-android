@@ -53,7 +53,7 @@ fun SignUpScreen(navController: NavHostController){
                 SignUpPasswordScreen(navController = signUpNavController, viewModel = signUpViewModel)
             }
             composable(route = SignUpScreen.DisabilityInfo.name){
-                SignUpUserDisabilityInfoScreen(navController = signUpNavController, viewModel = signUpViewModel)
+                SignUpUserDisabilityInfoScreen(navController = navController, viewModel = signUpViewModel)
             }
         }
     }
