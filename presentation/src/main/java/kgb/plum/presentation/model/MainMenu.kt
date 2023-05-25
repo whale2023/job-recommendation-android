@@ -4,9 +4,9 @@ import androidx.annotation.DrawableRes
 import kgb.plum.presentation.R
 
 sealed class MainMenu(val name: String, @DrawableRes val res: Int) {
-    object Home: MainMenu(name = "home", res = R.drawable.home)
-    object Domain: MainMenu(name = "domain", res = R.drawable.domain)
-    object Recommend: MainMenu(name = "recommend", res = R.drawable.thumb_up)
-    object WishList: MainMenu(name = "wishList", res = R.drawable.clober)
-    object MyPage: MainMenu(name = "myPage", res = R.drawable.person)
+    object Home: MainMenu(name = "홈", res = R.drawable.home)
+    object Domain: MainMenu(name = "채용정보", res = R.drawable.domain)
+    object Recommend: MainMenu(name = "추천", res = R.drawable.thumb_up)
+    object WishList: MainMenu(name = "위시리스트", res = R.drawable.clober)
+    object MyPage: MainMenu(name = "마이페이지", res = R.drawable.person)
 }

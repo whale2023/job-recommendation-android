@@ -1,6 +1,8 @@
 package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -14,10 +16,13 @@ import kgb.plum.presentation.model.MainMenu
 import kumoh.whale.whale.ui.theme.WhaleTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import kumoh.whale.whale.ui.theme.colors
@@ -58,13 +63,20 @@ fun MainNavigationBar(navController: NavHostController) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(painterResource(id = item.res), item.name)
+                        Icon(
+                            painter = painterResource(id = item.res),
+                            contentDescription = item.name,
+                            modifier = Modifier.size(36.dp),
+                            tint = if(currentRoute == item.name) MaterialTheme.colors.surface else MaterialTheme.colors.primary
+                        )
                         Text(
                             text = item.name,
-                            color = MaterialTheme.colors.primary
+                            color = if(currentRoute == item.name) MaterialTheme.colors.surface else MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
                 },
+                colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colors.primary),
                 selected = currentRoute == item.name,
                 onClick = {
                     navController.navigate(item.name) {
