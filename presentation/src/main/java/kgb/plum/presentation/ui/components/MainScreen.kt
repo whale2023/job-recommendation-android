@@ -1,6 +1,7 @@
 package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import kumoh.whale.whale.ui.theme.Padding
 import kumoh.whale.whale.ui.theme.colors
+import kumoh.whale.whale.ui.theme.menuSmall
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +75,14 @@ fun MainNavigationBar(navController: NavHostController) {
                         Text(
                             text = item.name,
                             color = if(currentRoute == item.name) MaterialTheme.colors.surface else MaterialTheme.colors.primary,
-                            style = MaterialTheme.typography.labelMedium
+                            style = when(item.name) {
+                                MainMenu.WishList.name, MainMenu.MyPage.name -> {
+                                    MaterialTheme.typography.menuSmall
+                                }
+                                else ->{
+                                    MaterialTheme.typography.labelMedium
+                                }
+                            }
                         )
                     }
                 },
@@ -98,19 +108,19 @@ fun MainNavigationBar(navController: NavHostController) {
 fun MainNavigationScreen(navController : NavHostController) {
     NavHost(navController = navController, startDestination = MainMenu.Home.name) {
         composable(route = MainMenu.Home.name){
-            Text("This is Main")
+            HomeScreen()
         }
         composable(route = MainMenu.Domain.name){
             Text("This is Category")
         }
         composable(route = MainMenu.Recommend.name){
-            Text("This is MyPage")
+            RecommendScreen()
         }
         composable(route = MainMenu.WishList.name){
-            Text("This is MyPage")
+            WishListScreen()
         }
         composable(route = MainMenu.MyPage.name){
-            Text("This is MyPage")
+            MyPageScreen()
         }
     }
 }

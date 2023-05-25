@@ -90,3 +90,8 @@ val Typography.underlineDisplay: TextStyle
         textDecoration = TextDecoration.Underline,
         fontSize = 18.sp
     )
+
+val Typography.menuSmall: TextStyle
+    @Composable get() = labelMedium.copy(
+        fontSize = 11.sp
+    )
