@@ -69,4 +69,16 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
     fun setDisabilityLevel(text: String) {
         _disabilityLevel.value = text
     }
+
+    fun setAddressInfo(text: String) {
+        _addressInfo.value = text
+    }
+
+    fun setAddressDetail(text: String) {
+        _addressDetail.value = text
+    }
+
+    fun checkUserInfoValid() : Boolean {
+        return (_name.value.isNullOrEmpty() || _age.value.isNullOrEmpty() || _addressInfo.value.isNullOrEmpty() || _addressDetail.value.isNullOrEmpty()).not()
+    }
 }
