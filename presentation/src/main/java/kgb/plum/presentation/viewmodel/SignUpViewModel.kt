@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kgb.plum.domain.usecase.SignUpUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): ViewModel() {
+class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCase): ViewModel() {
     private val _email = MutableLiveData("")
     val email: LiveData<String> = _email
 
@@ -80,5 +81,21 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
 
     fun checkUserInfoValid() : Boolean {
         return (_name.value.isNullOrEmpty() || _age.value.isNullOrEmpty() || _addressInfo.value.isNullOrEmpty() || _addressDetail.value.isNullOrEmpty()).not()
+    }
+
+    fun emailValid() : Boolean {
+        return signUpUseCase.checkEmailFormat(_email.value?:"") && _email.value.isNullOrEmpty().not()
+    }
+
+    fun certificationNumberValid() : Boolean {
+        return _certificationNumber.value.isNullOrEmpty().not()
+    }
+
+    fun checkEmailFormat() : String {
+        return if(signUpUseCase.checkEmailFormat(_email.value?:"")) "" else "이메일 양식이 잘못되었습니다."
+    }
+
+    fun requestCertificationNumber() {
+        signUpUseCase.requestCertificationNumber(_email.value?: "")
     }
 }

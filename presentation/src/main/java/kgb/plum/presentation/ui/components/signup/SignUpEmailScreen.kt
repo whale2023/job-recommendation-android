@@ -66,8 +66,12 @@ fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewMod
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth(0.9f)
         )
-        Spacer(modifier = Modifier.size(24.dp))
-
+        Text(
+            text = viewModel.checkEmailFormat(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colors.onError,
+            textAlign = TextAlign.Left
+        )
         Crossfade(targetState = checkEmail) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -78,11 +82,12 @@ fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewMod
                             text = "이메일 인증하기",
                             onClick = {
                                 checkEmail = true
+                                viewModel.requestCertificationNumber()
                             },
                             modifier = Modifier
                                 .height(56.dp)
                                 .fillMaxWidth(0.9f)
-                            , state = !(viewModel.email.observeAsState().value.isNullOrEmpty())
+                            , state = viewModel.emailValid()
                         )
                     }
                     true -> {
@@ -103,7 +108,7 @@ fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewMod
                             SecondaryButton (
                                 text = "인증 재요청",
                                 onClick = {
-
+                                    viewModel.requestCertificationNumber()
                                 },
                                 modifier = Modifier
                                     .height(56.dp)
@@ -118,7 +123,7 @@ fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewMod
                                 modifier = Modifier
                                     .height(56.dp)
                                     .width(150.dp)
-                                , state = !(viewModel.certificationNumber.observeAsState().value.isNullOrEmpty())
+                                , state = viewModel.certificationNumberValid()
                             )
                         }
                     }

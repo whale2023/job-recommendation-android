@@ -16,6 +16,7 @@ val Grey900 = Color(0xFF151515)
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 val Red400 = Color(0xFFFF5258)
+val Red  = Color(0xFFFF0000)
 
 sealed class ColorSet {
     open lateinit var LightColors: WhaleColors
@@ -33,9 +34,10 @@ sealed class ColorSet {
                 onBackground = Black,
                 error = Red400,
                 tertiary = LightPurple,
-                onTertiary = Black
+                onTertiary = Black,
+                onError = Red
             ),
-            textFiledBackgroundVariant = Grey500
+            textFiledBackgroundVariant = Grey500,
         )
     }
 }

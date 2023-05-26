@@ -1,9 +1,7 @@
 package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import kumoh.whale.whale.ui.theme.Padding
 import kumoh.whale.whale.ui.theme.colors
 import kumoh.whale.whale.ui.theme.menuSmall
 
