@@ -98,4 +98,8 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     fun requestCertificationNumber() {
         signUpUseCase.requestCertificationNumber(_email.value?: "")
     }
+
+    fun requestCertification() : Boolean{
+        return signUpUseCase.requestCertification(_certificationNumber.value ?: "")
+    }
 }

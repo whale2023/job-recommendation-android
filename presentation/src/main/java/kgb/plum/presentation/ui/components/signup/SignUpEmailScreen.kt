@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.SignUpScreen
 import kgb.plum.presentation.ui.common.buttons.PrimaryButton
 import kgb.plum.presentation.ui.common.buttons.SecondaryButton
+import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.SignUpViewModel
 import kumoh.whale.whale.ui.theme.Padding
 import kumoh.whale.whale.ui.theme.WhaleTheme
@@ -42,6 +44,7 @@ import kumoh.whale.whale.ui.theme.colors
 @Composable
 fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewModel){
     var checkEmail by remember { mutableStateOf(false)}
+    val context = LocalContext.current
     Column(
         modifier = Modifier.padding(Padding.large),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -118,7 +121,11 @@ fun SignUpEmailScreen(navController: NavHostController, viewModel: SignUpViewMod
                             PrimaryButton (
                                 text = "다음",
                                 onClick = {
-                                    navController.navigate(SignUpScreen.PasswordInfo.name)
+                                    if(viewModel.requestCertification()){
+                                        navController.navigate(SignUpScreen.PasswordInfo.name)
+                                    } else {
+                                        showToast(context, "유효하지 않은 인증번호입니다.")
+                                    }
                                 },
                                 modifier = Modifier
                                     .height(56.dp)
