@@ -95,3 +95,7 @@ val Typography.menuSmall: TextStyle
     @Composable get() = labelMedium.copy(
         fontSize = 11.sp
     )
+val Typography.nameMedium: TextStyle
+    @Composable get() = headlineSmall.copy(
+        fontSize = 20.sp
+    )
