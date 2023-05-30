@@ -10,6 +10,12 @@ class SignUpUseCase @Inject constructor(private val signUpRepository: SignUpRepo
         return emailRegex.matches(email)
     }
 
+    fun checkPasswordFormat(pw: String): Boolean {
+        val pwRegex = Regex("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%&*])[a-zA-Z0-9!@#$%&*]{8,15}$")
+
+        return pwRegex.matches(pw)
+    }
+
     fun requestCertificationNumber(email: String) {
         signUpRepository.requestCertificationNumber(email)
     }

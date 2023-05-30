@@ -91,8 +91,20 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         return _certificationNumber.value.isNullOrEmpty().not()
     }
 
+    fun passwordValid() : Boolean {
+        return signUpUseCase.checkPasswordFormat(_pw.value?:"") && _pw.value==_pwCheck.value
+    }
+
     fun checkEmailFormat() : String {
         return if(signUpUseCase.checkEmailFormat(_email.value?:"")) "" else "이메일 양식이 잘못되었습니다."
+    }
+
+    fun checkPasswordFormat(): String {
+        return if(signUpUseCase.checkPasswordFormat(_pw.value?:"")) "" else "영문, 특수문자, 숫자를 포함한 8~15자를 사용해주세요."
+    }
+
+    fun checkPasswordSame() : String {
+        return if(_pw.value == _pwCheck.value) "" else "비밀번호가 일치하지 않습니다."
     }
 
     fun requestCertificationNumber() {

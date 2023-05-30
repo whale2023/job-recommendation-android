@@ -67,6 +67,12 @@ fun SignUpPasswordScreen(navController: NavHostController, viewModel: SignUpView
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(0.9f)
         )
+        Text(
+            text = viewModel.checkPasswordFormat(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colors.onError,
+            textAlign = TextAlign.Left
+        )
         Spacer(modifier = Modifier.size(24.dp))
         OutlinedTextField(
             value = viewModel.pwCheck.observeAsState(initial = "").value,
@@ -80,6 +86,12 @@ fun SignUpPasswordScreen(navController: NavHostController, viewModel: SignUpView
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(0.9f)
         )
+        Text(
+            text = viewModel.checkPasswordSame(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colors.onError,
+            textAlign = TextAlign.Left
+        )
         Spacer(modifier = Modifier.size(24.dp))
         PrimaryButton (
             text = "다음",
@@ -89,7 +101,7 @@ fun SignUpPasswordScreen(navController: NavHostController, viewModel: SignUpView
             modifier = Modifier
                 .height(56.dp)
                 .fillMaxWidth(0.9f)
-            , state = true//TODO("패스워드 양식 및 일치 확인")
+            , state = viewModel.passwordValid()
         )
     }
 }
