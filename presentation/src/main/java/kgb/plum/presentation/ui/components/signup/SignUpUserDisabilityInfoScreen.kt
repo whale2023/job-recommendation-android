@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,6 +43,7 @@ import kumoh.whale.whale.ui.theme.WhaleTheme
 import kumoh.whale.whale.ui.theme.colors
 import kgb.plum.domain.model.disabilityType
 import kgb.plum.presentation.model.Screen
+import kgb.plum.presentation.util.showToast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +52,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
     var selectedTypeItem by remember { mutableStateOf(disabilityType[0])}
     var expandedLevel by remember { mutableStateOf(false)}
     var selectedLevelItem by remember { mutableStateOf(disabilityLevel[0])}
+    val context = LocalContext.current
     Column(
         modifier = Modifier.padding(Padding.large),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -152,7 +155,19 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
         PrimaryButton (
             text = "회원가입 완료",
             onClick = {
-                navController.navigate(Screen.Login.name)
+                val result = viewModel.signUp()
+                when(result) {
+                    200 -> {
+                        navController.navigate(Screen.Login.name)
+                        showToast (context, "회원가입 완료!! 환영합니다.")
+                    }
+                    400 -> {
+                        showToast (context, "이미 가입된 회원입니다.")
+                    }
+                    404 -> {
+                        showToast (context, "회원가입 오류. 잠시후 다시 시도해주세요")
+                    }
+                }
             },
             modifier = Modifier
                 .height(56.dp)

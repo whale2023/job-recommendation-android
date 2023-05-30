@@ -13,4 +13,18 @@ class SignUpRepositoryImpl @Inject constructor() : SignUpRepository {
         return true
         //TODO("인증 요청")
     }
+
+    override fun signUp(
+        email: String,
+        pw: String,
+        name: String,
+        disabilityType: String,
+        disabilityLevel: String,
+        age: String,
+        addressInfo: String,
+        addressDetail: String
+    ): Int {
+        return 200
+        //TODO("회원가입 요청")
+    }
 }

@@ -23,4 +23,8 @@ class SignUpUseCase @Inject constructor(private val signUpRepository: SignUpRepo
     fun requestCertification(number: String) : Boolean{
         return signUpRepository.requestCertification(number)
     }
+
+    fun signUp(email: String, pw: String, name: String, disabilityType: String, disabilityLevel: String, age: String, addressInfo: String, addressDetail: String) : Int{
+        return signUpRepository.signUp(email, pw, name, disabilityType, disabilityLevel, age, addressInfo, addressDetail)
+    }
 }
