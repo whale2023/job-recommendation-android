@@ -1,24 +1,16 @@
-package kumoh.whale.whale
+package kgb.plum.presentation
 
 import android.os.Bundle
 import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kgb.plum.presentation.ui.components.LoginScreen
 import kgb.plum.presentation.ui.components.RootScreen
-import kumoh.whale.whale.ui.theme.WhaleTheme
+import kgb.plum.presentation.ui.theme.WhaleTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

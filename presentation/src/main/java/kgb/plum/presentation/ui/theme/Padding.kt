@@ -1,4 +1,4 @@
-package kumoh.whale.whale.ui.theme
+package kgb.plum.presentation.ui.theme
 
 import androidx.compose.ui.unit.dp
 

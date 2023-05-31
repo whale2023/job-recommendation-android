@@ -1,4 +1,4 @@
-package kumoh.whale.whale.ui.theme
+package kgb.plum.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -9,7 +9,6 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -20,10 +19,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import kumoh.whale.whale.ui.theme.color.ColorSet
-import kumoh.whale.whale.ui.theme.color.LightYellow
-import kumoh.whale.whale.ui.theme.color.MainBlue
-import kumoh.whale.whale.ui.theme.color.SkyBlue
+import kgb.plum.presentation.ui.theme.color.ColorSet
+import kgb.plum.presentation.ui.theme.color.LightYellow
+import kgb.plum.presentation.ui.theme.color.MainBlue
+import kgb.plum.presentation.ui.theme.color.SkyBlue
 import kumoh.whale.whale.ui.theme.color.WhaleColors
 
 private val DarkColorScheme = darkColorScheme(
