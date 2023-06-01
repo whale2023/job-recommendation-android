@@ -1,4 +1,4 @@
-package kumoh.whale.whale.ui.commons
+package kgb.plum.presentation.ui.common
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*

@@ -1,4 +1,4 @@
-package kumoh.whale.whale.recruit
+package kgb.plum.presentation.ui.components.recruit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,14 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kumoh.whale.whale.model.entity.RecruitEntity
-import kumoh.whale.whale.ui.commons.TagItem
-import kumoh.whale.whale.ui.theme.WhaleTheme
+import kgb.plum.domain.model.RecruitModel
+import kgb.plum.presentation.ui.common.TagItem
 
 @Composable
 fun RecruitListItem(
   modifier: Modifier = Modifier,
-  recruitEntity: RecruitEntity,
+  recruitModel: RecruitModel,
   onWishChange: () -> Unit,
 ) {
   Card(
@@ -77,18 +76,18 @@ fun RecruitListItem(
         horizontalAlignment = Alignment.Start,
       ) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-          items(items = recruitEntity.tag) {
+          items(items = recruitModel.tag) {
             TagItem(tag = it, backgroundColor = Color(0xFFF9F9F9))
           }
         }
         Text(
-          text = recruitEntity.title,
+          text = recruitModel.title,
           fontSize = 18.sp,
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold
         )
         Text(
-          text = recruitEntity.company,
+          text = recruitModel.company,
           color = Color(0xFF9E9E9E),
           textAlign = TextAlign.Center,
         )
@@ -98,7 +97,7 @@ fun RecruitListItem(
           .size(30.dp)
           .padding(end = 10.dp)
       ) {
-        Icon(if (recruitEntity.isWished) Icons.Rounded.Cake else Icons.Outlined.Cake, "Title Icon")
+        Icon(if (recruitModel.isWished) Icons.Rounded.Cake else Icons.Outlined.Cake, "Title Icon")
       }
     }
   }
@@ -108,19 +107,17 @@ fun RecruitListItem(
 @Composable
 fun PreviewWidget() {
   var isWished by remember { mutableStateOf(false) }
-  WhaleTheme {
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-      RecruitListItem(
-        recruitEntity = RecruitEntity(
-          title = "Title",
-          company = "Company",
-          tag = listOf("Tag", "Tag", "Tag"),
-          isWished = isWished,
-        ),
-        onWishChange = {
-          isWished = !isWished
-        },
-      )
-    }
+  Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    RecruitListItem(
+      recruitModel = RecruitModel(
+        title = "Title",
+        company = "Company",
+        tag = listOf("Tag", "Tag", "Tag"),
+        isWished = isWished,
+      ),
+      onWishChange = {
+        isWished = !isWished
+      },
+    )
   }
 }

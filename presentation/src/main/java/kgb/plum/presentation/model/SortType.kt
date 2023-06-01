@@ -1,4 +1,4 @@
-package kumoh.whale.whale.recruit
+package kgb.plum.presentation.model
 
 enum class SortType {
   NEWEST {

@@ -1,4 +1,4 @@
-package kumoh.whale.whale.ui.commons
+package kgb.plum.presentation.ui.common
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -30,6 +30,7 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
