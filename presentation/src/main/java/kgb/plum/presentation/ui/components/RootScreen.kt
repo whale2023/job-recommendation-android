@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.Screen
 import kgb.plum.presentation.ui.components.signup.SignUpScreen
-import kumoh.whale.whale.ui.theme.colors
+import kgb.plum.presentation.ui.theme.colors
 
 @Composable
 fun RootScreen(){

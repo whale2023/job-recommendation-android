@@ -1,4 +1,4 @@
-package kumoh.whale.whale.ui.theme.color
+package kgb.plum.presentation.ui.theme.color
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
@@ -14,6 +14,7 @@ data class WhaleColors(
     val disabledSecondary: Color = material.secondary.copy(alpha = 0.5f),
     val textFiledBackground: Color = Color.LightGray,
     val textFiledBackgroundVariant: Color = Color.DarkGray,
+    val textSubColor: Color = Color(0xFF9E9E9E),
     val launcherScreenBackground: Color = material.primary,
     val progressItemColor: Color = Color.Black
 ) {

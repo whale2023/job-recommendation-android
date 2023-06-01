@@ -1,4 +1,4 @@
-package kumoh.whale.whale.ui.theme.color
+package kgb.plum.presentation.ui.theme.color
 
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color

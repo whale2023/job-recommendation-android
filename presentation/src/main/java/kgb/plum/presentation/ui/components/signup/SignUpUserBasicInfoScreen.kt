@@ -20,20 +20,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import kgb.plum.domain.model.AddressInfo
-import kgb.plum.presentation.R
 import kgb.plum.presentation.model.SignUpScreen
 import kgb.plum.presentation.ui.common.buttons.PrimaryButton
 import kgb.plum.presentation.ui.common.webview.SearchAddressScreen
 import kgb.plum.presentation.viewmodel.SignUpViewModel
-import kumoh.whale.whale.ui.theme.Padding
-import kumoh.whale.whale.ui.theme.colors
+import kgb.plum.presentation.ui.theme.Padding
+import kgb.plum.presentation.ui.theme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

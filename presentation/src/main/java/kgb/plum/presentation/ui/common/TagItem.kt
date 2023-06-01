@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kgb.plum.presentation.ui.theme.Padding
+import kgb.plum.presentation.ui.theme.Shapes
+import kgb.plum.presentation.ui.theme.colors
 
 @Composable
 fun TagItem(
@@ -23,15 +27,15 @@ fun TagItem(
   Box(
     modifier = modifier
       .wrapContentSize()
-      .clip(RoundedCornerShape(50.dp))
+      .clip(Shapes.extraLarge)
       .background(color = backgroundColor),
   ) {
     Text(
       text = tag,
-      color = Color(0xFF9E9E9E),
+      color = MaterialTheme.colors.textSubColor,
       textAlign = TextAlign.Center,
       fontWeight = FontWeight.Bold,
-      modifier = Modifier.padding(horizontal = 10.dp, vertical = 1.dp),
+      modifier = Modifier.padding(horizontal = Padding.medium, vertical = Padding.xSmall),
     )
   }
 }

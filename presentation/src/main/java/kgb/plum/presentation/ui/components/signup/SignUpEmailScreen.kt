@@ -36,9 +36,9 @@ import kgb.plum.presentation.ui.common.buttons.PrimaryButton
 import kgb.plum.presentation.ui.common.buttons.SecondaryButton
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.SignUpViewModel
-import kumoh.whale.whale.ui.theme.Padding
-import kumoh.whale.whale.ui.theme.WhaleTheme
-import kumoh.whale.whale.ui.theme.colors
+import kgb.plum.presentation.ui.theme.Padding
+import kgb.plum.presentation.ui.theme.WhaleTheme
+import kgb.plum.presentation.ui.theme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

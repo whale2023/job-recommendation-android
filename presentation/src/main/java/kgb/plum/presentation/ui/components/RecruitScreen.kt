@@ -22,15 +22,17 @@ import kgb.plum.presentation.viewmodel.RecruitViewModel
 @Composable
 fun RecruitScreen() {
   val viewModel = hiltViewModel<RecruitViewModel>()
-  Column(modifier = Modifier.padding(10.dp)) {
-    RecruitHeader(viewModel.recruitList.size, viewModel.sortDropdownMenuController)
-    Box(modifier = Modifier.height(24.dp))
-    LazyColumn(
-      verticalArrangement = Arrangement.spacedBy(10.dp),
-      modifier = Modifier.fillMaxSize()
-    ) {
-      items(items = viewModel.recruitList) {
-        RecruitListItem(recruitModel = it, onWishChange = {})
+  Surface {
+    Column(modifier = Modifier.padding(10.dp)) {
+      RecruitHeader(viewModel.recruitList.size, viewModel.sortDropdownMenuController)
+      Box(modifier = Modifier.height(24.dp))
+      LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier.fillMaxSize()
+      ) {
+        items(items = viewModel.recruitList) {
+          RecruitListItem(recruitModel = it, onWishChange = {})
+        }
       }
     }
   }

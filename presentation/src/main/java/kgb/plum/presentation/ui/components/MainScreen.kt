@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.MainMenu
-import kumoh.whale.whale.ui.theme.WhaleTheme
+import kgb.plum.presentation.ui.theme.WhaleTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -24,8 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import kumoh.whale.whale.ui.theme.colors
-import kumoh.whale.whale.ui.theme.menuSmall
+import kgb.plum.presentation.ui.theme.colors
+import kgb.plum.presentation.ui.theme.menuSmall
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
