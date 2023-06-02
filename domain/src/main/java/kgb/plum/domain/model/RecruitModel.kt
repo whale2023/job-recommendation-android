@@ -1,6 +1,6 @@
-package kumoh.whale.whale.model.entity
+package kgb.plum.domain.model
 
-data class RecruitEntity(
+data class RecruitModel(
   val title: String,
   val company: String,
   val tag: List<String>,

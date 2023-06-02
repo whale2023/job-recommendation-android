@@ -24,8 +24,8 @@ import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.Screen
 import kgb.plum.presentation.model.SignUpScreen
 import kgb.plum.presentation.viewmodel.SignUpViewModel
-import kumoh.whale.whale.ui.theme.Padding
-import kumoh.whale.whale.ui.theme.WhaleTheme
+import kgb.plum.presentation.ui.theme.Padding
+import kgb.plum.presentation.ui.theme.WhaleTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import kumoh.whale.whale.ui.theme.Padding
-import kumoh.whale.whale.ui.theme.WhaleTheme
-import kumoh.whale.whale.ui.theme.colors
-import kumoh.whale.whale.ui.theme.underlineDisplay
+import kgb.plum.presentation.ui.theme.Padding
+import kgb.plum.presentation.ui.theme.WhaleTheme
+import kgb.plum.presentation.ui.theme.colors
+import kgb.plum.presentation.ui.theme.underlineDisplay
 
 @Composable
 fun UnderlinedButton(

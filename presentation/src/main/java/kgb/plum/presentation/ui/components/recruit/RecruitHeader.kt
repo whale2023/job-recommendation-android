@@ -1,4 +1,4 @@
-package kumoh.whale.whale.recruit
+package kgb.plum.presentation.ui.components.recruit
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -13,8 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import kumoh.whale.whale.ui.commons.CustomDropdownMenuController
-import kumoh.whale.whale.ui.commons.CustomTextDropdownMenu
+import kgb.plum.presentation.model.SortType
+import kgb.plum.presentation.ui.common.CustomDropdownMenuController
+import kgb.plum.presentation.ui.common.CustomTextDropdownMenu
 
 @Composable
 fun RecruitHeader(
