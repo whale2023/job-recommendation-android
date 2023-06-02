@@ -3,8 +3,9 @@ package kgb.plum.data.datasource
 import kgb.plum.domain.model.RecruitRankItem
 import kgb.plum.domain.model.WishItemData
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class HomeDataSource {
+class HomeDataSource @Inject constructor() {
     val recruitRankItems = listOf(
         RecruitRankItem(1, null, "금오컴퍼니", "사무직"),
         RecruitRankItem(2, null, "대광스카이", "영업직"),

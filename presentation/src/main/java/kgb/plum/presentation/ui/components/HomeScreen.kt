@@ -95,19 +95,19 @@ fun HomeScreen(){
                     modifier = Modifier.padding(Padding.large)
                 ) {
                     WishItem(MaterialTheme.colors.background,
-                        viewModel.wishList[0].company,
-                        viewModel.wishList[0].occupation,
-                        viewModel.wishList[0].dDay)
+                        if(viewModel.wishList.size>0) viewModel.wishList[0].company else null,
+                        if(viewModel.wishList.size>0) viewModel.wishList[0].occupation else null,
+                        if(viewModel.wishList.size>0) viewModel.wishList[0].dDay else null)
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.secondary,
-                        viewModel.wishList[1].company,
-                        viewModel.wishList[1].occupation,
-                        viewModel.wishList[1].dDay)
+                        if(viewModel.wishList.size>1) viewModel.wishList[1].company else null,
+                        if(viewModel.wishList.size>1) viewModel.wishList[1].occupation else null,
+                        if(viewModel.wishList.size>1) viewModel.wishList[1].dDay else null)
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.background,
-                        viewModel.wishList[2].company,
-                        viewModel.wishList[2].occupation,
-                        viewModel.wishList[2].dDay)
+                        if(viewModel.wishList.size>2) viewModel.wishList[2].company else null,
+                        if(viewModel.wishList.size>2) viewModel.wishList[2].occupation else null,
+                        if(viewModel.wishList.size>2) viewModel.wishList[2].dDay else null)
                 }
 
 
