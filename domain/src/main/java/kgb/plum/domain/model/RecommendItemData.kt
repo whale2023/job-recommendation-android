@@ -1,4 +1,4 @@
-package kgb.plum.presentation.model
+package kgb.plum.domain.model
 
 data class RecommendItemData(
     val id: Int,
