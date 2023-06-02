@@ -23,7 +23,8 @@ import kgb.plum.presentation.ui.theme.color.ColorSet
 import kgb.plum.presentation.ui.theme.color.LightYellow
 import kgb.plum.presentation.ui.theme.color.MainBlue
 import kgb.plum.presentation.ui.theme.color.SkyBlue
-import kumoh.whale.whale.ui.theme.color.WhaleColors
+import kgb.plum.presentation.ui.theme.color.WhaleColors
+
 
 private val DarkColorScheme = darkColorScheme(
 //    primary = Purple80,

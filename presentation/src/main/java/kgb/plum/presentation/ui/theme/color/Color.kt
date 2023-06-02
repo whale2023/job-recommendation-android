@@ -2,7 +2,6 @@ package kgb.plum.presentation.ui.theme.color
 
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
-import kumoh.whale.whale.ui.theme.color.WhaleColors
 
 val MainBlue = Color(0xFF2192FF)
 val SkyBlue = Color(0xFFD0E7FF)
