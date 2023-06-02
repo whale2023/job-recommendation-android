@@ -22,28 +22,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kgb.plum.presentation.model.RecruitRankItem
+import androidx.hilt.navigation.compose.hiltViewModel
+import kgb.plum.domain.model.RecruitRankItem
 import kgb.plum.presentation.ui.common.RecruitCardItem
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.ui.theme.nameMedium
+import kgb.plum.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(){
-    val recruitRankItems = listOf(
-        RecruitRankItem(1, null, "금오컴퍼니", "사무직"),
-        RecruitRankItem(2, null, "대광스카이", "영업직"),
-        RecruitRankItem(3, null, "삼성 전자", "기술팀"),
-        RecruitRankItem(4, null, "LG CNS", "PM"),
-        RecruitRankItem(5, null, "금오사이", "프론트엔드"),
-        RecruitRankItem(6, null, "대한항공", "마케팅"),
-        RecruitRankItem(7, null, "금오 건설", "현장 지휘"),
-        RecruitRankItem(8, null, "금오 전자", "기술 연구"),
-        RecruitRankItem(9, null, "알바몬", "인사직"),
-        RecruitRankItem(10, null, "당근마켓", "백엔드")
-    )
+    val viewModel = hiltViewModel<HomeViewModel>()
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.surface)
@@ -78,7 +69,7 @@ fun HomeScreen(){
                     end = Padding.small
                 )
             ){
-                items(recruitRankItems, key = {it.rank}) { item ->
+                items(viewModel.popularCompany, key = {it.rank}) { item ->
                     RecruitCardItem(rank = item.rank, company = item.company, occupation = item.occupation)
                 }
             }
@@ -103,11 +94,20 @@ fun HomeScreen(){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(Padding.large)
                 ) {
-                    WishItem(MaterialTheme.colors.background)
+                    WishItem(MaterialTheme.colors.background,
+                        viewModel.wishList[0].company,
+                        viewModel.wishList[0].occupation,
+                        viewModel.wishList[0].dDay)
                     Spacer(modifier = Modifier.size(Padding.large))
-                    WishItem(MaterialTheme.colors.secondary)
+                    WishItem(MaterialTheme.colors.secondary,
+                        viewModel.wishList[1].company,
+                        viewModel.wishList[1].occupation,
+                        viewModel.wishList[1].dDay)
                     Spacer(modifier = Modifier.size(Padding.large))
-                    WishItem(MaterialTheme.colors.background)
+                    WishItem(MaterialTheme.colors.background,
+                        viewModel.wishList[2].company,
+                        viewModel.wishList[2].occupation,
+                        viewModel.wishList[2].dDay)
                 }
 
 
