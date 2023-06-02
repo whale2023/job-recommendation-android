@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface HomeRepository {
     fun getPopularCompany() : List<RecruitRankItem>
-    fun getWishList() : List<WishItemData>
+
 }

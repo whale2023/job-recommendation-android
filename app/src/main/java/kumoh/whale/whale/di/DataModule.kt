@@ -10,12 +10,14 @@ import kgb.plum.data.repository.LoginRepositoryImpl
 import kgb.plum.data.repository.RecommendRepositoryImpl
 import kgb.plum.data.repository.RecruitRepositoryImpl
 import kgb.plum.data.repository.SignUpRepositoryImpl
+import kgb.plum.data.repository.WishRepositoryImpl
 import kgb.plum.domain.repository.ExRepository
 import kgb.plum.domain.repository.HomeRepository
 import kgb.plum.domain.repository.LoginRepository
 import kgb.plum.domain.repository.RecommendRepository
 import kgb.plum.domain.repository.RecruitRepository
 import kgb.plum.domain.repository.SignUpRepository
+import kgb.plum.domain.repository.WishRepository
 import javax.inject.Singleton
 
 @Module
@@ -39,8 +41,14 @@ interface DataModule {
     fun bindRecruitRepository(recruitRepositoryImpl: RecruitRepositoryImpl) : RecruitRepository
 
     @Binds
+    @Singleton
     fun bindHomeRepository(homeRepositoryImpl: HomeRepositoryImpl) : HomeRepository
 
     @Binds
+    @Singleton
     fun bindRecommendRepository(recommendRepositoryImpl: RecommendRepositoryImpl) : RecommendRepository
+
+    @Binds
+    @Singleton
+    fun bindWishRepository(wishRepositoryImpl: WishRepositoryImpl) : WishRepository
 }
