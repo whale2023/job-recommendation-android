@@ -84,7 +84,7 @@ fun LoginScreen(navController : NavHostController){
             PrimaryButton(
                 onClick = {
                     val state = loginViewModel.login()
-                    showToast(context, state.state())
+                    if(state != LoginState.SUCCESS) showToast(context, state.state())
                     if(state == LoginState.SUCCESS){
                         navController.navigate(Screen.Main.name){
                             popUpTo(Screen.Login.name) { inclusive = true }
