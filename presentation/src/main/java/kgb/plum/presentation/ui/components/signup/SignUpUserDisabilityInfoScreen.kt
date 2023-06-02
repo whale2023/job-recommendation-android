@@ -80,7 +80,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedType)
                     },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(textColor = MaterialTheme.colors.onSurface, containerColor = MaterialTheme.colors.surface, unfocusedLabelColor = MaterialTheme.colors.primary, focusedLabelColor = MaterialTheme.colors.background, focusedIndicatorColor = MaterialTheme.colors.surface, unfocusedIndicatorColor = MaterialTheme.colors.surface),
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(unfocusedTextColor = MaterialTheme.colors.onSurface, focusedTextColor = MaterialTheme.colors.onSurface, focusedContainerColor = MaterialTheme.colors.surface, unfocusedContainerColor = MaterialTheme.colors.surface, unfocusedLabelColor = MaterialTheme.colors.primary, focusedLabelColor = MaterialTheme.colors.background, focusedIndicatorColor = MaterialTheme.colors.surface, unfocusedIndicatorColor = MaterialTheme.colors.surface),
                     modifier = Modifier.menuAnchor().fillMaxWidth().border(width = 1.dp, color = MaterialTheme.colors.primary, shape = MaterialTheme.shapes.small)
                 )
                 ExposedDropdownMenu(
@@ -126,7 +126,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLevel)
                     },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(textColor = MaterialTheme.colors.onSurface, containerColor = MaterialTheme.colors.surface, unfocusedLabelColor = MaterialTheme.colors.primary, focusedLabelColor = MaterialTheme.colors.background, focusedIndicatorColor = MaterialTheme.colors.surface, unfocusedIndicatorColor = MaterialTheme.colors.surface),
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(unfocusedTextColor = MaterialTheme.colors.onSurface, focusedTextColor = MaterialTheme.colors.onSurface, focusedContainerColor = MaterialTheme.colors.surface, unfocusedContainerColor = MaterialTheme.colors.surface, unfocusedLabelColor = MaterialTheme.colors.primary, focusedLabelColor = MaterialTheme.colors.background, focusedIndicatorColor = MaterialTheme.colors.surface, unfocusedIndicatorColor = MaterialTheme.colors.surface),
                     modifier = Modifier.menuAnchor().fillMaxWidth()
                 )
                 ExposedDropdownMenu(
