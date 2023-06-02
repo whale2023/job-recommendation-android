@@ -45,7 +45,7 @@ fun MainScreen(navController : NavHostController) {
 fun MainNavigationBar(navController: NavHostController) {
     val bottomNavigationItems = listOf(
         MainMenu.Home,
-        MainMenu.Domain,
+        MainMenu.Recruit,
         MainMenu.Recommend,
         MainMenu.WishList,
         MainMenu.MyPage,
@@ -107,8 +107,8 @@ fun MainNavigationScreen(navController : NavHostController) {
         composable(route = MainMenu.Home.name){
             HomeScreen()
         }
-        composable(route = MainMenu.Domain.name){
-            Text("This is Category")
+        composable(route = MainMenu.Recruit.name){
+            RecruitScreen()
         }
         composable(route = MainMenu.Recommend.name){
             RecommendScreen()
