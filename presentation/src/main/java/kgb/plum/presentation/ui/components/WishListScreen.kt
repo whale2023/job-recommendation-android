@@ -8,28 +8,25 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kgb.plum.presentation.R
-import kgb.plum.presentation.ui.common.RecommendItem
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
@@ -39,6 +36,19 @@ import kgb.plum.presentation.viewmodel.WishListViewModel
 @Composable
 fun WishListScreen() {
     val viewModel = hiltViewModel<WishListViewModel>()
+    val isCalendar = remember { mutableStateOf(false)}
+    if(isCalendar.value){
+        Text("하이")
+    } else {
+        WishListForListScreen(isCalendar, viewModel)
+    }
+}
+
+@Composable
+fun WishListForListScreen(
+    isCalendar : MutableState<Boolean>,
+    viewModel : WishListViewModel
+) {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.surface)
@@ -62,25 +72,73 @@ fun WishListScreen() {
         Row {
             Spacer(modifier = Modifier.weight(1f))
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { isCalendar.value = true },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colors.primary,
                 contentColor = MaterialTheme.colors.surface,
                 elevation = FloatingActionButtonDefaults.elevation(10.dp),
-                modifier = Modifier.size(80.dp),
+                modifier = Modifier
+                    .size(70.dp),
             ) {
-                Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "달력", modifier = Modifier.fillMaxSize(0.8f))
+                Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "달력", modifier = Modifier.fillMaxSize(0.7f))
             }
         }
-        Spacer(modifier = Modifier.size(100.dp))
+    }
+}
+
+@Composable
+fun WishListForCalendar(
+    //isCalendar: MutableState<Boolean>,
+    //viewModel: WishListViewModel
+) {
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colors.surface)
+            .fillMaxSize()
+            .padding(Padding.large)
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        Row {
+            Spacer(modifier = Modifier.weight(1f))
+            FloatingActionButton(
+                onClick = { TODO("전환") },
+                shape = CircleShape,
+                containerColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.surface,
+                elevation = FloatingActionButtonDefaults.elevation(10.dp),
+                modifier = Modifier
+                    .size(70.dp),
+            ) {
+                Image(painter = painterResource(id = R.drawable.list), contentDescription = "리스트", modifier = Modifier.fillMaxSize(0.7f))
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun WishListForCalendarPreview() {
+    WhaleTheme {
+        WishListForCalendar()
     }
 }
 
 
+
 @Preview
 @Composable
-fun WishListScreenPreview() {
+fun ButtonPreview() {
     WhaleTheme {
-        WishListScreen()
+        FloatingActionButton(
+            onClick = { /*TODO*/ },
+            shape = CircleShape,
+            containerColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.surface,
+            elevation = FloatingActionButtonDefaults.elevation(10.dp),
+            modifier = Modifier
+                .size(70.dp),
+        ) {
+            Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "달력",modifier = Modifier.fillMaxSize(0.5f))
+        }
     }
 }
