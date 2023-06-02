@@ -12,8 +12,5 @@ class HomeRepositoryImpl @Inject constructor(private val homeDataSource: HomeDat
         return homeDataSource.getPopularCompany()
     }
 
-    override fun getWishList(): List<WishItemData> {
-        return homeDataSource.getWishList()
-    }
 
 }

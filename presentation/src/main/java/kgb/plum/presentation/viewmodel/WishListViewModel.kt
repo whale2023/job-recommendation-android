@@ -13,6 +13,7 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
 
     init {
         getWishList()
+        println(wishList[0].toString())
     }
 
     private fun getWishList(){

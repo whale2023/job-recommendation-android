@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class WishDataSource @Inject constructor() {
 
-    val wishList = listOf(CompanyModel(id = 2,
+    private val wishList = listOf(CompanyModel(id = 2,
         applicationDate =  "2023-01-31 00:00:00",
     deadLine =  "2023-02-28",
     companyName= "(주)서한",

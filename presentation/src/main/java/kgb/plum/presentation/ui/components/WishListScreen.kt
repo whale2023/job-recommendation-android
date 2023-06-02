@@ -15,15 +15,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import kgb.plum.presentation.ui.common.RecommendItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
+import kgb.plum.presentation.viewmodel.WishListViewModel
 
 @Composable
 fun WishListScreen() {
+    val viewModel = hiltViewModel<WishListViewModel>()
     Column(
-        modifier = Modifier.background(MaterialTheme.colors.surface)
+        modifier = Modifier
+            .background(MaterialTheme.colors.surface)
             .fillMaxSize()
             .padding(Padding.large)
     ){
