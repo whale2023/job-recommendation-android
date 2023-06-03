@@ -15,6 +15,8 @@ data class WhaleColors(
     val textFiledBackground: Color = Color.LightGray,
     val textFiledBackgroundVariant: Color = Color.DarkGray,
     val textSubColor: Color = Color(0xFF9E9E9E),
+    val textHighlightColor: Color = Color(0xFF0A66C2),
+    val iconSubColor: Color = Color(0xFFA3A3A3),
     val launcherScreenBackground: Color = material.primary,
     val progressItemColor: Color = Color.Black
 ) {
