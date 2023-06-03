@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Cake
-import androidx.compose.material.icons.rounded.Cake
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -102,7 +102,7 @@ fun RecruitListItem(
           .size(30.dp)
           .padding(end = Padding.large)
       ) {
-        Icon(if (recruitModel.isWished) Icons.Rounded.Cake else Icons.Outlined.Cake, "Title Icon")
+        Icon(if (recruitModel.isWished) Icons.Filled.Star else Icons.Outlined.Star, "Title Icon")
       }
     }
   }

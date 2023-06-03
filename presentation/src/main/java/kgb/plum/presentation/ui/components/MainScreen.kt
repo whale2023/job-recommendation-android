@@ -1,6 +1,9 @@
 package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,9 +38,9 @@ fun MainScreen(navController : NavHostController) {
         bottomBar = {
             MainNavigationBar(navController = mainNavController)
         }
-    ) {
-        it
-        MainNavigationScreen(mainNavController)
+    ) {paddingValues ->
+        MainNavigationScreen(
+            mainNavController, paddingValues)
     }
 }
 
@@ -52,7 +55,6 @@ fun MainNavigationBar(navController: NavHostController) {
     )
 
     NavigationBar(
-
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -102,8 +104,12 @@ fun MainNavigationBar(navController: NavHostController) {
 }
 
 @Composable
-fun MainNavigationScreen(navController : NavHostController) {
-    NavHost(navController = navController, startDestination = MainMenu.Home.name) {
+fun MainNavigationScreen(navController : NavHostController, paddingValues: PaddingValues) {
+    NavHost(
+        navController = navController,
+        startDestination = MainMenu.Home.name,
+        modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+    ) {
         composable(route = MainMenu.Home.name){
             HomeScreen()
         }

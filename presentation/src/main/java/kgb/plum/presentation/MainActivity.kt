@@ -1,4 +1,4 @@
-package kumoh.whale.whale
+package kgb.plum.presentation
 
 import android.os.Bundle
 import android.widget.Toast

@@ -1,15 +1,18 @@
 package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -17,16 +20,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import kgb.plum.domain.model.RecruitRankItem
+import kgb.plum.presentation.ui.common.RecruitCardItem
+import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.ui.theme.nameMedium
+import kgb.plum.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(){
+    val viewModel = hiltViewModel<HomeViewModel>()
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.surface)
@@ -53,8 +61,17 @@ fun HomeScreen(){
                 text = "인기 채용 정보",
                 style = MaterialTheme.typography.nameMedium
             )
-            LazyRow(){
-
+            Spacer(modifier = Modifier.size(24.dp))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(Padding.large),
+                contentPadding = PaddingValues(
+                    start = Padding.small,
+                    end = Padding.small
+                )
+            ){
+                items(viewModel.popularCompany, key = {it.rank}) { item ->
+                    RecruitCardItem(rank = item.rank, company = item.company, occupation = item.occupation)
+                }
             }
             Spacer(modifier = Modifier.size(24.dp))
             Text(
@@ -65,17 +82,32 @@ fun HomeScreen(){
             Card(
                 elevation = CardDefaults.cardElevation(5.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colors.surface),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        0.5.dp,
+                        MaterialTheme.colors.textFiledBackgroundVariant,
+                        MaterialTheme.shapes.medium
+                    )
             ){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(Padding.large)
                 ) {
-                    WishItem(MaterialTheme.colors.background)
+                    WishItem(MaterialTheme.colors.background,
+                        if(viewModel.wishList.size>0) viewModel.wishList[0].company else null,
+                        if(viewModel.wishList.size>0) viewModel.wishList[0].occupation else null,
+                        if(viewModel.wishList.size>0) viewModel.wishList[0].dDay else null)
                     Spacer(modifier = Modifier.size(Padding.large))
-                    WishItem(MaterialTheme.colors.secondary)
+                    WishItem(MaterialTheme.colors.secondary,
+                        if(viewModel.wishList.size>1) viewModel.wishList[1].company else null,
+                        if(viewModel.wishList.size>1) viewModel.wishList[1].occupation else null,
+                        if(viewModel.wishList.size>1) viewModel.wishList[1].dDay else null)
                     Spacer(modifier = Modifier.size(Padding.large))
-                    WishItem(MaterialTheme.colors.background)
+                    WishItem(MaterialTheme.colors.background,
+                        if(viewModel.wishList.size>2) viewModel.wishList[2].company else null,
+                        if(viewModel.wishList.size>2) viewModel.wishList[2].occupation else null,
+                        if(viewModel.wishList.size>2) viewModel.wishList[2].dDay else null)
                 }
 
 
@@ -84,38 +116,7 @@ fun HomeScreen(){
     }
 }
 
-@Composable
-fun WishItem(
-    color: Color,
-    company: String?= null,
-    dDay: String?= null
-){
-    Row(
-        modifier = Modifier
-            .background(color, shape = MaterialTheme.shapes.large)
-            .fillMaxWidth()
-            .height(75.dp)
-            .padding(horizontal = Padding.large),
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        if(company.isNullOrEmpty()){
-            Text(
-                text = "위시리스트를 추가해보세요.",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        } else {
-            Text(
-                text = company,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = dDay ?: "정보 없음",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
+
 
 @Preview
 @Composable
