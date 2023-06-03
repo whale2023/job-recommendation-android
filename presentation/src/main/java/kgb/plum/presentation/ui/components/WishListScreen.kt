@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,9 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,18 +41,14 @@ import com.himanshoe.kalendar.color.KalendarColor
 import com.himanshoe.kalendar.color.KalendarColors
 import com.himanshoe.kalendar.ui.component.header.KalendarTextKonfig
 import com.himanshoe.kalendar.ui.firey.DaySelectionMode
-
 import kgb.plum.presentation.R
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.viewmodel.WishListViewModel
-import kotlinx.datetime.number
-import kotlinx.datetime.toJavaLocalDate
-import java.time.LocalDate
-import java.time.Month
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+
 
 @Composable
 fun WishListScreen() {
@@ -107,6 +103,7 @@ fun WishListForListScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WishListForCalendar(
     isCalendar: MutableState<Boolean>,
@@ -114,11 +111,13 @@ fun WishListForCalendar(
 ) {
     val list = mutableListOf<KalendarColor>()
     for(i in 1..12){
-        list.add(KalendarColor(
+        list.add(
+            KalendarColor(
             backgroundColor = MaterialTheme.colors.surface,
             dayBackgroundColor = MaterialTheme.colors.surface,
             headerTextColor = MaterialTheme.colors.primary
-        ))
+        )
+        )
     }
     Column(
         modifier = Modifier
@@ -140,10 +139,12 @@ fun WishListForCalendar(
                     modifier = Modifier.height(70.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Spacer(modifier = Modifier.size(12.dp))
                     Text(
                         text = date.dayOfMonth.toString(),
                         style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.size(24.dp).background(if(date.compareTo(LocalDate(java.time.LocalDate.now().year,java.time.LocalDate.now().month, java.time.LocalDate.now().dayOfMonth))==0 ) MaterialTheme.colors.background else MaterialTheme.colors.surface, shape = CircleShape )
                     )
                     Spacer(modifier = Modifier.size(4.dp))
                     viewModel.wishList.forEach { item ->
