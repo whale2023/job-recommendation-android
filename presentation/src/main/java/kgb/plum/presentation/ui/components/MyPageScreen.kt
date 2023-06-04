@@ -60,6 +60,7 @@ fun MyPageScreen() {
       title = "보유 자격증",
       leading = Icons.Rounded.Bookmark,
       valueList = viewModel.resumeModel.certifications,
+      onAddButtonClicked = viewModel::editCertifications,
       modifier = Modifier
         .background(Color.White)
         .padding(Padding.large)
@@ -69,6 +70,7 @@ fun MyPageScreen() {
       title = "경력",
       leading = Icons.Rounded.Bookmark,
       valueList = viewModel.resumeModel.careers.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
+      onAddButtonClicked = viewModel::editCareers,
       modifier = Modifier
         .clip(shape = RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
         .background(Color.White)

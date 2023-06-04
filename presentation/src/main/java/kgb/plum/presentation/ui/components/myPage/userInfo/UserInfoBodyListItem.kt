@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Dashboard
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +32,14 @@ import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 
 @Composable
-fun UserInfoBodyListItem(title: String, leading: ImageVector, valueList: List<String>, modifier: Modifier = Modifier) {
+fun UserInfoBodyListItem(
+  title: String,
+  leading: ImageVector,
+  valueList: List<String>,
+  onAddButtonClicked: () -> Unit = {},
+  onRemoveButtonClicked: (Int) -> Unit = {},
+  modifier: Modifier = Modifier
+) {
   LazyColumn(modifier = modifier) {
     item {
       Row(verticalAlignment = Alignment.CenterVertically) {
@@ -48,7 +57,7 @@ fun UserInfoBodyListItem(title: String, leading: ImageVector, valueList: List<St
           modifier = Modifier.weight(1f)
         )
         IconButton(
-          onClick = { /*TODO*/ },
+          onClick = onAddButtonClicked,
           modifier = Modifier
             .size(30.dp)
             .padding(end = Padding.large)
@@ -57,7 +66,7 @@ fun UserInfoBodyListItem(title: String, leading: ImageVector, valueList: List<St
         }
       }
     }
-    items(items = valueList) {
+    itemsIndexed(items = valueList) { index, it ->
       Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
           Icons.Rounded.Dashboard, "Edit Icon",
@@ -69,6 +78,14 @@ fun UserInfoBodyListItem(title: String, leading: ImageVector, valueList: List<St
             fontWeight = FontWeight.Bold
           )
         )
+        Spacer(modifier = Modifier.weight(1f))
+        IconButton(
+          onClick = { onRemoveButtonClicked(index) }, modifier = Modifier
+            .size(30.dp)
+            .padding(end = Padding.large)
+        ) {
+          Icon(Icons.Rounded.Remove, "삭제 버튼")
+        }
       }
     }
   }
