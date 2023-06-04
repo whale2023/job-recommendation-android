@@ -36,7 +36,7 @@ fun MyPageScreen() {
   val viewModel = hiltViewModel<MyPageViewModel>()
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-      IconButton(onClick = { viewModel.editUserInfo() }) {
+      IconButton(onClick = viewModel::editUserInfo) {
         Icon(Icons.Rounded.Edit, "Edit Icon")
       }
     }

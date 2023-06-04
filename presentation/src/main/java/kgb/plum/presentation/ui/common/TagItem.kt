@@ -1,6 +1,8 @@
 package kgb.plum.presentation.ui.common
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -23,12 +25,14 @@ fun TagItem(
   modifier: Modifier = Modifier,
   backgroundColor: Color,
   tag: String,
+  onClick: (() -> Unit)? = null
 ) {
   Box(
     modifier = modifier
       .wrapContentSize()
       .clip(Shapes.extraLarge)
-      .background(color = backgroundColor),
+      .background(color = backgroundColor)
+      .clickable(onClick = onClick ?: {})
   ) {
     Text(
       text = tag,

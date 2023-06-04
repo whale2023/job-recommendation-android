@@ -1,5 +1,6 @@
 package kgb.plum.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.domain.model.ResumeModel
@@ -15,6 +16,6 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     UserInfoModel("박준식", 25, "qkrwnstlr@naver.com", "구미시", "청각 3급")
 
   fun editUserInfo() {
-
+    Log.d("MyPageViewModel", "editUserInfo button is Clicked")
   }
 }

@@ -1,9 +1,11 @@
 package kgb.plum.presentation.ui.components.recruit
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -16,11 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import kgb.plum.presentation.model.SortType
 import kgb.plum.presentation.ui.common.CustomDropdownMenuController
 import kgb.plum.presentation.ui.common.CustomTextDropdownMenu
+import kgb.plum.presentation.ui.theme.Padding
 
 @Composable
 fun RecruitHeader(
   totalCount: Int,
   sortDropdownMenuController: CustomDropdownMenuController<SortType>,
+  filterDropdownMenuController: CustomDropdownMenuController<String>,
   modifier: Modifier = Modifier,
 ) {
   Row(
@@ -28,7 +32,12 @@ fun RecruitHeader(
       .height(ButtonDefaults.MinHeight), verticalAlignment = Alignment.CenterVertically
   ) {
     Text(text = "전체 ${totalCount}개")
-    Box(modifier = Modifier.weight(1f))
+    Spacer(modifier = Modifier.weight(1f))
+    CustomTextDropdownMenu(
+      controller = filterDropdownMenuController,
+      modifier = Modifier.wrapContentSize()
+    )
+    Spacer(modifier = Modifier.width(Padding.medium))
     CustomTextDropdownMenu(
       controller = sortDropdownMenuController,
       modifier = Modifier.wrapContentSize()
@@ -47,6 +56,9 @@ fun Preview() {
       0, CustomDropdownMenuController(
         SortType.NEWEST,
         SortType.values().toList(),
+      ), CustomDropdownMenuController(
+        "필터",
+        listOf("필터")
       )
     )
   }

@@ -1,6 +1,7 @@
 package kgb.plum.presentation.ui.common
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,7 +45,8 @@ fun <T> CustomTextDropdownMenu(
   Box(modifier = Modifier.border(1.dp, Color.Black, RoundedCornerShape(5.dp))) {
     Row(
       modifier = modifier
-        .height(ButtonDefaults.MinHeight).padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically
+        .height(ButtonDefaults.MinHeight)
+        .padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
         controller.currentValue.toString(),
@@ -53,7 +55,7 @@ fun <T> CustomTextDropdownMenu(
       )
       Box {
         IconButton(
-          onClick = controller::onShowRequest, modifier = Modifier.size(24.dp),
+          onClick = controller.onClick ?: controller::onShowRequest, modifier = Modifier.size(24.dp),
         ) {
           Icon(
             Icons.Rounded.FilterList,
@@ -97,7 +99,8 @@ fun <T> CustomDropdownMenu(
 class CustomDropdownMenuController<T>(
   initValue: T,
   var dropdownMenuItemList: List<T>,
-  val onDismissRequestCallBack: () -> Unit = {}
+  val onDismissRequestCallBack: () -> Unit = {},
+  val onClick: (() -> Unit)? = null
 ) {
   var expanded by mutableStateOf<Boolean>(false)
   var currentValue by mutableStateOf<T>(initValue)
