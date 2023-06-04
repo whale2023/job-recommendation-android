@@ -37,6 +37,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   }
 
   fun showDetail(companyModel: CompanyModel) {
+    _navController.currentBackStackEntry?.savedStateHandle?.set(key = "companyModel", value = companyModel)
     _navController.navigate("detail")
   }
 }

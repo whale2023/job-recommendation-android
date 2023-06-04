@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,12 +28,12 @@ import kgb.plum.presentation.ui.common.CustomTextField
 import kgb.plum.presentation.ui.common.TagItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.colors
-import kgb.plum.presentation.viewmodel.FilterScreenViewModel
+import kgb.plum.presentation.viewmodel.FilterViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FilterScreen(navController: NavHostController) {
-  val viewModel = hiltViewModel<FilterScreenViewModel>()
+  val viewModel = hiltViewModel<FilterViewModel>()
   viewModel.init(navController)
   Surface(modifier = Modifier.background(Color.Transparent)) {
     Column(

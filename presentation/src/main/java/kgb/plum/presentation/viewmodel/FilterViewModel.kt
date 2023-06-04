@@ -9,7 +9,7 @@ import kgb.plum.presentation.ui.common.CustomTextFieldController
 import javax.inject.Inject
 
 @HiltViewModel
-class FilterScreenViewModel @Inject constructor() : ViewModel() {
+class FilterViewModel @Inject constructor() : ViewModel() {
   private val _filterList = mutableStateListOf<TagType>()
   val filterList: List<TagType> = _filterList
 
@@ -31,6 +31,6 @@ class FilterScreenViewModel @Inject constructor() : ViewModel() {
   }
 
   fun navigatePop() {
-    _navController.popBackStack()
+    _navController.navigateUp()
   }
 }

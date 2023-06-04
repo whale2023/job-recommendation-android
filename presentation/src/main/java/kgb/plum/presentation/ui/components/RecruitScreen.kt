@@ -2,7 +2,6 @@ package kgb.plum.presentation.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.RecruitModel
+import kgb.plum.presentation.ui.components.recruit.DetailScreen
 import kgb.plum.presentation.ui.components.recruit.FilterScreen
 import kgb.plum.presentation.ui.components.recruit.RecruitHeader
 import kgb.plum.presentation.ui.components.recruit.RecruitListItem
@@ -63,6 +64,32 @@ fun RecruitScreen() {
     }
     composable("filter") {
       FilterScreen(navController)
+    }
+    composable("detail") {
+      val companyModel =
+        navController.previousBackStackEntry?.savedStateHandle?.get<CompanyModel>("companyModel")
+          ?: CompanyModel(
+            id = 0,
+            applicationDate = "",
+            deadLine = "",
+            companyName = "",
+            recruitmentType = "",
+            typeOfEmployment = "",
+            formOfWages = "",
+            wage = "",
+            entryForm = "",
+            requiredExperience = "",
+            requiredEducation = "",
+            majorField = "",
+            requiredCredentials = "",
+            businessAddress = "",
+            companyType = "",
+            responsibleAgency = "",
+            contactNumber = "",
+            countOfMemberWish = 0,
+            addedWishlist = false
+          )
+      DetailScreen(companyModel, navController)
     }
   }
 }
