@@ -36,20 +36,20 @@ fun MyPageScreen() {
   val viewModel = hiltViewModel<MyPageViewModel>()
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-      IconButton(onClick = { /*TODO*/ }) {
+      IconButton(onClick = { viewModel.editUserInfo() }) {
         Icon(Icons.Rounded.Edit, "Edit Icon")
       }
     }
     UserInfoHeader(
-      name = "박준식",
+      name = viewModel.userInfoModel.userName,
       description = "구미에 거주하며 사무업 취직을 희망하고 편식을 어려워 합니다.",
       modifier = Modifier.padding(Padding.large)
     )
     Spacer(modifier = Modifier.height(Padding.xlarge))
     UserInfoBody(
-      disabilityType = "청각 3급",
-      address = "구미시",
-      email = "qkrwnstlr@naver.com",
+      disabilityType = viewModel.userInfoModel.disabilityType,
+      address = viewModel.userInfoModel.addressInfo,
+      email = viewModel.userInfoModel.email,
       phoneNumber = "010 2630 4097",
       modifier = Modifier
         .background(Color.White)
