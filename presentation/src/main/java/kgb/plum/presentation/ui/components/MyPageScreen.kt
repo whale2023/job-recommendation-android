@@ -36,20 +36,20 @@ fun MyPageScreen() {
   val viewModel = hiltViewModel<MyPageViewModel>()
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-      IconButton(onClick = { /*TODO*/ }) {
+      IconButton(onClick = { viewModel.editUserInfo() }) {
         Icon(Icons.Rounded.Edit, "Edit Icon")
       }
     }
     UserInfoHeader(
-      name = "박준식",
-      description = "구미에 거주하며 사무업 취직을 희망하고 편식을 어려워 합니다.",
+      name = viewModel.userInfoModel.userName,
+      description = "${viewModel.resumeModel.major} 전공으로 연봉 ${viewModel.resumeModel.preferIncome}정도의 ${viewModel.resumeModel.workType}을 희망합니다.",
       modifier = Modifier.padding(Padding.large)
     )
     Spacer(modifier = Modifier.height(Padding.xlarge))
     UserInfoBody(
-      disabilityType = "청각 3급",
-      address = "구미시",
-      email = "qkrwnstlr@naver.com",
+      disabilityType = viewModel.userInfoModel.disabilityType,
+      address = viewModel.userInfoModel.addressInfo,
+      email = viewModel.userInfoModel.email,
       phoneNumber = "010 2630 4097",
       modifier = Modifier
         .background(Color.White)
@@ -59,16 +59,16 @@ fun MyPageScreen() {
     UserInfoBodyListItem(
       title = "보유 자격증",
       leading = Icons.Rounded.Bookmark,
-      valueList = listOf<String>("정보 처리 기사", "정보 처리 기사", "정보 처리 기사"),
+      valueList = viewModel.resumeModel.certifications,
       modifier = Modifier
         .background(Color.White)
         .padding(Padding.large)
     )
     Spacer(modifier = Modifier.height(Padding.small))
     UserInfoBodyListItem(
-      title = "보유 자격증",
+      title = "경력",
       leading = Icons.Rounded.Bookmark,
-      valueList = listOf<String>("정보 처리 기사", "정보 처리 기사", "정보 처리 기사"),
+      valueList = viewModel.resumeModel.careers.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
       modifier = Modifier
         .clip(shape = RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
         .background(Color.White)
