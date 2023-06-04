@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kgb.plum.domain.model.RecruitModel
 import kgb.plum.presentation.ui.components.recruit.FilterScreen
 import kgb.plum.presentation.ui.components.recruit.RecruitHeader
 import kgb.plum.presentation.ui.components.recruit.RecruitListItem
@@ -34,14 +36,26 @@ fun RecruitScreen() {
     composable("recruit") {
       Surface {
         Column(modifier = Modifier.padding(10.dp)) {
-          RecruitHeader(viewModel.recruitList.size, viewModel.sortDropdownMenuController, viewModel.filterDropdownMenuController)
+          RecruitHeader(
+            viewModel.recruitList.size,
+            viewModel.sortDropdownMenuController,
+            viewModel.filterDropdownMenuController
+          )
           Spacer(modifier = Modifier.height(24.dp))
           LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.fillMaxSize()
           ) {
             items(items = viewModel.recruitList) {
-              RecruitListItem(recruitModel = it, onWishChange = {})
+              RecruitListItem(
+                recruitModel = RecruitModel(
+                  "[${it.typeOfEmployment}] ${it.recruitmentType}",
+                  it.companyName,
+                  listOf(it.requiredEducation, it.companyType),
+                  it.addedWishlist,
+                ),
+                onWishChange = { viewModel.onIsWishedChange(it) },
+                modifier = Modifier.clickable { viewModel.showDetail(it) })
             }
           }
         }

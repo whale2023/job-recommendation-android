@@ -3,7 +3,7 @@ package kgb.plum.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kgb.plum.domain.model.RecruitModel
+import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.usecase.RecruitUseCase
 import kgb.plum.presentation.model.SortType
 import kgb.plum.presentation.ui.common.CustomDropdownMenuController
@@ -18,7 +18,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
     this._navController = navController
   }
 
-  val recruitList: List<RecruitModel>
+  val recruitList: List<CompanyModel>
     get() = recruitUseCase.getRecruitList()
 
   val sortDropdownMenuController = CustomDropdownMenuController(
@@ -31,4 +31,12 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
     listOf("필터"),
     onClick = { _navController.navigate("filter") }
   )
+
+  fun onIsWishedChange(companyModel: CompanyModel) {
+    recruitUseCase.changeIsWished(companyModel)
+  }
+
+  fun showDetail(companyModel: CompanyModel) {
+    _navController.navigate("detail")
+  }
 }
