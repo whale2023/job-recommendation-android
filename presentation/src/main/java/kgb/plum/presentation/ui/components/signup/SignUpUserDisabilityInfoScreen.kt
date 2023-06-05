@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components.signup
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,7 +39,10 @@ import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.domain.model.disabilityType
 import kgb.plum.presentation.model.Screen
+import kgb.plum.presentation.model.state.SignUpState
 import kgb.plum.presentation.util.showToast
+import kotlinx.coroutines.CoroutineScope
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +51,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
     var selectedTypeItem by remember { mutableStateOf(disabilityType[0])}
     var expandedLevel by remember { mutableStateOf(false)}
     var selectedLevelItem by remember { mutableStateOf(disabilityLevel[0])}
+    var buttonText by remember { mutableStateOf("회원가입") }
     val context = LocalContext.current
     Column(
         modifier = Modifier.padding(Padding.large),
@@ -81,7 +87,14 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedType)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors(unfocusedTextColor = MaterialTheme.colors.onSurface, focusedTextColor = MaterialTheme.colors.onSurface, focusedContainerColor = MaterialTheme.colors.surface, unfocusedContainerColor = MaterialTheme.colors.surface, unfocusedLabelColor = MaterialTheme.colors.primary, focusedLabelColor = MaterialTheme.colors.background, focusedIndicatorColor = MaterialTheme.colors.surface, unfocusedIndicatorColor = MaterialTheme.colors.surface),
-                    modifier = Modifier.menuAnchor().fillMaxWidth().border(width = 1.dp, color = MaterialTheme.colors.primary, shape = MaterialTheme.shapes.small)
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.primary,
+                            shape = MaterialTheme.shapes.small
+                        )
                 )
                 ExposedDropdownMenu(
                     expanded = expandedType,
@@ -127,7 +140,9 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLevel)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors(unfocusedTextColor = MaterialTheme.colors.onSurface, focusedTextColor = MaterialTheme.colors.onSurface, focusedContainerColor = MaterialTheme.colors.surface, unfocusedContainerColor = MaterialTheme.colors.surface, unfocusedLabelColor = MaterialTheme.colors.primary, focusedLabelColor = MaterialTheme.colors.background, focusedIndicatorColor = MaterialTheme.colors.surface, unfocusedIndicatorColor = MaterialTheme.colors.surface),
-                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
                 )
                 ExposedDropdownMenu(
                     expanded = expandedLevel,
@@ -147,21 +162,11 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
         }
         Spacer(modifier = Modifier.size(24.dp))
         PrimaryButton (
-            text = "회원가입 완료",
+            text = buttonText,
             onClick = {
-//                viewModel.signUp()
-//                when(result) {
-//                    200 -> {
-//                        navController.navigate(Screen.Login.name)
-//                        showToast (context, "회원가입 완료!! 환영합니다.")
-//                    }
-//                    400 -> {
-//                        showToast (context, "이미 가입된 회원입니다.")
-//                    }
-//                    404 -> {
-//                        showToast (context, "회원가입 오류. 잠시후 다시 시도해주세요")
-//                    }
-//                }
+                buttonText = "회원가입 진행중..."
+                viewModel.signUp()
+
             },
             modifier = Modifier
                 .height(56.dp)

@@ -1,5 +1,6 @@
 package kgb.plum.domain.usecase
 
+import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.repository.SignUpRepository
 import javax.inject.Inject
 
@@ -24,7 +25,7 @@ class SignUpUseCase @Inject constructor(private val signUpRepository: SignUpRepo
         return signUpRepository.requestCertification(number)
     }
 
-    fun signUp(email: String, pw: String, name: String, disabilityType: String, disabilityLevel: String, age: String, addressInfo: String, addressDetail: String) : Int{
+    suspend fun signUp(email: String, pw: String, name: String, disabilityType: String, disabilityLevel: String, age: String, addressInfo: String, addressDetail: String) : EntityWrapper<Int>{
         return signUpRepository.signUp(email, pw, name, disabilityType, disabilityLevel, age, addressInfo, addressDetail)
     }
 }

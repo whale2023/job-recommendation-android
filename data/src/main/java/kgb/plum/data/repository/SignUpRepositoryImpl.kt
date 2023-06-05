@@ -1,9 +1,15 @@
 package kgb.plum.data.repository
 
+import kgb.plum.data.mapper.SignUpMapper
+import kgb.plum.data.network.SignUpApi
+import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.repository.SignUpRepository
 import javax.inject.Inject
 
-class SignUpRepositoryImpl @Inject constructor() : SignUpRepository {
+class SignUpRepositoryImpl @Inject constructor(
+    private val signUpApi: SignUpApi,
+    private val signUpMapper: SignUpMapper
+) : SignUpRepository {
     override fun requestCertificationNumber(email: String) {
         println("인증 번호 요청")
         //TODO("인증번호 요청하기")
@@ -14,7 +20,7 @@ class SignUpRepositoryImpl @Inject constructor() : SignUpRepository {
         //TODO("인증 요청")
     }
 
-    override fun signUp(
+    override suspend fun signUp(
         email: String,
         pw: String,
         name: String,
@@ -23,8 +29,9 @@ class SignUpRepositoryImpl @Inject constructor() : SignUpRepository {
         age: String,
         addressInfo: String,
         addressDetail: String
-    ): Int {
-        return 200
-        //TODO("회원가입 요청")
+    ): EntityWrapper<Int> {
+        return signUpMapper.getCode(
+            result = signUpApi.signUp(email = email, encryptedPwd = pw, username = name, disabilityType = "${disabilityType} ${disabilityLevel}", age = age.toInt(), addressInfo = addressInfo, addressDetails = addressDetail)
+        )
     }
 }

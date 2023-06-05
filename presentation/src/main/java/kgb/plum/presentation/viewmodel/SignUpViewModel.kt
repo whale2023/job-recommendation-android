@@ -1,5 +1,7 @@
 package kgb.plum.presentation.viewmodel
 
+import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,6 +50,9 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
 
     private val _signUpState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState.Loading)
     val signUpState : StateFlow<SignUpState> = _signUpState
+
+    private val _code = MutableLiveData(-1)
+    val code: LiveData<Int> = _code
 
     fun setEmail(text : String){
         _email.value = text
@@ -125,20 +130,23 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         return signUpUseCase.requestCertification(_certificationNumber.value ?: "")
     }
 
-//    suspend fun signUp(){
-//        viewModelScope.launch {
-//            _signUpState.value = SignUpState.Loading
-//            val result = signUpUseCase.signUp(_email.value?:"", _pw.value?:"", _name.value?:"", _disabilityType.value?:"", _disabilityLevel.value?:"", _age.value?:"", _addressInfo.value?:"", _addressDetail.value?:"")
-//            _signUpState.value = when(result) {
-//                is EntityWrapper.Success -> {
-//                    SignUpState.Main
-//                }
-//                is EntityWrapper.Fail -> {
-//                    SignUpState.Failed(
-//
-//                    )
-//                }
-//            }
-//        }
-//    }
+    fun signUp(){
+        viewModelScope.launch {
+            _signUpState.value = SignUpState.Loading
+            val result = signUpUseCase.signUp(_email.value?:"", _pw.value?:"", _name.value?:"", _disabilityType.value?:"", _disabilityLevel.value?:"", _age.value?:"", _addressInfo.value?:"", _addressDetail.value?:"")
+            _signUpState.value = when(result) {
+                is EntityWrapper.Success -> {
+                    SignUpState.Main(
+                        code = result.entity
+                    )
+                }
+                is EntityWrapper.Fail -> {
+                    SignUpState.Failed(
+                        reason = result.error.message ?: "Unknown Error"
+                    )
+                }
+            }
+            Log.d("테스트", result.toString())
+        }
+    }
 }
