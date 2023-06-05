@@ -9,7 +9,7 @@ import kgb.plum.domain.model.UserInfoModel
 import kgb.plum.domain.usecase.MyPageUseCase
 import kgb.plum.presentation.model.CareerType
 import kgb.plum.presentation.model.CertificationType
-import kgb.plum.presentation.ui.common.CustomTextFieldController
+import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import kgb.plum.presentation.ui.common.dialog.CustomDialogController
 import javax.inject.Inject
 

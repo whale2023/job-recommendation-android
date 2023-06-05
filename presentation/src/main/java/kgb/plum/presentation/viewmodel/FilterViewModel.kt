@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.presentation.model.TagType
-import kgb.plum.presentation.ui.common.CustomTextFieldController
+import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import javax.inject.Inject
 
 @HiltViewModel

@@ -7,8 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import kgb.plum.presentation.ui.common.CustomTextField
-import kgb.plum.presentation.ui.common.CustomTextFieldController
+import kgb.plum.presentation.ui.common.textField.CustomTextField
+import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import kgb.plum.presentation.ui.theme.Padding
 
 @Composable

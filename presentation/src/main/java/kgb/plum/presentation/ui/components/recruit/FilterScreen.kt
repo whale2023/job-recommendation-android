@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kgb.plum.presentation.ui.common.CustomTextField
+import kgb.plum.presentation.ui.common.textField.CustomTextField
 import kgb.plum.presentation.ui.common.TagItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.colors
