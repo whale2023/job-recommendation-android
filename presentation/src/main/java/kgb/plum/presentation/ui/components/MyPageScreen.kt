@@ -24,6 +24,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kgb.plum.presentation.ui.common.dialog.CustomDialog
+import kgb.plum.presentation.ui.components.myPage.edit.CareerEditDialogBody
+import kgb.plum.presentation.ui.components.myPage.edit.CareerEditDialogHeader
+import kgb.plum.presentation.ui.components.myPage.edit.CertificationEditDialogBody
+import kgb.plum.presentation.ui.components.myPage.edit.CertificationEditDialogHeader
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoBody
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoBodyListItem
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoHeader
@@ -35,6 +40,33 @@ import kgb.plum.presentation.viewmodel.MyPageViewModel
 fun MyPageScreen() {
   val viewModel = hiltViewModel<MyPageViewModel>()
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    CustomDialog(
+      controller = viewModel.certificationDialogController,
+      header = {
+        CertificationEditDialogHeader(
+          textFieldController = viewModel.certificationTextFieldController
+        )
+      },
+      body = {
+        CertificationEditDialogBody(
+          certificationList = viewModel.certificationList,
+          onAddButtonClicked = { value -> viewModel.addCertification(value) })
+      },
+    )
+    CustomDialog(
+      controller = viewModel.careerDialogController,
+      header = {
+        CareerEditDialogHeader(
+          textFieldController = viewModel.careerTextFieldController
+        )
+      },
+      body = {
+        CareerEditDialogBody(
+          careerList = viewModel.careerList,
+          onAddButtonClicked = { value -> viewModel.addCareer(value) }
+        )
+      },
+    )
     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
       IconButton(onClick = viewModel::editUserInfo) {
         Icon(Icons.Rounded.Edit, "Edit Icon")
@@ -60,7 +92,8 @@ fun MyPageScreen() {
       title = "보유 자격증",
       leading = Icons.Rounded.Bookmark,
       valueList = viewModel.resumeModel.certifications,
-      onAddButtonClicked = viewModel::editCertifications,
+      onAddButtonClicked = { viewModel.certificationDialogController.show(viewModel::initCertificationList) },
+      onRemoveButtonClicked = viewModel::removeCertification,
       modifier = Modifier
         .background(Color.White)
         .padding(Padding.large)
@@ -70,7 +103,8 @@ fun MyPageScreen() {
       title = "경력",
       leading = Icons.Rounded.Bookmark,
       valueList = viewModel.resumeModel.careers.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
-      onAddButtonClicked = viewModel::editCareers,
+      onAddButtonClicked = { viewModel.careerDialogController.show(viewModel::initCareerList) },
+      onRemoveButtonClicked = viewModel::removeCareer,
       modifier = Modifier
         .clip(shape = RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
         .background(Color.White)

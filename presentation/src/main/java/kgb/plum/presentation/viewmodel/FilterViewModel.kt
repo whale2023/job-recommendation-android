@@ -25,9 +25,9 @@ class FilterViewModel @Inject constructor() : ViewModel() {
 
   private fun updateFilterList() {
     _filterList.clear()
-    val tempList =
-      TagType.values().filter { it.toString().contains(searchTextFieldController.text) }
-    tempList.forEach { _filterList.add(it) }
+    _filterList.addAll(TagType.values().filter {
+      it.toString().contains(searchTextFieldController.text)
+    })
   }
 
   fun navigatePop() {
