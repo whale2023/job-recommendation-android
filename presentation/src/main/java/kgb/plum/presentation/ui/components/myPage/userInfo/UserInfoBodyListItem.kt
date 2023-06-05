@@ -1,18 +1,19 @@
 package kgb.plum.presentation.ui.components.myPage.userInfo
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Dashboard
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,34 +31,39 @@ import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 
 @Composable
-fun UserInfoBodyListItem(title: String, leading: ImageVector, valueList: List<String>, modifier: Modifier = Modifier) {
-  LazyColumn(modifier = modifier) {
-    item {
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-          leading, "Edit Icon",
-          modifier = Modifier.size(20.dp), MaterialTheme.colors.iconSubColor
-        )
-        Spacer(modifier = Modifier.width(Padding.medium))
-        Text(
-          text = title,
-          style = Typography.displaySmall.copy(
-            color = MaterialTheme.colors.textSubColor,
-            fontWeight = FontWeight.Bold
-          ),
-          modifier = Modifier.weight(1f)
-        )
-        IconButton(
-          onClick = { /*TODO*/ },
-          modifier = Modifier
-            .size(30.dp)
-            .padding(end = Padding.large)
-        ) {
-          Icon(Icons.Rounded.Add, "Edit Icon")
-        }
+fun UserInfoBodyListItem(
+  modifier: Modifier = Modifier,
+  title: String,
+  leading: ImageVector,
+  valueList: List<String>,
+  onAddButtonClicked: () -> Unit = {},
+  onRemoveButtonClicked: (Int) -> Unit = {},
+) {
+  Column(modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+      Icon(
+        leading, "Edit Icon",
+        modifier = Modifier.size(20.dp), MaterialTheme.colors.iconSubColor
+      )
+      Spacer(modifier = Modifier.width(Padding.medium))
+      Text(
+        text = title,
+        style = Typography.displaySmall.copy(
+          color = MaterialTheme.colors.textSubColor,
+          fontWeight = FontWeight.Bold
+        ),
+        modifier = Modifier.weight(1f)
+      )
+      IconButton(
+        onClick = onAddButtonClicked,
+        modifier = Modifier
+          .size(30.dp)
+          .padding(end = Padding.large)
+      ) {
+        Icon(Icons.Rounded.Add, "Edit Icon")
       }
     }
-    items(items = valueList) {
+    valueList.forEachIndexed { index, it ->
       Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
           Icons.Rounded.Dashboard, "Edit Icon",
@@ -69,6 +75,14 @@ fun UserInfoBodyListItem(title: String, leading: ImageVector, valueList: List<St
             fontWeight = FontWeight.Bold
           )
         )
+        Spacer(modifier = Modifier.weight(1f))
+        IconButton(
+          onClick = { onRemoveButtonClicked(index) }, modifier = Modifier
+            .size(30.dp)
+            .padding(end = Padding.large)
+        ) {
+          Icon(Icons.Rounded.Remove, "삭제 버튼")
+        }
       }
     }
   }

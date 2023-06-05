@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.usecase.RecruitUseCase
 import kgb.plum.presentation.model.SortType
-import kgb.plum.presentation.ui.common.CustomDropdownMenuController
+import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
 import javax.inject.Inject
 
 @HiltViewModel
