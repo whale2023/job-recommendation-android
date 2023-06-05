@@ -86,4 +86,15 @@ dependencies {
     //LiveData
     implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
 
+    // Timber
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+    // Gson
+    implementation "com.google.code.gson:gson:$gson_version"
+
 }

@@ -144,7 +144,7 @@ fun WishListForCalendar(
                         text = date.dayOfMonth.toString(),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
-                        modifier = if(date.compareTo(LocalDate(java.time.LocalDate.now().year,java.time.LocalDate.now().month, java.time.LocalDate.now().dayOfMonth))==0 ) Modifier.size(36.dp).background( MaterialTheme.colors.background) else Modifier
+                        modifier = if(date.compareTo(LocalDate(java.time.LocalDate.now().year,java.time.LocalDate.now().month, java.time.LocalDate.now().dayOfMonth))==0 ) Modifier.size(36.dp).background( MaterialTheme.colors.background , shape = CircleShape) else Modifier
                     )
                     Spacer(modifier = Modifier.size(4.dp))
                     viewModel.wishList.forEach { item ->

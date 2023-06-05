@@ -12,5 +12,9 @@ class HomeRepositoryImpl @Inject constructor(private val homeDataSource: HomeDat
         return homeDataSource.getPopularCompany()
     }
 
+    override suspend fun retrofitTest() {
+        TODO("Not yet implemented")
+    }
+
 
 }

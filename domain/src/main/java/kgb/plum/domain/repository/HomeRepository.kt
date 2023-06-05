@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 interface HomeRepository {
     fun getPopularCompany() : List<RecruitRankItem>
 
+    suspend fun retrofitTest()
+
 }
