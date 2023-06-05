@@ -4,6 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kgb.plum.data.datasource.HomeDataSource
+import kgb.plum.data.network.HomeApi
 import kgb.plum.data.repository.ExRepositoryImpl
 import kgb.plum.data.repository.HomeRepositoryImpl
 import kgb.plum.data.repository.LoginRepositoryImpl
@@ -57,4 +59,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindWishRepository(wishRepositoryImpl: WishRepositoryImpl) : WishRepository
+
+   @Binds
+   @Singleton
+   fun bindHomeNetwork(homeDataSource: HomeDataSource): HomeApi
 }

@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.rememberScrollableState
@@ -15,16 +16,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,8 +41,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -50,6 +58,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kgb.plum.presentation.R
+import kgb.plum.presentation.model.state.RankState
 import kgb.plum.presentation.ui.common.AsyncImageSlider
 import kgb.plum.presentation.ui.common.RecruitCardItem
 import kgb.plum.presentation.ui.common.WishItem
@@ -59,6 +68,7 @@ import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.ui.theme.nameMedium
 import kgb.plum.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
+import timber.log.Timber
 
 
 val images = listOf(
@@ -122,9 +132,28 @@ fun HomeScreen(){
                     end = Padding.small
                 )
             ){
-                items(viewModel.popularCompany, key = {it.rank}) { item ->
-                    RecruitCardItem(rank = item.rank, company = item.company, occupation = item.occupation)
+                when(viewModel.rankState.value){
+                    is RankState.Loading -> {
+                        Timber.d("MoviesScreen: Loading")
+                        item () {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                        }
+                    }
+
+                    is RankState.Main -> {
+                        Timber.d("MoviesScreen: Success")
+                        itemsIndexed((viewModel.rankState.value as RankState.Main).rankList) { index, item ->
+                            RecruitCardItem(rank = index+1, company = item.company, occupation = item.occupation)
+                        }
+                    }
+
+                    is RankState.Failed -> {
+                        Timber.d("MoviesScreen: Error")
+                    }
                 }
+
             }
             Spacer(modifier = Modifier.size(12.dp))
             Text(
@@ -168,6 +197,8 @@ fun HomeScreen(){
         }
     }
 }
+
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

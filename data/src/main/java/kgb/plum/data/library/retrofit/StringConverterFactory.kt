@@ -18,7 +18,6 @@ import java.nio.charset.Charset
 class StringConverterFactory(private val gson: Gson) : Converter.Factory() {
 
     companion object {
-
         private val MEDIA_TYPE = "application/json; charset=UTF-8".toMediaTypeOrNull()
         private val UTF_8 = Charset.forName("UTF-8")
     }
@@ -62,7 +61,6 @@ class StringConverterFactory(private val gson: Gson) : Converter.Factory() {
     }
 
     inner class ResponseBodyConverter : Converter<ResponseBody, String> {
-
         override fun convert(value: ResponseBody): String {
             return value.string()
         }

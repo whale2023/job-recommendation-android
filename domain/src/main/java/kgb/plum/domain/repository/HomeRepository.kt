@@ -1,12 +1,11 @@
 package kgb.plum.domain.repository
 
-import kgb.plum.domain.model.RecruitRankItem
-import kgb.plum.domain.model.WishItemData
-import kotlinx.coroutines.flow.MutableStateFlow
+import kgb.plum.domain.model.EntityWrapper
+import kgb.plum.domain.model.RankItem
 
 interface HomeRepository {
-    fun getPopularCompany() : List<RecruitRankItem>
+    fun getPopularCompany() : List<RankItem>
 
-    suspend fun retrofitTest()
+    suspend fun getRankItemList() : EntityWrapper<List<RankItem>>
 
 }
