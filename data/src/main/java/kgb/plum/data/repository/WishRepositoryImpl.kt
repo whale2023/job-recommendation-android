@@ -12,7 +12,7 @@ class WishRepositoryImpl @Inject constructor(private val wishDataSource: WishDat
         val list = wishDataSource.getWishList()
         val wishList = mutableListOf<WishItemData>()
         list.forEach{item ->
-            wishList.add(WishItemData(item.companyName, item.recruitmentType, getDDay(item.deadLine),item.deadLine))
+            wishList.add(WishItemData(item.companyName, item.recruitmentType, getDDay(item.recruitmentPeriod),item.recruitmentPeriod))
         }
         return wishList
     }

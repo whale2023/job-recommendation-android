@@ -149,19 +149,19 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
         PrimaryButton (
             text = "회원가입 완료",
             onClick = {
-                val result = viewModel.signUp()
-                when(result) {
-                    200 -> {
-                        navController.navigate(Screen.Login.name)
-                        showToast (context, "회원가입 완료!! 환영합니다.")
-                    }
-                    400 -> {
-                        showToast (context, "이미 가입된 회원입니다.")
-                    }
-                    404 -> {
-                        showToast (context, "회원가입 오류. 잠시후 다시 시도해주세요")
-                    }
-                }
+//                viewModel.signUp()
+//                when(result) {
+//                    200 -> {
+//                        navController.navigate(Screen.Login.name)
+//                        showToast (context, "회원가입 완료!! 환영합니다.")
+//                    }
+//                    400 -> {
+//                        showToast (context, "이미 가입된 회원입니다.")
+//                    }
+//                    404 -> {
+//                        showToast (context, "회원가입 오류. 잠시후 다시 시도해주세요")
+//                    }
+//                }
             },
             modifier = Modifier
                 .height(56.dp)

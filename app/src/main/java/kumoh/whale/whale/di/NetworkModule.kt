@@ -53,7 +53,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(logBaseUrl(baseUrl = "https://kgeun.github.io/assets/fastcampus_android_compose/movie/"))
+            .baseUrl(logBaseUrl(baseUrl = "http://3.34.125.119:8080/"))
             .addConverterFactory(StringConverterFactory(gson))
             .build()
     }

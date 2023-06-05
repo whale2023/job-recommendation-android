@@ -3,8 +3,15 @@ package kgb.plum.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.usecase.SignUpUseCase
+import kgb.plum.presentation.model.Screen
+import kgb.plum.presentation.model.state.SignUpState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +45,9 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
 
     private val _disabilityLevel = MutableLiveData("")
     val disabilityLevel: LiveData<String> = _disabilityLevel
+
+    private val _signUpState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState.Loading)
+    val signUpState : StateFlow<SignUpState> = _signUpState
 
     fun setEmail(text : String){
         _email.value = text
@@ -115,7 +125,20 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         return signUpUseCase.requestCertification(_certificationNumber.value ?: "")
     }
 
-    fun signUp() : Int{
-        return signUpUseCase.signUp(_email.value?:"", _pw.value?:"", _name.value?:"", _disabilityType.value?:"", _disabilityLevel.value?:"", _age.value?:"", _addressInfo.value?:"", _addressDetail.value?:"")
-    }
+//    suspend fun signUp(){
+//        viewModelScope.launch {
+//            _signUpState.value = SignUpState.Loading
+//            val result = signUpUseCase.signUp(_email.value?:"", _pw.value?:"", _name.value?:"", _disabilityType.value?:"", _disabilityLevel.value?:"", _age.value?:"", _addressInfo.value?:"", _addressDetail.value?:"")
+//            _signUpState.value = when(result) {
+//                is EntityWrapper.Success -> {
+//                    SignUpState.Main
+//                }
+//                is EntityWrapper.Fail -> {
+//                    SignUpState.Failed(
+//
+//                    )
+//                }
+//            }
+//        }
+//    }
 }
