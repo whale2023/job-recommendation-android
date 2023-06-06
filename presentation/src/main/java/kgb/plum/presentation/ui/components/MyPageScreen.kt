@@ -63,14 +63,13 @@ fun MyPageScreen() {
     CustomDialog(
       controller = viewModel.careerDialogController,
       header = {
-        CareerEditDialogHeader(
-          textFieldController = viewModel.careerTextFieldController
-        )
+        CareerEditDialogHeader()
       },
       body = {
         CareerEditDialogBody(
-          careerList = viewModel.careerList,
-          onAddButtonClicked = { value -> viewModel.addCareer(value) }
+          majorCategoryDropdownMenuController = viewModel.careerMajorDropdownMenuController,
+          yearDropdownMenuController = viewModel.yearDropdownMenuController,
+          onAddButtonClicked = viewModel::addCareer
         )
       },
     )
@@ -110,7 +109,7 @@ fun MyPageScreen() {
       title = "경력",
       leading = Icons.Rounded.Bookmark,
       valueList = viewModel.resumeModel.careers.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
-      onAddButtonClicked = { viewModel.careerDialogController.show(viewModel::initCareerList) },
+      onAddButtonClicked = { viewModel.careerDialogController.show() },
       onRemoveButtonClicked = viewModel::removeCareer,
       modifier = Modifier
         .clip(shape = RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))

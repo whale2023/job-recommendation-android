@@ -3,7 +3,7 @@ package kgb.plum.presentation.ui.common.dialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,7 +33,7 @@ fun CustomDialog(
       Surface(
         modifier = Modifier
           .width(300.dp)
-          .height(500.dp),
+          .heightIn(0.dp, 500.dp),
         shape = Shapes.large,
         color = MaterialTheme.colors.checked
       ) {

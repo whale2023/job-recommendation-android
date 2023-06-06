@@ -13,11 +13,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun <T> CustomDropdownMenu(
   controller: CustomDropdownMenuController<T>,
+  offset: DpOffset = DpOffset(0.dp, 10.dp)
 ) {
   DropdownMenu(
     expanded = controller.expanded,
     onDismissRequest = controller::onDismissRequest,
-    offset = DpOffset(0.dp, 10.dp),
+    offset = offset,
   ) {
     controller.dropdownMenuItemList.forEach {
       DropdownMenuItem(
