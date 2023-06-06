@@ -1,49 +1,82 @@
 package kgb.plum.presentation.ui.components.myPage.edit
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Dashboard
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kgb.plum.domain.model.CareerModel
-import kgb.plum.presentation.model.CareerType
+import kgb.plum.presentation.model.CareerMajorType
+import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
+import kgb.plum.presentation.ui.common.dropdown.CustomTextDropdownMenu
 import kgb.plum.presentation.ui.theme.Padding
-import kgb.plum.presentation.ui.theme.Typography
+import kgb.plum.presentation.ui.theme.colors
 
 @Composable
 fun CareerEditDialogBody(
-  careerList: List<CareerType>,
+  majorCategoryDropdownMenuController: CustomDropdownMenuController<CareerMajorType>,
+  yearDropdownMenuController: CustomDropdownMenuController<Int>,
   onAddButtonClicked: (CareerModel) -> Unit
 ) {
-  LazyColumn {
-    items(items = careerList) {
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-          Icons.Rounded.Dashboard, "Edit Icon",
-          modifier = Modifier.size(20.dp)
+  val middleCategoryDropdownMenuController = CustomDropdownMenuController(
+    majorCategoryDropdownMenuController.currentValue.getMiddleType()[0],
+    majorCategoryDropdownMenuController.currentValue.getMiddleType(),
+  )
+  Column() {
+    Spacer(modifier = Modifier.height(Padding.large))
+    CustomTextDropdownMenu(
+      controller = majorCategoryDropdownMenuController,
+      offset = DpOffset((-70).dp, 10.dp),
+      modifier = Modifier.fillMaxWidth()
+    )
+    Spacer(modifier = Modifier.height(Padding.large))
+    CustomTextDropdownMenu(
+      controller = middleCategoryDropdownMenuController,
+      offset = DpOffset((-70).dp, 10.dp),
+      modifier = Modifier.fillMaxWidth()
+    )
+    Spacer(modifier = Modifier.height(Padding.large))
+    Row(
+      verticalAlignment = Alignment.Top,
+      horizontalArrangement = Arrangement.SpaceBetween,
+      modifier = Modifier.fillMaxWidth()
+    ) {
+      Box(modifier = Modifier.weight(1f)) {
+        CustomTextDropdownMenu(
+          controller = yearDropdownMenuController,
+          offset = DpOffset((-70).dp, 10.dp),
+          modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.width(Padding.medium))
-        Text(
-          text = it.toString(), style = Typography.displaySmall.copy(
-            fontWeight = FontWeight.Bold
+      }
+      Spacer(modifier = Modifier.width(Padding.large))
+      Button(
+        onClick = {
+          onAddButtonClicked(
+            CareerModel(
+              yearDropdownMenuController.currentValue,
+              if (middleCategoryDropdownMenuController.currentValue.toString() == "해당 없음") "${majorCategoryDropdownMenuController.currentValue}/" else "${majorCategoryDropdownMenuController.currentValue}/${middleCategoryDropdownMenuController.currentValue}"
+            )
           )
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        IconButton(onClick = { onAddButtonClicked(CareerModel(3, it.toString())) }) {
-          Icon(Icons.Rounded.Add, "추가 버튼")
-        }
+        },
+        contentPadding = PaddingValues(0.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.tertiary),
+        modifier = Modifier.padding(0.dp)
+      ) {
+        Text(text = "추가")
       }
     }
   }
