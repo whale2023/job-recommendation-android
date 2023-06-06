@@ -111,7 +111,7 @@ fun MainNavigationScreen(navController : NavHostController, paddingValues: Paddi
         modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
     ) {
         composable(route = MainMenu.Home.name){
-            HomeScreen()
+            HomeScreen(navController)
         }
         composable(route = MainMenu.Recruit.name){
             RecruitScreen()

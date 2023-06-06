@@ -1,8 +1,11 @@
 package kgb.plum.presentation.ui.components
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +48,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -54,6 +58,7 @@ import kgb.plum.domain.model.UserInfo
 import kgb.plum.domain.model.state.RankState
 import kgb.plum.domain.model.state.UserState
 import kgb.plum.domain.model.state.WishState
+import kgb.plum.presentation.model.MainMenu
 import kgb.plum.presentation.ui.common.RecruitCardItem
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
@@ -74,7 +79,7 @@ val images = listOf(
 )
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController: NavHostController){
     val viewModel = hiltViewModel<HomeViewModel>()
     var name by remember { mutableStateOf("")}
     val userState by viewModel.userState.collectAsStateWithLifecycle()
@@ -131,7 +136,10 @@ fun HomeScreen(){
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(200.dp)
+                        modifier = Modifier.height(200.dp).clickable {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(images[index]))
+                            context.startActivity(intent)
+                        }
                     )
                 }
             )
@@ -193,7 +201,11 @@ fun HomeScreen(){
             ){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(Padding.large)
+                    modifier = Modifier.padding(Padding.large).clickable {
+                        navController.navigate(MainMenu.WishList.name) {
+                            popUpTo(MainMenu.Home.name) {inclusive = true}
+                        }
+                    }
                 ) {
                     WishItem(MaterialTheme.colors.background,
                         if(wishList.isNotEmpty()) wishList[0].companyName else null,
@@ -238,7 +250,9 @@ fun AutoSlidingCarousel(
     Box(
         modifier = modifier.fillMaxWidth(),
     ) {
-        HorizontalPager(count = itemsCount, state = pagerState) { page ->
+        HorizontalPager(count = itemsCount, state = pagerState, modifier = Modifier.clickable {
+
+        }) { page ->
             itemContent(page)
         }
 
@@ -304,11 +318,3 @@ fun IndicatorDot(
 
 
 
-
-@Preview
-@Composable
-fun HomeScreenPreview(){
-    WhaleTheme {
-        HomeScreen()
-    }
-}
