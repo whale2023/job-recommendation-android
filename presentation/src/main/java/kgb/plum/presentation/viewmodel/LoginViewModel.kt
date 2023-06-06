@@ -27,13 +27,8 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
 
     private val _loginState: MutableStateFlow<LoginState> =
         MutableStateFlow(LoginState.LOADING)
-    val loginState : StateFlow<LoginState> = _loginState.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        LoginState.LOADING
-    )
+    val loginState : StateFlow<LoginState> = _loginState
 
-    var isSuccess = false
 
     private val _id = MutableLiveData("")
     val id : LiveData<String> = _id
@@ -49,12 +44,9 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
         _pw.value = text
     }
 
-    fun login(){
-        viewModelScope.launch {
-            _loginState.value = LoginState.LOADING
-            _loginState.value = loginUseCase.login(_id.value ?: "", _pw.value ?: "")
-            if(_loginState.value == LoginState.SUCCESS) isSuccess = true
-        }
+    suspend fun login() : LoginState{
+        _loginState.value = LoginState.LOADING
+        return loginUseCase.login(_id.value ?: "", _pw.value ?: "")
     }
 
     fun saveToken(context: Context) {
