@@ -71,7 +71,7 @@ fun RecruitScreen() {
           ?: CompanyModel(
             id = 0,
             applicationDate = "",
-            deadLine = "",
+            recruitmentPeriod = "",
             companyName = "",
             recruitmentType = "",
             typeOfEmployment = "",
@@ -87,6 +87,7 @@ fun RecruitScreen() {
             responsibleAgency = "",
             contactNumber = "",
             countOfMemberWish = 0,
+            registrationDate = "",
             addedWishlist = false
           )
       DetailScreen(companyModel, navController)

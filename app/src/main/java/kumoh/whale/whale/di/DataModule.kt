@@ -8,10 +8,12 @@ import kgb.plum.data.datasource.HomeDataSource
 import kgb.plum.data.datasource.LoginDataSource
 import kgb.plum.data.datasource.SignUpDataSource
 import kgb.plum.data.datasource.UserDataSource
+import kgb.plum.data.datasource.WishDataSource
 import kgb.plum.data.network.HomeApi
 import kgb.plum.data.network.LoginApi
 import kgb.plum.data.network.SignUpApi
 import kgb.plum.data.network.UserApi
+import kgb.plum.data.network.WishApi
 import kgb.plum.data.repository.ExRepositoryImpl
 import kgb.plum.data.repository.HomeRepositoryImpl
 import kgb.plum.data.repository.LoginRepositoryImpl
@@ -81,4 +83,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindUserNetwork(userDataSource: UserDataSource): UserApi
+
+    @Binds
+    @Singleton
+    fun bindWishNetwork(wishDataSource: WishDataSource): WishApi
 }

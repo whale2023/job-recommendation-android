@@ -20,7 +20,7 @@ fun DetailBody(companyModel: CompanyModel) {
   Column {
     DetailBodyItem(
       "지원 기간",
-      "${companyModel.applicationDate} ~ ${companyModel.deadLine}",
+      "${companyModel.applicationDate} ~ ${companyModel.recruitmentPeriod}",
       modifier = Modifier
         .background(MaterialTheme.colors.checked)
         .padding(horizontal = Padding.large)

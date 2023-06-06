@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,12 +19,15 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.himanshoe.kalendar.Kalendar
 import com.himanshoe.kalendar.KalendarEvents
 import com.himanshoe.kalendar.KalendarType
@@ -41,7 +46,9 @@ import com.himanshoe.kalendar.color.KalendarColor
 import com.himanshoe.kalendar.color.KalendarColors
 import com.himanshoe.kalendar.ui.component.header.KalendarTextKonfig
 import com.himanshoe.kalendar.ui.firey.DaySelectionMode
+import kgb.plum.domain.model.state.WishState
 import kgb.plum.presentation.R
+import kgb.plum.presentation.model.MainMenu
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
@@ -54,17 +61,19 @@ import kotlinx.datetime.LocalDate
 fun WishListScreen() {
     val viewModel = hiltViewModel<WishListViewModel>()
     val isCalendar = remember { mutableStateOf(false)}
+    val wishListState by viewModel.wishState.collectAsStateWithLifecycle()
     if(isCalendar.value){
-        WishListForCalendar(isCalendar, viewModel)
+        WishListForCalendar(isCalendar, viewModel, wishListState)
     } else {
-        WishListForListScreen(isCalendar, viewModel)
+        WishListForListScreen(isCalendar, viewModel, wishListState)
     }
 }
 
 @Composable
 fun WishListForListScreen(
     isCalendar : MutableState<Boolean>,
-    viewModel : WishListViewModel
+    viewModel : WishListViewModel,
+    wishListState : WishState
 ) {
     Column(
         modifier = Modifier
@@ -77,12 +86,28 @@ fun WishListForListScreen(
             style = MaterialTheme.typography.headlineSmall
         )
         Spacer(modifier = Modifier.size(Padding.large))
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            itemsIndexed(viewModel.wishList) { index, item ->
-                WishItem(color = if(index%2==0) MaterialTheme.colors.background else MaterialTheme.colors.secondary, company = item.company, occupation = item.occupation, dDay = item.dDay)
+        when(wishListState){
+            is WishState.Loading -> {
+                Box (
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+            is WishState.Main -> {
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    itemsIndexed(wishListState.wishList) { index, item ->
+                        WishItem(color = if(index%2==0) MaterialTheme.colors.background else MaterialTheme.colors.secondary, company = item.companyName, occupation = item.recruitmentType, dDay = item.recruitmentPeriod)
+                    }
+                }
+            }
+            is WishState.Failed -> {
+
             }
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -107,7 +132,8 @@ fun WishListForListScreen(
 @Composable
 fun WishListForCalendar(
     isCalendar: MutableState<Boolean>,
-    viewModel: WishListViewModel
+    viewModel: WishListViewModel,
+    wishListState: WishState
 ) {
     val list = mutableListOf<KalendarColor>()
     for(i in 1..12){
@@ -144,17 +170,22 @@ fun WishListForCalendar(
                         text = date.dayOfMonth.toString(),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
-                        modifier = if(date.compareTo(LocalDate(java.time.LocalDate.now().year,java.time.LocalDate.now().month, java.time.LocalDate.now().dayOfMonth))==0 ) Modifier.size(36.dp).background( MaterialTheme.colors.background , shape = CircleShape) else Modifier
+                        modifier = if(date.compareTo(LocalDate(java.time.LocalDate.now().year,java.time.LocalDate.now().month, java.time.LocalDate.now().dayOfMonth))==0 ) Modifier
+                            .size(36.dp)
+                            .background(MaterialTheme.colors.background, shape = CircleShape) else Modifier
                     )
                     Spacer(modifier = Modifier.size(4.dp))
-                    viewModel.wishList.forEach { item ->
-                        if(item.deadLine == date.toString()){
-                            Text(
-                                text = item.company,
-                                modifier = Modifier.background(MaterialTheme.colors.secondary),
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                            Spacer(modifier = Modifier.size(6.dp))
+                    if(wishListState is WishState.Main){
+                        wishListState.wishList.forEach {
+                                item ->
+                            if(item.recruitmentPeriod == date.toString()){
+                                Text(
+                                    text = item.companyName,
+                                    modifier = Modifier.background(MaterialTheme.colors.secondary),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                                Spacer(modifier = Modifier.size(6.dp))
+                            }
                         }
                     }
                 }

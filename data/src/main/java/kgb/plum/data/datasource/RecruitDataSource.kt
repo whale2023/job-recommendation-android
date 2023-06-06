@@ -10,7 +10,7 @@ class RecruitDataSource @Inject constructor()  {
       CompanyModel(
         id = 2,
         applicationDate = "2023-01-31 00:00:00",
-        deadLine = "2023-02-28",
+        recruitmentPeriod = "2023-02-28",
         companyName = "(주)서한",
         recruitmentType = "총무 및 일반 사무원",
         typeOfEmployment = "계약직",
@@ -26,12 +26,13 @@ class RecruitDataSource @Inject constructor()  {
         responsibleAgency = "대구지역본부",
         contactNumber = "1588-1519",
         countOfMemberWish = 1,
+        registrationDate = "2023-01-31",
         addedWishlist = true
       ),
       CompanyModel(
         id = 2,
         applicationDate = "2023-01-31 00:00:00",
-        deadLine = "2023-06-28",
+        recruitmentPeriod = "2023-06-28",
         companyName = "(주)서한",
         recruitmentType = "총무 및 일반 사무원",
         typeOfEmployment = "계약직",
@@ -47,12 +48,13 @@ class RecruitDataSource @Inject constructor()  {
         responsibleAgency = "대구지역본부",
         contactNumber = "1588-1519",
         countOfMemberWish = 1,
+        registrationDate = "2023-01-31",
         addedWishlist = true
       ),
       CompanyModel(
         id = 2,
         applicationDate = "2023-01-31 00:00:00",
-        deadLine = "2023-04-28",
+        recruitmentPeriod = "2023-04-28",
         companyName = "(주)서한",
         recruitmentType = "총무 및 일반 사무원",
         typeOfEmployment = "계약직",
@@ -68,6 +70,7 @@ class RecruitDataSource @Inject constructor()  {
         responsibleAgency = "대구지역본부",
         contactNumber = "1588-1519",
         countOfMemberWish = 1,
+        registrationDate = "2023-01-31",
         addedWishlist = true
       )
     )

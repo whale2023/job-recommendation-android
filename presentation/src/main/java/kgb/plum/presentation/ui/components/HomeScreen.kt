@@ -53,6 +53,7 @@ import com.google.accompanist.pager.PagerState
 import kgb.plum.domain.model.UserInfo
 import kgb.plum.domain.model.state.RankState
 import kgb.plum.domain.model.state.UserState
+import kgb.plum.domain.model.state.WishState
 import kgb.plum.presentation.ui.common.RecruitCardItem
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
@@ -77,6 +78,13 @@ fun HomeScreen(){
     val viewModel = hiltViewModel<HomeViewModel>()
     var name by remember { mutableStateOf("")}
     val userState by viewModel.userState.collectAsStateWithLifecycle()
+    val rankState by viewModel.rankState.collectAsStateWithLifecycle()
+    val wishState by viewModel.wishState.collectAsStateWithLifecycle()
+
+    val wishList = if(wishState is WishState.Main) {
+        (wishState as WishState.Main).wishList
+    } else emptyList()
+
     val context = LocalContext.current
     when(userState){
         is UserState.Loading -> {
@@ -133,36 +141,39 @@ fun HomeScreen(){
                 style = MaterialTheme.typography.nameMedium
             )
             Spacer(modifier = Modifier.size(12.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(Padding.large),
-                contentPadding = PaddingValues(
-                    start = Padding.small,
-                    end = Padding.small
-                )
-            ){
-                when(viewModel.rankState.value){
-                    is RankState.Loading -> {
-                        Timber.d("MoviesScreen: Loading")
-                        item () {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                        }
+            when(rankState){
+                is RankState.Loading -> {
+                    Timber.d("MoviesScreen: Loading")
+                    Box (
+                        modifier = Modifier
+                            .height(180.dp)
+                            .fillMaxWidth()
+                            ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
-
-                    is RankState.Main -> {
-                        Timber.d("MoviesScreen: Success")
+                }
+                is RankState.Main -> {
+                    Timber.d("MoviesScreen: Success")
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(Padding.large),
+                        contentPadding = PaddingValues(
+                            start = Padding.small,
+                            end = Padding.small
+                        )
+                    ){
                         itemsIndexed((viewModel.rankState.value as RankState.Main).rankList) { index, item ->
                             RecruitCardItem(rank = index+1, company = item.company, occupation = item.occupation)
                         }
                     }
 
-                    is RankState.Failed -> {
-                        Timber.d("MoviesScreen: Error")
-                    }
                 }
-
+                is RankState.Failed -> {
+                    Timber.d("MoviesScreen: Error")
+                }
             }
+
             Spacer(modifier = Modifier.size(12.dp))
             Text(
                 text = "관심을 표한 회사에요",
@@ -185,19 +196,19 @@ fun HomeScreen(){
                     modifier = Modifier.padding(Padding.large)
                 ) {
                     WishItem(MaterialTheme.colors.background,
-                        if(viewModel.wishList.size>0) viewModel.wishList[0].company else null,
-                        if(viewModel.wishList.size>0) viewModel.wishList[0].occupation else null,
-                        if(viewModel.wishList.size>0) viewModel.wishList[0].dDay else null)
+                        if(wishList.isNotEmpty()) wishList[0].companyName else null,
+                        if(wishList.isNotEmpty()) wishList[0].recruitmentType else null,
+                        if(wishList.isNotEmpty()) wishList[0].recruitmentPeriod else null)
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.secondary,
-                        if(viewModel.wishList.size>1) viewModel.wishList[1].company else null,
-                        if(viewModel.wishList.size>1) viewModel.wishList[1].occupation else null,
-                        if(viewModel.wishList.size>1) viewModel.wishList[1].dDay else null)
+                        if(wishList.size>1) wishList[1].companyName else null,
+                        if(wishList.size>1) wishList[1].recruitmentType else null,
+                        if(wishList.size>1) wishList[1].recruitmentPeriod else null)
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.background,
-                        if(viewModel.wishList.size>2) viewModel.wishList[2].company else null,
-                        if(viewModel.wishList.size>2) viewModel.wishList[2].occupation else null,
-                        if(viewModel.wishList.size>2) viewModel.wishList[2].dDay else null)
+                        if(wishList.size>2) wishList[2].companyName else null,
+                        if(wishList.size>2) wishList[2].recruitmentType else null,
+                        if(wishList.size>2) wishList[2].recruitmentPeriod else null)
                 }
 
 

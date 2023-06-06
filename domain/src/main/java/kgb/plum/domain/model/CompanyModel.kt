@@ -3,7 +3,7 @@ package kgb.plum.domain.model
 data class CompanyModel(
     val id: Int,
     val applicationDate: String,
-    val deadLine: String,
+    val recruitmentPeriod: String,
     val companyName: String,
     val recruitmentType: String,
     val typeOfEmployment: String,
@@ -17,6 +17,7 @@ data class CompanyModel(
     val businessAddress: String,
     val companyType: String,
     val responsibleAgency: String,
+    val registrationDate: String,
     val contactNumber: String,
     val countOfMemberWish: Int,
     val addedWishlist: Boolean = false,
