@@ -1,7 +1,9 @@
 package kgb.plum.presentation.ui.components
 
 import android.content.Context
+import android.os.Handler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -46,6 +48,11 @@ import kgb.plum.presentation.ui.common.buttons.UnderlinedButton
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.LoginViewModel
 import kgb.plum.presentation.ui.theme.colors
+import kgb.plum.presentation.util.SpeechTool
+import kgb.plum.presentation.util.SpeechTool.isSupported
+import kgb.plum.presentation.util.SpeechTool.offTool
+import kgb.plum.presentation.util.SpeechTool.speakOut
+import kgb.plum.presentation.util.SpeechTool.speechStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -55,16 +62,43 @@ import kotlinx.coroutines.runBlocking
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(contextActivity: Context, navController : NavHostController, loginViewModel: LoginViewModel = hiltViewModel()) {
+    var speechState by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var buttonText by remember { mutableStateOf("이메일로 로그인") }
     val coroutineScope = rememberCoroutineScope()
     var loginState by remember { mutableStateOf(LoginState.LOADING)}
+    var doubleClick: Boolean? = false
+    var isLock by remember { mutableStateOf(!isSupported) }
+
+
+        LaunchedEffect(speechState){
+            coroutineScope.launch {
+                if(isSupported) {
+                    speakOut("안녕하세요? 장애인 맞춤형 취업 추천 애플리케이션 웨일입니다. 지금과 같이 음성 지원 기능을 원하지 않으신다면 화면을 빠르게 두 번 터치해주세요.")
+                    delay(18000)
+                    if(isSupported) {
+                        speakOut("로그인 혹은 회원가입을 선택해주세요.")
+                        delay(2000)
+                        speechStart(context)
+                    }else {
+                        isLock = true
+                        offTool(context)
+                    }
+                }
+            }
+        }
+
 
     Surface {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ){
+            modifier = Modifier.fillMaxSize().clickable(enabled = !isLock) {
+                if (doubleClick!!) {
+                    SpeechTool.isSupported = !SpeechTool.isSupported
+                }
+                doubleClick = true
+                Handler().postDelayed({ doubleClick = false }, 2000) }
+                ){
             Image(
                 modifier = Modifier.fillMaxSize(0.6f),
                 painter = painterResource(id = R.drawable.whale_logo),

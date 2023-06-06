@@ -1,7 +1,9 @@
 package kgb.plum.presentation.ui.components
 
 import android.content.Context
+import android.os.Handler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,11 +16,13 @@ import androidx.navigation.compose.rememberNavController
 import kgb.plum.presentation.model.Screen
 import kgb.plum.presentation.ui.components.signup.SignUpScreen
 import kgb.plum.presentation.ui.theme.colors
+import kgb.plum.presentation.util.SpeechTool
 import kgb.plum.presentation.viewmodel.LoginViewModel
 
 @Composable
 fun RootScreen(context: Context){
     val navController = rememberNavController()
+    SpeechTool.navController = navController
     NavHost(
         navController = navController,
         modifier = Modifier.background(MaterialTheme.colors.background),
