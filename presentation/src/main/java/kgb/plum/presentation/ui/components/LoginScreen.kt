@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +17,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,9 +47,39 @@ import kgb.plum.presentation.ui.theme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController : NavHostController){
+fun LoginScreen(context: Context, navController : NavHostController){
     val context = LocalContext.current
     val loginViewModel = hiltViewModel<LoginViewModel>()
+    val result by loginViewModel.loginState.collectAsState()
+    var buttonText by remember { mutableStateOf("이메일로 로그인")}
+
+    when(result) {
+        LoginState.LOADING -> {
+
+        }
+        LoginState.ID_PW_EMPTY -> {
+            showToast(context, "아이디와 비밀번호를 먼저 입력해주세요.")
+            buttonText = "이메일로 로그인"
+        }
+        LoginState.NOT_EMAIL -> {
+            showToast(context, "아이디 양식이 잘못 되었습니다.")
+            buttonText = "이메일로 로그인"
+        }
+        LoginState.SUCCESS -> {
+            loginViewModel.saveToken(context)
+            navController.navigate(kgb.plum.presentation.model.Screen.Main.name){
+                popUpTo(kgb.plum.presentation.model.Screen.Login.name) { inclusive = true }
+            }
+        }
+        LoginState.WRONG_PW_ID -> {
+            showToast(context, "잘못된 로그인 정보입니다.")
+            buttonText = "이메일로 로그인"
+        }
+        LoginState.UNKNOWN_ERROR -> {
+            showToast(context, "Unknown error")
+            buttonText = "이메일로 로그인"
+        }
+    }
     Surface {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,18 +119,13 @@ fun LoginScreen(navController : NavHostController){
             Spacer(modifier = Modifier.size(20.dp))
             PrimaryButton(
                 onClick = {
-                    val state = loginViewModel.login()
-                    if(state != LoginState.SUCCESS) showToast(context, state.state())
-                    if(state == LoginState.SUCCESS){
-                        navController.navigate(Screen.Main.name){
-                            popUpTo(Screen.Login.name) { inclusive = true }
-                        }
-                    }
+                    loginViewModel.login()
+                    buttonText = "로그인 진행중..."
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .height(56.dp),
-                id = R.string.sign_in_with_email
+                text = buttonText
             )
             UnderlinedButton(
                 text = stringResource(id = R.string.sign_up),
@@ -110,10 +141,3 @@ fun LoginScreen(navController : NavHostController){
     }
 }
 
-@Preview
-@Composable
-fun LoginScreenPreview(){
-    WhaleTheme {
-        LoginScreen(navController = rememberNavController())
-    }
-}

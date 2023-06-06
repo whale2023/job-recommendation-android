@@ -5,8 +5,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kgb.plum.data.datasource.HomeDataSource
+import kgb.plum.data.datasource.LoginDataSource
 import kgb.plum.data.datasource.SignUpDataSource
 import kgb.plum.data.network.HomeApi
+import kgb.plum.data.network.LoginApi
 import kgb.plum.data.network.SignUpApi
 import kgb.plum.data.repository.ExRepositoryImpl
 import kgb.plum.data.repository.HomeRepositoryImpl
@@ -69,4 +71,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindSignUpNetwork(signUpDataSource: SignUpDataSource): SignUpApi
+
+    @Binds
+    @Singleton
+    fun bindLoginNetwork(loginDataSource: LoginDataSource): LoginApi
 }

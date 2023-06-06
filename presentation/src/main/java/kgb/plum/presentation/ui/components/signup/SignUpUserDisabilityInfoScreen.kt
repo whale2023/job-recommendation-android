@@ -1,14 +1,15 @@
 package kgb.plum.presentation.ui.components.signup
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -17,13 +18,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,21 +40,49 @@ import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.domain.model.disabilityType
+import kgb.plum.domain.model.state.SignUpState
 import kgb.plum.presentation.model.Screen
-import kgb.plum.presentation.model.state.SignUpState
 import kgb.plum.presentation.util.showToast
-import kotlinx.coroutines.CoroutineScope
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: SignUpViewModel){
+    val context = LocalContext.current
     var expandedType by remember { mutableStateOf(false)}
     var selectedTypeItem by remember { mutableStateOf(disabilityType[0])}
     var expandedLevel by remember { mutableStateOf(false)}
     var selectedLevelItem by remember { mutableStateOf(disabilityLevel[0])}
     var buttonText by remember { mutableStateOf("회원가입") }
-    val context = LocalContext.current
+    val signUpState by viewModel.signUpState.collectAsState()
+    when(signUpState) {
+        is SignUpState.Loading -> {
+        }
+        is SignUpState.None -> {
+            buttonText = "회원가입"
+        }
+        is SignUpState.Main -> {
+            when((signUpState as SignUpState.Main).code) {
+                200 -> {
+                    showToast(context, "회원 가입 완료!! 환영합니다.")
+                    navController.navigate(Screen.Login.name) {
+                        popUpTo(Screen.SignUp.name) {inclusive = true}
+                    }
+                }
+                400 -> {
+                    showToast(context, "이미 가입된 정보입니다.")
+                    viewModel.resetState()
+                }
+                404 -> {
+                    showToast(context, "서버 오류. 잠시 후 다시 시도해주세요.")
+                    viewModel.resetState()
+                }
+            }
+        }
+        is SignUpState.Failed -> {
+            showToast(context, (signUpState as SignUpState.Failed).reason)
+            viewModel.resetState()
+        }
+    }
     Column(
         modifier = Modifier.padding(Padding.large),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -166,7 +196,6 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
             onClick = {
                 buttonText = "회원가입 진행중..."
                 viewModel.signUp()
-
             },
             modifier = Modifier
                 .height(56.dp)

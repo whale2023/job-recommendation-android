@@ -1,4 +1,4 @@
-package kgb.plum.presentation.model.state
+package kgb.plum.domain.model.state
 
 import kgb.plum.domain.model.RankItem
 

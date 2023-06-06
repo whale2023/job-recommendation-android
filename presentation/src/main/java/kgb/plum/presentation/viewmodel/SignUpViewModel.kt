@@ -1,7 +1,5 @@
 package kgb.plum.presentation.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.usecase.SignUpUseCase
-import kgb.plum.presentation.model.Screen
-import kgb.plum.presentation.model.state.SignUpState
+import kgb.plum.domain.model.state.SignUpState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -146,7 +143,10 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
                     )
                 }
             }
-            Log.d("테스트", result.toString())
         }
+    }
+
+    fun resetState() {
+        _signUpState.value = SignUpState.None
     }
 }

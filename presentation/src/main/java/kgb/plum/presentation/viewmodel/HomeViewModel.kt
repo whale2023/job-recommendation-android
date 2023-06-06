@@ -8,7 +8,7 @@ import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.usecase.HomeUseCase
 import kgb.plum.domain.model.RankItem
 import kgb.plum.domain.model.WishItemData
-import kgb.plum.presentation.model.state.RankState
+import kgb.plum.domain.model.state.RankState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

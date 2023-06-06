@@ -1,6 +1,8 @@
 package kgb.plum.domain.repository
 
-interface LoginRepository {
+import kgb.plum.domain.model.EntityWrapper
+import kgb.plum.domain.model.LoginToken
 
-    fun login(id: String, pw: String)
+interface LoginRepository {
+    suspend fun login(id: String, pw: String) : EntityWrapper<LoginToken>
 }

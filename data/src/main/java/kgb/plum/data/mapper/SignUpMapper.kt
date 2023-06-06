@@ -14,10 +14,10 @@ class SignUpMapper @Inject constructor(
     override fun getSuccess(model: SignUpRequest?, extra: Any?): EntityWrapper.Success<Int> {
         return model?.let {
             EntityWrapper.Success(
-                500
+                0
             )
         } ?: EntityWrapper.Success(
-            entity = 400
+            entity = 0
         )
     }
     

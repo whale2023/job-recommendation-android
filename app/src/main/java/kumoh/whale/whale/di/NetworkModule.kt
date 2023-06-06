@@ -53,7 +53,7 @@ class NetworkModule {
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(logBaseUrl(baseUrl = "http://3.34.125.119:8080/"))
+            .baseUrl(logBaseUrl(baseUrl = "http://13.124.3.219:8080/"))
             .addConverterFactory(StringConverterFactory(gson))
             .build()
     }

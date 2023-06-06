@@ -1,7 +1,8 @@
-package kgb.plum.presentation.model.state
+package kgb.plum.domain.model.state
 
 sealed class SignUpState {
     object Loading: SignUpState()
+    object None: SignUpState()
     class Main(
         val code: Int
     ): SignUpState()
