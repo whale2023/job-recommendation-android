@@ -1,6 +1,5 @@
 package kgb.plum.presentation.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,8 +8,10 @@ import kgb.plum.domain.model.ResumeModel
 import kgb.plum.domain.model.UserInfoModel
 import kgb.plum.domain.usecase.MyPageUseCase
 import kgb.plum.presentation.model.CareerMajorType
-import kgb.plum.presentation.model.careerMiddleType.CareerMiddleType
 import kgb.plum.presentation.model.CertificationType
+import kgb.plum.presentation.model.EducationType
+import kgb.plum.presentation.model.MajorType
+import kgb.plum.presentation.model.WorkType
 import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import kgb.plum.presentation.ui.common.dialog.CustomDialogController
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
@@ -22,6 +23,21 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     get() = myPageUseCase.getResume()
   val userInfoModel: UserInfoModel =
     UserInfoModel("박준식", 25, "qkrwnstlr@naver.com", "구미시", "청각 3급")
+
+  val resumeDialogController = CustomDialogController()
+  val resumeMajorDropdownMenuController = CustomDropdownMenuController(
+    MajorType.NEWEST,
+    MajorType.values().toList(),
+  )
+  val resumeEducationDropdownMenuController = CustomDropdownMenuController(
+    EducationType.MIDDLE,
+    EducationType.values().toList(),
+  )
+  val resumeWorkTypeDropdownMenuController = CustomDropdownMenuController(
+    WorkType.NEWEST,
+    WorkType.values().toList(),
+  )
+  val resumePreferIncomeTextFieldController = CustomTextFieldController()
 
   val careerDialogController = CustomDialogController()
   val careerMajorDropdownMenuController = CustomDropdownMenuController(
@@ -73,7 +89,6 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     val newCareers = resumeModel.careers.toMutableList()
     newCareers.add(careerModel)
     myPageUseCase.saveResume(resumeModel.copy(careers = newCareers))
-    Log.d("MyPageViewModel", careerModel.category)
   }
 
   fun removeCareer(index: Int) {
