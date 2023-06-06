@@ -15,7 +15,7 @@ class LoginDataSource @Inject constructor(
 ) : LoginApi {
     override suspend fun login(email: String, password: String): ApiResult<LoginResponse> {
         return networkRequestFactory.create(
-            url = "members/login",
+            url = "login",
             type = object: TypeToken<LoginResponse>(){}.type,
             requestInfo = NetworkRequestInfo.Builder(RequestType.POST).withBody(
                 LoginRequest(email = email, password = password)

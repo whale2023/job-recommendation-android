@@ -17,11 +17,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,11 +32,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import kgb.plum.domain.model.state.LoginState
 import kgb.plum.presentation.R
 import kgb.plum.presentation.model.Screen
@@ -42,42 +43,53 @@ import kgb.plum.presentation.ui.common.buttons.PrimaryButton
 import kgb.plum.presentation.ui.common.buttons.UnderlinedButton
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.LoginViewModel
-import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(context: Context, navController : NavHostController){
+fun LoginScreen(contextActivity: Context, navController : NavHostController, loginViewModel: LoginViewModel = hiltViewModel()){
     val context = LocalContext.current
-    val loginViewModel = hiltViewModel<LoginViewModel>()
-    val result by loginViewModel.loginState.collectAsState()
+    val loginState = loginViewModel.loginState.collectAsStateWithLifecycle()
     var buttonText by remember { mutableStateOf("이메일로 로그인")}
+    var state by remember { mutableStateOf( false) }
 
-    when(result) {
+
+    when(loginState.value) {
         LoginState.LOADING -> {
 
         }
         LoginState.ID_PW_EMPTY -> {
             showToast(context, "아이디와 비밀번호를 먼저 입력해주세요.")
             buttonText = "이메일로 로그인"
+            loginViewModel.resetLoginState()
         }
         LoginState.NOT_EMAIL -> {
             showToast(context, "아이디 양식이 잘못 되었습니다.")
             buttonText = "이메일로 로그인"
+            loginViewModel.resetLoginState()
         }
         LoginState.SUCCESS -> {
-            loginViewModel.saveToken(context)
-            navController.navigate(kgb.plum.presentation.model.Screen.Main.name){
-                popUpTo(kgb.plum.presentation.model.Screen.Login.name) { inclusive = true }
+            //loginViewModel.saveToken(contextActivity)
+            buttonText = "이메일로 로그인"
+            state = true
+            navController.navigate(Screen.Main.name) {
+                popUpTo(Screen.Login.name) {inclusive = true}
             }
         }
         LoginState.WRONG_PW_ID -> {
             showToast(context, "잘못된 로그인 정보입니다.")
             buttonText = "이메일로 로그인"
+            loginViewModel.resetLoginState()
         }
         LoginState.UNKNOWN_ERROR -> {
             showToast(context, "Unknown error")
             buttonText = "이메일로 로그인"
+            loginViewModel.resetLoginState()
         }
     }
     Surface {
@@ -85,15 +97,11 @@ fun LoginScreen(context: Context, navController : NavHostController){
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ){
-            Spacer(
-                modifier = Modifier.fillMaxHeight(0.2f)
-            )
             Image(
-                modifier = Modifier.fillMaxSize(0.2f),
-                painter = painterResource(id = R.drawable.baseline_cloud_72),
-                contentDescription = "로고 예시"
+                modifier = Modifier.fillMaxSize(0.6f),
+                painter = painterResource(id = R.drawable.whale_logo),
+                contentDescription = "Whale logo"
             )
-            Text(text = "로고 예시")
             Spacer(modifier = Modifier.weight(1f))
             OutlinedTextField(
                 value = loginViewModel.id.observeAsState(initial = "").value,
@@ -119,8 +127,8 @@ fun LoginScreen(context: Context, navController : NavHostController){
             Spacer(modifier = Modifier.size(20.dp))
             PrimaryButton(
                 onClick = {
-                    loginViewModel.login()
                     buttonText = "로그인 진행중..."
+                    loginViewModel.login()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -140,4 +148,17 @@ fun LoginScreen(context: Context, navController : NavHostController){
         }
     }
 }
+
+fun login(viewModel: LoginViewModel,navController: NavHostController) = runBlocking {
+    val asyncResult = async {
+        viewModel.login()
+        delay(1000)
+    }
+
+    val result = asyncResult.await()
+    if(viewModel.isSuccess) {
+        navController.navigate(Screen.Main.name)
+    }
+}
+
 

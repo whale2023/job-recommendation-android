@@ -29,8 +29,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,19 +44,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import kgb.plum.domain.model.UserInfo
 import kgb.plum.domain.model.state.RankState
+import kgb.plum.domain.model.state.UserState
 import kgb.plum.presentation.ui.common.RecruitCardItem
 import kgb.plum.presentation.ui.common.WishItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.ui.theme.nameMedium
+import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import timber.log.Timber
@@ -68,122 +75,137 @@ val images = listOf(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen(){
-    val viewModel = hiltViewModel<HomeViewModel>()
-    val state = rememberPagerState()
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .background(MaterialTheme.colors.surface)
-            .fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.
-                    padding(Padding.extra)
-                .verticalScroll(scrollState)
-        ){
-            Row(
-                verticalAlignment = Alignment.Bottom
-            ){
-                Text(
-                    text = "박준식",
-                    style = MaterialTheme.typography.nameMedium
-                )
-                Text(
-                    text = "님 안녕하세요?",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-            Spacer(modifier = Modifier.size(12.dp))
-            AutoSlidingCarousel(
-                itemsCount = images.size,
-                itemContent = { index ->
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(images[index])
-                            .build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(200.dp)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                text = "인기 채용 정보",
-                style = MaterialTheme.typography.nameMedium
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(Padding.large),
-                contentPadding = PaddingValues(
-                    start = Padding.small,
-                    end = Padding.small
-                )
-            ){
-                when(viewModel.rankState.value){
-                    is RankState.Loading -> {
-                        Timber.d("MoviesScreen: Loading")
-                        item () {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                        }
-                    }
-
-                    is RankState.Main -> {
-                        Timber.d("MoviesScreen: Success")
-                        itemsIndexed((viewModel.rankState.value as RankState.Main).rankList) { index, item ->
-                            RecruitCardItem(rank = index+1, company = item.company, occupation = item.occupation)
-                        }
-                    }
-
-                    is RankState.Failed -> {
-                        Timber.d("MoviesScreen: Error")
-                    }
-                }
-
-            }
-            Spacer(modifier = Modifier.size(12.dp))
-            Text(
-                text = "관심을 표한 회사에요",
-                style = MaterialTheme.typography.nameMedium
-            )
-            Spacer(modifier = Modifier.size(12.dp))
-            Card(
-                elevation = CardDefaults.cardElevation(5.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colors.surface),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        0.5.dp,
-                        MaterialTheme.colors.textFiledBackgroundVariant,
-                        MaterialTheme.shapes.medium
-                    )
-            ){
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(Padding.large)
-                ) {
-                    WishItem(MaterialTheme.colors.background,
-                        if(viewModel.wishList.size>0) viewModel.wishList[0].company else null,
-                        if(viewModel.wishList.size>0) viewModel.wishList[0].occupation else null,
-                        if(viewModel.wishList.size>0) viewModel.wishList[0].dDay else null)
-                    Spacer(modifier = Modifier.size(Padding.large))
-                    WishItem(MaterialTheme.colors.secondary,
-                        if(viewModel.wishList.size>1) viewModel.wishList[1].company else null,
-                        if(viewModel.wishList.size>1) viewModel.wishList[1].occupation else null,
-                        if(viewModel.wishList.size>1) viewModel.wishList[1].dDay else null)
-                    Spacer(modifier = Modifier.size(Padding.large))
-                    WishItem(MaterialTheme.colors.background,
-                        if(viewModel.wishList.size>2) viewModel.wishList[2].company else null,
-                        if(viewModel.wishList.size>2) viewModel.wishList[2].occupation else null,
-                        if(viewModel.wishList.size>2) viewModel.wishList[2].dDay else null)
-                }
-
-
-            }
-        }
-    }
+//    val viewModel = hiltViewModel<HomeViewModel>()
+//    var name by remember { mutableStateOf("")}
+//    val userState by viewModel.userState.collectAsStateWithLifecycle()
+//    val context = LocalContext.current
+//    when(userState){
+//        is UserState.Loading -> {
+//
+//        }
+//        is UserState.Main -> {
+//            name = UserInfo.userData?.userName ?: ""
+//        }
+//        is UserState.Fail -> {
+//            showToast(context, "유저 정보를 불러올 수 없습니다. 새로 고침 해주세요.")
+//            viewModel.resetUserState()
+//        }
+//    }
+//    val scrollState = rememberScrollState()
+//    Column(
+//        modifier = Modifier
+//            .background(MaterialTheme.colors.surface)
+//            .fillMaxSize()
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .padding(horizontal = Padding.extra)
+//                .verticalScroll(scrollState)
+//        ){
+//            Row(
+//                verticalAlignment = Alignment.Bottom,
+//                modifier = Modifier.padding(Padding.extra)
+//            ){
+//                Text(
+//                    text = name,
+//                    style = MaterialTheme.typography.nameMedium
+//                )
+//                Text(
+//                    text = "님 안녕하세요?",
+//                    style = MaterialTheme.typography.bodyMedium
+//                )
+//            }
+//            Spacer(modifier = Modifier.size(12.dp))
+//            AutoSlidingCarousel(
+//                itemsCount = images.size,
+//                itemContent = { index ->
+//                    AsyncImage(
+//                        model = ImageRequest.Builder(LocalContext.current)
+//                            .data(images[index])
+//                            .build(),
+//                        contentDescription = null,
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier.height(200.dp)
+//                    )
+//                }
+//            )
+//            Spacer(modifier = Modifier.size(12.dp))
+//            Text(
+//                text = "인기 채용 정보",
+//                style = MaterialTheme.typography.nameMedium
+//            )
+//            Spacer(modifier = Modifier.size(12.dp))
+//            LazyRow(
+//                horizontalArrangement = Arrangement.spacedBy(Padding.large),
+//                contentPadding = PaddingValues(
+//                    start = Padding.small,
+//                    end = Padding.small
+//                )
+//            ){
+//                when(viewModel.rankState.value){
+//                    is RankState.Loading -> {
+//                        Timber.d("MoviesScreen: Loading")
+//                        item () {
+//                            CircularProgressIndicator(
+//                                modifier = Modifier.align(Alignment.CenterHorizontally)
+//                            )
+//                        }
+//                    }
+//
+//                    is RankState.Main -> {
+//                        Timber.d("MoviesScreen: Success")
+//                        itemsIndexed((viewModel.rankState.value as RankState.Main).rankList) { index, item ->
+//                            RecruitCardItem(rank = index+1, company = item.company, occupation = item.occupation)
+//                        }
+//                    }
+//
+//                    is RankState.Failed -> {
+//                        Timber.d("MoviesScreen: Error")
+//                    }
+//                }
+//
+//            }
+//            Spacer(modifier = Modifier.size(12.dp))
+//            Text(
+//                text = "관심을 표한 회사에요",
+//                style = MaterialTheme.typography.nameMedium
+//            )
+//            Spacer(modifier = Modifier.size(12.dp))
+//            Card(
+//                elevation = CardDefaults.cardElevation(5.dp),
+//                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colors.surface),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .border(
+//                        0.5.dp,
+//                        MaterialTheme.colors.textFiledBackgroundVariant,
+//                        MaterialTheme.shapes.medium
+//                    )
+//            ){
+//                Column(
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    modifier = Modifier.padding(Padding.large)
+//                ) {
+//                    WishItem(MaterialTheme.colors.background,
+//                        if(viewModel.wishList.size>0) viewModel.wishList[0].company else null,
+//                        if(viewModel.wishList.size>0) viewModel.wishList[0].occupation else null,
+//                        if(viewModel.wishList.size>0) viewModel.wishList[0].dDay else null)
+//                    Spacer(modifier = Modifier.size(Padding.large))
+//                    WishItem(MaterialTheme.colors.secondary,
+//                        if(viewModel.wishList.size>1) viewModel.wishList[1].company else null,
+//                        if(viewModel.wishList.size>1) viewModel.wishList[1].occupation else null,
+//                        if(viewModel.wishList.size>1) viewModel.wishList[1].dDay else null)
+//                    Spacer(modifier = Modifier.size(Padding.large))
+//                    WishItem(MaterialTheme.colors.background,
+//                        if(viewModel.wishList.size>2) viewModel.wishList[2].company else null,
+//                        if(viewModel.wishList.size>2) viewModel.wishList[2].occupation else null,
+//                        if(viewModel.wishList.size>2) viewModel.wishList[2].dDay else null)
+//                }
+//
+//
+//            }
+//        }
+//    }
 }
 
 

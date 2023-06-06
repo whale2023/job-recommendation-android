@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -53,7 +54,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
     var expandedLevel by remember { mutableStateOf(false)}
     var selectedLevelItem by remember { mutableStateOf(disabilityLevel[0])}
     var buttonText by remember { mutableStateOf("회원가입") }
-    val signUpState by viewModel.signUpState.collectAsState()
+    val signUpState by viewModel.signUpState.collectAsStateWithLifecycle()
     when(signUpState) {
         is SignUpState.Loading -> {
         }
@@ -65,7 +66,10 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                 200 -> {
                     showToast(context, "회원 가입 완료!! 환영합니다.")
                     navController.navigate(Screen.Login.name) {
-                        popUpTo(Screen.SignUp.name) {inclusive = true}
+                        popUpTo(Screen.SignUp.name) {
+                            inclusive = true
+                            saveState = false
+                        }
                     }
                 }
                 400 -> {

@@ -20,4 +20,8 @@ class HomeUseCase @Inject constructor(private val homeRepository: HomeRepository
     suspend fun getRankItemList() : EntityWrapper<List<RankItem>> {
         return homeRepository.getRankItemList()
     }
+
+    suspend fun  getUserInfo() : Int {
+        return homeRepository.getUserInfo()
+    }
 }

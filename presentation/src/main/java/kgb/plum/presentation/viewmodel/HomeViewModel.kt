@@ -9,17 +9,22 @@ import kgb.plum.domain.usecase.HomeUseCase
 import kgb.plum.domain.model.RankItem
 import kgb.plum.domain.model.WishItemData
 import kgb.plum.domain.model.state.RankState
+import kgb.plum.domain.model.state.UserState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase) : ViewModel() {
 
-    private val _rankState: MutableStateFlow<RankState> =
-        MutableStateFlow(RankState.Loading)
+    private val _rankState: MutableStateFlow<RankState> = MutableStateFlow(RankState.Loading)
     val rankState: StateFlow<RankState> = _rankState
+
+    private val _userState: MutableStateFlow<UserState> = MutableStateFlow(UserState.Loading)
+    val userState: StateFlow<UserState> = _userState
 
 
 
@@ -27,8 +32,10 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase) : 
     val wishList = mutableStateListOf<WishItemData>()
 
     init {
-        getPopularCompany()
-        getWishList()
+        //getRankItemList()
+        //getUserInfo()
+        //getPopularCompany()
+        //getWishList()
     }
 
     private fun getPopularCompany(){
@@ -39,7 +46,7 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase) : 
         wishList.addAll(homeUseCase.getWishList())
     }
 
-    suspend fun getRankItemList() {
+    private fun getRankItemList() {
         viewModelScope.launch {
             _rankState.value = RankState.Loading
             val rankItems = homeUseCase.getRankItemList()
@@ -57,4 +64,28 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase) : 
             }
         }
     }
+
+    private fun getUserInfo() {
+        viewModelScope.launch {
+            _userState.value = UserState.Loading
+            val result = homeUseCase.getUserInfo()
+            _userState.value = when(result){
+                200 -> {
+                    UserState.Main
+                }
+                400 -> {
+                    UserState.Fail
+                }
+                else -> {
+                    UserState.Fail
+                }
+            }
+        }
+    }
+
+    fun resetUserState() {
+        _userState.value = UserState.Loading
+    }
+
+
 }
