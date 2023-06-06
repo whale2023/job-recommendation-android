@@ -1,5 +1,6 @@
 package kgb.plum.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,7 +34,7 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase) : 
 
     init {
         //getRankItemList()
-        //getUserInfo()
+        getUserInfo()
         //getPopularCompany()
         //getWishList()
     }

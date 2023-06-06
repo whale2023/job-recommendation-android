@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
@@ -29,7 +30,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +50,6 @@ import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kgb.plum.domain.model.UserInfo
 import kgb.plum.domain.model.state.RankState
 import kgb.plum.domain.model.state.UserState
@@ -84,7 +83,7 @@ fun HomeScreen(){
 
         }
         is UserState.Main -> {
-            name = UserInfo.userData?.userName ?: ""
+            name = UserInfo.userData?.username ?: ""
         }
         is UserState.Fail -> {
             showToast(context, "유저 정보를 불러올 수 없습니다. 새로 고침 해주세요.")
@@ -104,7 +103,7 @@ fun HomeScreen(){
         ){
             Row(
                 verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.padding(Padding.extra)
+                modifier = Modifier.padding(vertical = Padding.extra)
             ){
                 Text(
                     text = name,
@@ -115,7 +114,6 @@ fun HomeScreen(){
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            Spacer(modifier = Modifier.size(12.dp))
             AutoSlidingCarousel(
                 itemsCount = images.size,
                 itemContent = { index ->

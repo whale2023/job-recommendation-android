@@ -59,7 +59,7 @@ class NetworkRequestFactoryImpl @Inject constructor(
 
     private suspend fun performGetRequest(
         url: String,
-        headers: Map<String, String>,
+        headers: Map<String, String>
     ) = apiService.get(url = url, headerMap = headers)
 
     private suspend fun performPostRequest(

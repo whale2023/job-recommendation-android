@@ -1,5 +1,6 @@
 package kgb.plum.data.datasource
 
+import android.util.Log
 import com.google.gson.reflect.TypeToken
 import kgb.plum.data.library.model.ApiResult
 import kgb.plum.data.library.model.NetworkRequestInfo
@@ -16,7 +17,7 @@ class UserDataSource @Inject constructor(
         return networkRequestFactory.create(
             url = "members",
             type = object : TypeToken<UserInfoModel>(){}.type,
-            requestInfo = NetworkRequestInfo.Builder().withHeaders(headerMap = mapOf("header" to LoginTokenData.atk!!)).build()
+            requestInfo = NetworkRequestInfo.Builder().withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
         )
     }
 }

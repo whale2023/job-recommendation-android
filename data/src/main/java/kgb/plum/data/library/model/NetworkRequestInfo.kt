@@ -25,6 +25,7 @@ class NetworkRequestInfo private constructor(
             body = requestBody
         }
 
+
         fun build(): NetworkRequestInfo {
             return NetworkRequestInfo(method, parameters, headers, body)
         }

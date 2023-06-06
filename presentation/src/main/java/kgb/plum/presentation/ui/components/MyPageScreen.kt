@@ -95,7 +95,7 @@ fun MyPageScreen() {
       }
     }
     UserInfoHeader(
-      name = viewModel.userInfoModel.userName,
+      name = viewModel.userInfoModel.username,
       description = "${viewModel.resumeModel.major} 전공으로 연봉 ${viewModel.resumeModel.preferIncome}정도의 ${viewModel.resumeModel.workType}을 희망합니다.",
       modifier = Modifier.padding(Padding.large)
     )
