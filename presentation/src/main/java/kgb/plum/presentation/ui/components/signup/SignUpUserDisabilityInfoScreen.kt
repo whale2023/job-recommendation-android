@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,9 +42,11 @@ import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.domain.model.disabilityType
+import kgb.plum.domain.model.state.LoginState
 import kgb.plum.domain.model.state.SignUpState
 import kgb.plum.presentation.model.Screen
 import kgb.plum.presentation.util.showToast
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,39 +57,8 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
     var expandedLevel by remember { mutableStateOf(false)}
     var selectedLevelItem by remember { mutableStateOf(disabilityLevel[0])}
     var buttonText by remember { mutableStateOf("회원가입") }
-    val signUpState by viewModel.signUpState.collectAsStateWithLifecycle()
-    when(signUpState) {
-        is SignUpState.Loading -> {
-        }
-        is SignUpState.None -> {
-            buttonText = "회원가입"
-        }
-        is SignUpState.Main -> {
-            when((signUpState as SignUpState.Main).code) {
-                200 -> {
-                    showToast(context, "회원 가입 완료!! 환영합니다.")
-                    navController.navigate(Screen.Login.name) {
-                        popUpTo(Screen.SignUp.name) {
-                            inclusive = true
-                            saveState = false
-                        }
-                    }
-                }
-                400 -> {
-                    showToast(context, "이미 가입된 정보입니다.")
-                    viewModel.resetState()
-                }
-                404 -> {
-                    showToast(context, "서버 오류. 잠시 후 다시 시도해주세요.")
-                    viewModel.resetState()
-                }
-            }
-        }
-        is SignUpState.Failed -> {
-            showToast(context, (signUpState as SignUpState.Failed).reason)
-            viewModel.resetState()
-        }
-    }
+    var signUpState by remember { mutableStateOf(SignUpState.None)}
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier.padding(Padding.large),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -199,7 +171,38 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
             text = buttonText,
             onClick = {
                 buttonText = "회원가입 진행중..."
-                viewModel.signUp()
+                signUpState = SignUpState.Loading
+                coroutineScope.launch {
+                    signUpState = viewModel.signUp()
+                    when (signUpState) {
+                        SignUpState.Loading -> {
+                            buttonText = "회원가입 진행 중..."
+                        }
+
+                        SignUpState.None -> {
+                            buttonText = "회원가입"
+                            signUpState = SignUpState.None
+                        }
+
+                        SignUpState.Main -> {
+                            showToast(context, signUpState.toString())
+                            navController.navigate(Screen.Login.name) {
+                                popUpTo(Screen.SignUp.name) {
+                                    inclusive = true
+                                    saveState = false
+                                }
+                            }
+                        }
+                        SignUpState.Failed -> {
+                            showToast(context, signUpState.toString())
+                            signUpState = SignUpState.None
+                        }
+                        else -> {
+                            showToast(context, "Unknown error")
+                            signUpState = SignUpState.None
+                        }
+                    }
+                }
             },
             modifier = Modifier
                 .height(56.dp)

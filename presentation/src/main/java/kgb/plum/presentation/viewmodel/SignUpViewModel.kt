@@ -127,23 +127,22 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
         return signUpUseCase.requestCertification(_certificationNumber.value ?: "")
     }
 
-    fun signUp(){
-        viewModelScope.launch {
-            _signUpState.value = SignUpState.Loading
-            val result = signUpUseCase.signUp(_email.value?:"", _pw.value?:"", _name.value?:"", _disabilityType.value?:"", _disabilityLevel.value?:"", _age.value?:"", _addressInfo.value?:"", _addressDetail.value?:"")
-            _signUpState.value = when(result) {
-                is EntityWrapper.Success -> {
-                    SignUpState.Main(
-                        code = result.entity
-                    )
-                }
-                is EntityWrapper.Fail -> {
-                    SignUpState.Failed(
-                        reason = result.error.message ?: "Unknown Error"
-                    )
+    suspend fun signUp() : SignUpState{
+        _signUpState.value = SignUpState.Loading
+        val result = signUpUseCase.signUp(_email.value?:"", _pw.value?:"", _name.value?:"", _disabilityType.value?:"", _disabilityLevel.value?:"", _age.value?:"", _addressInfo.value?:"", _addressDetail.value?:"")
+        _signUpState.value = when(result) {
+            is EntityWrapper.Success -> {
+                when(result.entity){
+                    200 -> SignUpState.Main
+                    400 -> SignUpState.Duplicate
+                    else -> SignUpState.Failed
                 }
             }
+            is EntityWrapper.Fail -> {
+                SignUpState.Failed
+            }
         }
+        return _signUpState.value
     }
 
     fun resetState() {

@@ -25,11 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase): ViewModel() {
 
-    private val _loginState: MutableStateFlow<LoginState> =
-        MutableStateFlow(LoginState.LOADING)
-    val loginState : StateFlow<LoginState> = _loginState
-
-
     private val _id = MutableLiveData("")
     val id : LiveData<String> = _id
 
@@ -45,7 +40,6 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
     }
 
     suspend fun login() : LoginState{
-        _loginState.value = LoginState.LOADING
         return loginUseCase.login(_id.value ?: "", _pw.value ?: "")
     }
 
@@ -57,9 +51,5 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
             editor.putString("rtk", LoginTokenData.rtk)
             editor.apply()
         }
-    }
-
-    fun resetLoginState() {
-        _loginState.value = LoginState.LOADING
     }
 }

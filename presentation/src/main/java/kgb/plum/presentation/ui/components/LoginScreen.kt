@@ -56,50 +56,10 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun LoginScreen(contextActivity: Context, navController : NavHostController, loginViewModel: LoginViewModel = hiltViewModel()) {
     val context = LocalContext.current
-    //val result by remember(loginViewModel.loginState){loginViewModel.loginState}.collectAsState(LoginState.LOADING)
     var buttonText by remember { mutableStateOf("이메일로 로그인") }
     val coroutineScope = rememberCoroutineScope()
     var loginState by remember { mutableStateOf(LoginState.LOADING)}
 
-//    if (result == LoginState.SUCCESS) {
-//        navController.navigate(Screen.Main.name) {
-//            popUpTo(Screen.Login.name) { inclusive = true }
-//        }
-//    } else {
-//        showToast(context, "잘못된 로그인 정보입니다.")
-//        buttonText = "이메일로 로그인"
-//        loginViewModel.resetLoginState()
-//    }
-//
-////    when(result) {
-//        LoginState.LOADING -> {
-//
-//        }
-//        LoginState.ID_PW_EMPTY -> {
-//            showToast(context, "아이디와 비밀번호를 먼저 입력해주세요.")
-//            buttonText = "이메일로 로그인"
-//            loginViewModel.resetLoginState()
-//        }
-//        LoginState.NOT_EMAIL -> {
-//            showToast(context, "아이디 양식이 잘못 되었습니다.")
-//            buttonText = "이메일로 로그인"
-//            loginViewModel.resetLoginState()
-//        }
-//        LoginState.SUCCESS -> {
-//            //loginViewModel.saveToken(contextActivity)
-//            buttonText = "이메일로 로그인"
-//            state = true
-//
-//        }
-//        LoginState.WRONG_PW_ID -> {
-//
-//        }
-//        LoginState.UNKNOWN_ERROR -> {
-//            showToast(context, "Unknown error")
-//            buttonText = "이메일로 로그인"
-//            loginViewModel.resetLoginState()
-//        }
-//}
     Surface {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -145,16 +105,16 @@ fun LoginScreen(contextActivity: Context, navController : NavHostController, log
                             LoginState.ID_PW_EMPTY -> {
                                 showToast(context, "아이디와 비밀번호를 먼저 입력해주세요.")
                                 buttonText = "이메일로 로그인"
-                                loginViewModel.resetLoginState()
+                                loginState = LoginState.LOADING
                             }
                             LoginState.NOT_EMAIL -> {
                                 showToast(context, "아이디 양식이 잘못 되었습니다.")
                                 buttonText = "이메일로 로그인"
-                                loginViewModel.resetLoginState()
+                                loginState = LoginState.LOADING
                             }
 
                             LoginState.SUCCESS -> {
-                                //loginViewModel.saveToken(contextActivity)
+                                loginViewModel.saveToken(contextActivity)
                                 buttonText = "이메일로 로그인"
                                 navController.navigate(Screen.Main.name) {
                                     popUpTo(Screen.Login.name) {inclusive = true}
@@ -165,13 +125,13 @@ fun LoginScreen(contextActivity: Context, navController : NavHostController, log
                             LoginState.WRONG_PW_ID -> {
                                 showToast(context, "잘못된 로그인 정보입니다.")
                                 buttonText = "이메일로 로그인"
-                                loginViewModel.resetLoginState()
+                                loginState = LoginState.LOADING
                             }
 
                             LoginState.UNKNOWN_ERROR -> {
                                 showToast(context, "Unknown error")
                                 buttonText = "이메일로 로그인"
-                                loginViewModel.resetLoginState()
+                                loginState = LoginState.LOADING
                             }
                         }
                     }
