@@ -68,7 +68,7 @@ fun CareerEditDialogBody(
           onAddButtonClicked(
             CareerModel(
               yearDropdownMenuController.currentValue,
-              if (middleCategoryDropdownMenuController.currentValue.toString() == "해당 없음") majorCategoryDropdownMenuController.currentValue.toString() else middleCategoryDropdownMenuController.currentValue.toString()
+              if (middleCategoryDropdownMenuController.currentValue.toString() == "해당 없음") "${majorCategoryDropdownMenuController.currentValue}/" else "${majorCategoryDropdownMenuController.currentValue}/${middleCategoryDropdownMenuController.currentValue}"
             )
           )
         },

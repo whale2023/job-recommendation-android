@@ -30,7 +30,7 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
   )
   val yearDropdownMenuController = CustomDropdownMenuController(
     1,
-    listOf(1, 2, 3, 4),
+    listOf(1, 2, 3, 4, 5),
   )
 
   val certificationDialogController = CustomDialogController()
@@ -57,18 +57,28 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
 
   fun addCertification(value: CertificationType) {
     certificationDialogController.close()
+    val newCertifications = resumeModel.certifications.toMutableList()
+    newCertifications.add(value.toString())
+    myPageUseCase.saveResume(resumeModel.copy(certifications = newCertifications))
   }
 
   fun removeCertification(index: Int) {
-
+    val newCertifications = resumeModel.certifications.toMutableList()
+    newCertifications.removeAt(index)
+    myPageUseCase.saveResume(resumeModel.copy(certifications = newCertifications))
   }
 
   fun addCareer(careerModel: CareerModel) {
     careerDialogController.close()
+    val newCareers = resumeModel.careers.toMutableList()
+    newCareers.add(careerModel)
+    myPageUseCase.saveResume(resumeModel.copy(careers = newCareers))
     Log.d("MyPageViewModel", careerModel.category)
   }
 
   fun removeCareer(index: Int) {
-
+    val newCareers = resumeModel.careers.toMutableList()
+    newCareers.removeAt(index)
+    myPageUseCase.saveResume(resumeModel.copy(careers = newCareers))
   }
 }
