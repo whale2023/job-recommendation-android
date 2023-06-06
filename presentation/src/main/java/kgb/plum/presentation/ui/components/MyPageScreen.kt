@@ -31,6 +31,8 @@ import kgb.plum.presentation.ui.components.myPage.edit.CareerEditDialogBody
 import kgb.plum.presentation.ui.components.myPage.edit.CareerEditDialogHeader
 import kgb.plum.presentation.ui.components.myPage.edit.CertificationEditDialogBody
 import kgb.plum.presentation.ui.components.myPage.edit.CertificationEditDialogHeader
+import kgb.plum.presentation.ui.components.myPage.edit.ResumeEditDialogBody
+import kgb.plum.presentation.ui.components.myPage.edit.ResumeEditDialogHeader
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoBody
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoBodyListItem
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoHeader
@@ -47,6 +49,20 @@ fun MyPageScreen() {
     horizontalAlignment = Alignment.CenterHorizontally,
     modifier = Modifier.verticalScroll(scrollState)
   ) {
+    CustomDialog(
+      controller = viewModel.resumeDialogController,
+      header = {
+        ResumeEditDialogHeader()
+      },
+      body = {
+        ResumeEditDialogBody(
+          majorDropdownMenuController = viewModel.resumeMajorDropdownMenuController,
+          educationDropdownMenuController = viewModel.resumeEducationDropdownMenuController,
+          preferIncomeTextFieldController = viewModel.resumePreferIncomeTextFieldController,
+          workTypeDropdownMenuController = viewModel.resumeWorkTypeDropdownMenuController
+        )
+      },
+    )
     CustomDialog(
       controller = viewModel.certificationDialogController,
       header = {
@@ -74,7 +90,7 @@ fun MyPageScreen() {
       },
     )
     Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-      IconButton(onClick = viewModel::editUserInfo) {
+      IconButton(onClick = viewModel.resumeDialogController::show) {
         Icon(Icons.Rounded.Edit, "Edit Icon")
       }
     }
