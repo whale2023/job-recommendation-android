@@ -30,6 +30,10 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private val _recruitState: MutableStateFlow<RecruitState> = MutableStateFlow(RecruitState.Loading)
   val recruitState: StateFlow<RecruitState> = _recruitState
 
+  init{
+    getRecruitList()
+  }
+
   fun init(navController: NavHostController) {
     this._navController = navController
   }
@@ -43,6 +47,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private fun addRecruitList(result: EntityWrapper<List<CompanyModel>>) {
     when (result) {
       is EntityWrapper.Success -> {
+        Log.d("??", "recruit success")
         val newRecruitList = if(_recruitState.value is RecruitState.Main) (_recruitState.value as RecruitState.Main).recruitList.toMutableList() else mutableListOf()
         newRecruitList.addAll(result.entity)
         _recruitState.value = RecruitState.Main(
@@ -51,6 +56,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
       }
 
       is EntityWrapper.Fail -> {
+        Log.d("??", "recruit error")
         RecruitState.Failed(
           reason = result.error.message ?: "Unknown error"
         )

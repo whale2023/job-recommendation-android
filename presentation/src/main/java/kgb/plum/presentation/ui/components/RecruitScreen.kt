@@ -49,30 +49,29 @@ fun RecruitScreen() {
 
   val context = LocalContext.current
 
-  when(recruitState) {
-    is RecruitState.Loading -> {
-      Box (
-        modifier = Modifier.fillMaxSize()
-      ) {
-        CircularProgressIndicator(
-          modifier = Modifier.align(Alignment.Center)
-        )
-      }
-    }
-    is RecruitState.Main -> {
-      val recruitList = (recruitState as RecruitState.Main).recruitList
-
-      NavHost(navController = navController, startDestination = "recruit") {
-        composable("recruit") {
-          Surface {
-            Column(modifier = Modifier.padding(10.dp)) {
-              RecruitHeader(
-                recruitList.size,
-                viewModel.sortDropdownMenuController,
-                viewModel.filterDropdownMenuController,
-                viewModel::getRecruitList
-              )
-              Spacer(modifier = Modifier.height(24.dp))
+  NavHost(navController = navController, startDestination = "recruit") {
+    composable("recruit") {
+      Surface {
+        Column(modifier = Modifier.padding(10.dp)) {
+          RecruitHeader(
+            0,//recruitList.size,
+            viewModel.sortDropdownMenuController,
+            viewModel.filterDropdownMenuController,
+            viewModel::getRecruitList
+          )
+          Spacer(modifier = Modifier.height(24.dp))
+          when(recruitState) {
+            is RecruitState.Loading -> {
+              Box (
+                modifier = Modifier.fillMaxSize()
+              ) {
+                CircularProgressIndicator(
+                  modifier = Modifier.align(Alignment.Center)
+                )
+              }
+            }
+            is RecruitState.Main -> {
+              val recruitList = (recruitState as RecruitState.Main).recruitList
               LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxSize()
@@ -90,43 +89,43 @@ fun RecruitScreen() {
                 }
               }
             }
+            is RecruitState.Failed -> {
+              showToast(context, "유저 정보를 불러올 수 없습니다. 새로 고침 해주세요.")
+              viewModel.resetRecruitState()
+            }
           }
-        }
-        composable("filter") {
-          FilterScreen(navController)
-        }
-        composable("detail") {
-          val companyModel =
-            navController.previousBackStackEntry?.savedStateHandle?.get<CompanyModel>("companyModel")
-              ?: CompanyModel(
-                id = 0,
-                applicationDate = "",
-                recruitmentPeriod = "",
-                companyName = "",
-                recruitmentType = "",
-                typeOfEmployment = "",
-                formOfWages = "",
-                wage = "",
-                entryForm = "",
-                requiredExperience = "",
-                requiredEducation = "",
-                majorField = "",
-                requiredCredentials = "",
-                businessAddress = "",
-                companyType = "",
-                responsibleAgency = "",
-                contactNumber = "",
-                countOfMemberWish = 0,
-                registrationDate = "",
-                addedWishlist = false
-              )
-          DetailScreen(companyModel, navController)
         }
       }
     }
-    is RecruitState.Failed -> {
-      showToast(context, "유저 정보를 불러올 수 없습니다. 새로 고침 해주세요.")
-      viewModel.resetRecruitState()
+    composable("filter") {
+      FilterScreen(navController)
+    }
+    composable("detail") {
+      val companyModel =
+        navController.previousBackStackEntry?.savedStateHandle?.get<CompanyModel>("companyModel")
+          ?: CompanyModel(
+            id = 0,
+            applicationDate = "",
+            recruitmentPeriod = "",
+            companyName = "",
+            recruitmentType = "",
+            typeOfEmployment = "",
+            formOfWages = "",
+            wage = "",
+            entryForm = "",
+            requiredExperience = "",
+            requiredEducation = "",
+            majorField = "",
+            requiredCredentials = "",
+            businessAddress = "",
+            companyType = "",
+            responsibleAgency = "",
+            contactNumber = "",
+            countOfMemberWish = 0,
+            registrationDate = "",
+            addedWishlist = false
+          )
+      DetailScreen(companyModel, navController)
     }
   }
 }

@@ -6,5 +6,5 @@ data class ResumeModel(
   val preferIncome: Long,
   val workType: String,
   val certifications: List<String>,
-  val careers: List<CareerModel>
+  val careerList: List<CareerModel>
 )

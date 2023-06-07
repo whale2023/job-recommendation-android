@@ -8,6 +8,7 @@ import kgb.plum.data.datasource.HomeDataSource
 import kgb.plum.data.datasource.LoginDataSource
 import kgb.plum.data.datasource.MyPageDataSource
 import kgb.plum.data.datasource.RecommendDataSource
+import kgb.plum.data.datasource.RecruitDataSource
 import kgb.plum.data.datasource.SignUpDataSource
 import kgb.plum.data.datasource.UserDataSource
 import kgb.plum.data.datasource.WishDataSource
@@ -15,6 +16,7 @@ import kgb.plum.data.network.HomeApi
 import kgb.plum.data.network.LoginApi
 import kgb.plum.data.network.MyPageApi
 import kgb.plum.data.network.RecommendApi
+import kgb.plum.data.network.RecruitApi
 import kgb.plum.data.network.SignUpApi
 import kgb.plum.data.network.UserApi
 import kgb.plum.data.network.WishApi
@@ -98,4 +100,8 @@ interface DataModule {
   @Binds
   @Singleton
   fun bindRecommendNetwork(recommendDataSource: RecommendDataSource) : RecommendApi
+
+  @Binds
+  @Singleton
+  fun bindRecruitNetwork(recruitDataSource: RecruitDataSource) : RecruitApi
 }

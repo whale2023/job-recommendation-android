@@ -1,9 +1,7 @@
 package kgb.plum.presentation.viewmodel
 
-import androidx.compose.runtime.getValue
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +10,6 @@ import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.model.ResumeModel
 import kgb.plum.domain.model.UserInfoModel
 import kgb.plum.domain.model.state.MyPageState
-import kgb.plum.domain.model.state.WishState
 import kgb.plum.domain.usecase.MyPageUseCase
 import kgb.plum.presentation.model.CareerMajorType
 import kgb.plum.presentation.model.CertificationType
@@ -36,9 +33,8 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     _resumeState.value = MyPageState.Loading
   }
 
-  fun init() {
+  init {
     viewModelScope.launch {
-      _resumeState.value = MyPageState.Loading
       setResume(myPageUseCase.getResume())
     }
   }
@@ -46,11 +42,13 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
   private fun setResume(result: EntityWrapper<ResumeModel>) {
     when(result) {
       is EntityWrapper.Success -> {
+        Log.d("??", "resume success ${result.entity}")
         _resumeState.value = MyPageState.Main(
           result.entity
         )
       }
       is EntityWrapper.Fail -> {
+        Log.d("??", "resume error")
         MyPageState.Failed(
           reason = result.error.message ?: "Unknown error"
         )
@@ -137,18 +135,18 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
 
   fun addCareer(resumeModel: ResumeModel, careerModel: CareerModel) {
     careerDialogController.close()
-    val newCareers = resumeModel.careers.toMutableList()
+    val newCareers = resumeModel.careerList.toMutableList()
     newCareers.add(careerModel)
     viewModelScope.launch {
-      setResume(myPageUseCase.saveResume(resumeModel.copy(careers = newCareers)))
+      setResume(myPageUseCase.saveResume(resumeModel.copy(careerList = newCareers)))
     }
   }
 
   fun removeCareer(resumeModel: ResumeModel, index: Int) {
-    val newCareers = resumeModel.careers.toMutableList()
+    val newCareers = resumeModel.careerList.toMutableList()
     newCareers.removeAt(index)
     viewModelScope.launch {
-      setResume(myPageUseCase.saveResume(resumeModel.copy(careers = newCareers)))
+      setResume(myPageUseCase.saveResume(resumeModel.copy(careerList = newCareers)))
     }
   }
 }

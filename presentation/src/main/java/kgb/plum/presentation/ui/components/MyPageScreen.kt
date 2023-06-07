@@ -53,8 +53,6 @@ fun MyPageScreen() {
   val viewModel = hiltViewModel<MyPageViewModel>()
   val resumeState by viewModel.resumeState.collectAsStateWithLifecycle()
 
-  viewModel.init()
-
   val context = LocalContext.current
   when(resumeState){
     is MyPageState.Loading -> {
@@ -149,7 +147,7 @@ fun MyPageScreen() {
         UserInfoBodyListItem(
           title = "경력",
           leading = Icons.Rounded.Bookmark,
-          valueList = resumeModel.careers.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
+          valueList = resumeModel.careerList.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
           onAddButtonClicked = { viewModel.careerDialogController.show() },
           onRemoveButtonClicked = { careerModel -> viewModel.removeCareer(resumeModel, careerModel) },
           modifier = Modifier

@@ -17,7 +17,7 @@ class MyPageDataSource @Inject constructor(
 ): MyPageApi {
   override suspend fun saveResume(resumeModel: ResumeModel): ApiResult<ResumeModel> {
     return networkRequestFactory.create(
-      url = "resume",
+      url = "resumes",
       type = object : TypeToken<ResumeModel>(){}.type,
       requestInfo = NetworkRequestInfo.Builder(RequestType.POST).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
@@ -25,7 +25,7 @@ class MyPageDataSource @Inject constructor(
 
   override suspend fun getResume(): ApiResult<ResumeModel> {
     return networkRequestFactory.create(
-      url = "resume",
+      url = "resumes",
       type = object : TypeToken<ResumeModel>(){}.type,
       requestInfo = NetworkRequestInfo.Builder(RequestType.GET).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
