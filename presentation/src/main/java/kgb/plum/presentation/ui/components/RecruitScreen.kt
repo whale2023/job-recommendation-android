@@ -87,11 +87,6 @@ fun RecruitScreen() {
                     onWishChange = { viewModel.onIsWishedChange(it) },
                     modifier = Modifier.clickable { viewModel.showDetail(it) })
                 }
-                item {
-                  LaunchedEffect(key1 = null) {
-                    viewModel.getRecruitList()
-                  }
-                }
               }
             }
           }

@@ -1,5 +1,6 @@
 package kgb.plum.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -43,7 +44,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
     }
   }
 
-  fun addRecruitList(result: EntityWrapper<List<CompanyModel>>) {
+  private fun addRecruitList(result: EntityWrapper<List<CompanyModel>>) {
     when (result) {
       is EntityWrapper.Success -> {
         val newRecruitList = if(_recruitState.value is RecruitState.Main) (_recruitState.value as RecruitState.Main).recruitList.toMutableList() else mutableListOf()

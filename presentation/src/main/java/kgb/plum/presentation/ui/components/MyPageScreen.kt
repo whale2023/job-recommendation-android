@@ -53,6 +53,8 @@ fun MyPageScreen() {
   val viewModel = hiltViewModel<MyPageViewModel>()
   val resumeState by viewModel.resumeState.collectAsStateWithLifecycle()
 
+  viewModel.init()
+
   val context = LocalContext.current
   when(resumeState){
     is MyPageState.Loading -> {

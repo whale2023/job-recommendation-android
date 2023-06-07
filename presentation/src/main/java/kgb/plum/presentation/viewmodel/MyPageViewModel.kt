@@ -36,7 +36,7 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     _resumeState.value = MyPageState.Loading
   }
 
-  init {
+  fun init() {
     viewModelScope.launch {
       _resumeState.value = MyPageState.Loading
       setResume(myPageUseCase.getResume())
