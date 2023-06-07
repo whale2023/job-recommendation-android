@@ -1,10 +1,12 @@
 package kgb.plum.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.usecase.RecruitUseCase
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,7 +18,9 @@ class DetailViewModel @Inject constructor(private val recruitUseCase: RecruitUse
   }
 
   fun onIsWishedChange(companyModel: CompanyModel) {
-    recruitUseCase.changeIsWished(companyModel)
+    viewModelScope.launch {
+      recruitUseCase.changeIsWished(companyModel)
+    }
   }
 
   fun navigatePop() {
