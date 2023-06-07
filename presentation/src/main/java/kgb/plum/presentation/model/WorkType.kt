@@ -1,8 +1,17 @@
 package kgb.plum.presentation.model
 
 enum class WorkType {
-  NEWEST {
-    override fun toString(): String = "최신순"
+  ETC {
+    override fun toString(): String = "해당 없음"
+  },
+  FULL_TIME {
+    override fun toString(): String = "상용직"
+  },
+  CONTRACT {
+    override fun toString(): String = "계약직"
+  },
+  PART_TIME {
+    override fun toString(): String = "시간제"
   };
 
   companion object {
