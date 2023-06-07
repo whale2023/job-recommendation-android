@@ -5,8 +5,10 @@ import kgb.plum.data.datasource.HomeDataSource
 import kgb.plum.data.library.model.ApiResponse
 import kgb.plum.data.library.model.ApiResult
 import kgb.plum.data.mapper.RankMapper
+import kgb.plum.data.mapper.WishMapper
 import kgb.plum.data.network.HomeApi
 import kgb.plum.data.network.UserApi
+import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.model.RankItem
 import kgb.plum.domain.model.UserInfo
@@ -15,17 +17,14 @@ import kgb.plum.domain.repository.HomeRepository
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
-    private val homeDataSource: HomeDataSource,
     private val homeApi: HomeApi,
     private val userApi: UserApi,
-    private val rankMapper: RankMapper
+    private val wishMapper: WishMapper
     ) : HomeRepository {
-    override fun getPopularCompany(): List<RankItem> {
-        return homeDataSource.getPopularCompany()
-    }
 
-    override suspend fun getRankItemList() : EntityWrapper<List<RankItem>> {
-        return rankMapper.mapFromResult(
+
+    override suspend fun getRankItemList() : EntityWrapper<List<CompanyModel>> {
+        return wishMapper.mapFromResult(
             result = homeApi.getRankItemList()
         )
     }

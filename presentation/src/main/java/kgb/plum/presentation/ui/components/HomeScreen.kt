@@ -136,7 +136,7 @@ fun HomeScreen(navController: NavHostController){
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(200.dp).clickable {
+                        modifier = Modifier.height(150.dp).clickable {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(images[index]))
                             context.startActivity(intent)
                         }
@@ -172,7 +172,7 @@ fun HomeScreen(navController: NavHostController){
                         )
                     ){
                         itemsIndexed((viewModel.rankState.value as RankState.Main).rankList) { index, item ->
-                            RecruitCardItem(rank = index+1, company = item.company, occupation = item.occupation)
+                            RecruitCardItem(rank = index+1, company = item.companyName, occupation = item.recruitmentType)
                         }
                     }
 

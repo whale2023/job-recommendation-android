@@ -10,11 +10,8 @@ import javax.inject.Inject
 
 class HomeUseCase @Inject constructor(private val homeRepository: HomeRepository){
 
-    fun getPopularCompany() : List<RankItem> {
-        return homeRepository.getPopularCompany()
-    }
 
-    suspend fun getRankItemList() : EntityWrapper<List<RankItem>> {
+    suspend fun getRankItemList() : EntityWrapper<List<CompanyModel>> {
         return homeRepository.getRankItemList()
     }
 

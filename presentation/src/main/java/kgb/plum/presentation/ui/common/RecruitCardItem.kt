@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -37,7 +38,7 @@ fun RecruitCardItem(
     Card(
         modifier = Modifier
             .width(145.dp)
-            .height(180.dp),
+            .height(190.dp),
         elevation = CardDefaults.cardElevation(5.dp)
     ){
         Column(
@@ -64,11 +65,15 @@ fun RecruitCardItem(
             Spacer(modifier = Modifier.size(Padding.small))
             Text(
                 text = company,
-                style = MaterialTheme.typography.nameMedium
+                style = MaterialTheme.typography.nameMedium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = occupation,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

@@ -97,5 +97,5 @@ val Typography.menuSmall: TextStyle
     )
 val Typography.nameMedium: TextStyle
     @Composable get() = headlineSmall.copy(
-        fontSize = 20.sp
+        fontSize = 17.sp
     )

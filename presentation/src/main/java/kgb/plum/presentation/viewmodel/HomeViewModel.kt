@@ -33,19 +33,13 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase, pr
     val wishState: StateFlow<WishState> = _wishState
 
 
-
-    val popularCompany = mutableStateListOf<RankItem>()
-
     init {
-        //getRankItemList()
+        getRankItemList()
         getUserInfo()
-        //getPopularCompany()
         getWishList()
     }
 
-    private fun getPopularCompany(){
-        popularCompany.addAll(homeUseCase.getPopularCompany())
-    }
+
 
 
     private fun getWishList() {
