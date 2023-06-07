@@ -1,86 +1,42 @@
 package kgb.plum.data.datasource
 
+import com.google.gson.reflect.TypeToken
+import kgb.plum.data.library.model.ApiResult
+import kgb.plum.data.library.model.NetworkRequestInfo
+import kgb.plum.data.library.model.RequestType
+import kgb.plum.data.library.retrofit.NetworkRequestFactory
+import kgb.plum.data.network.RecruitApi
+import kgb.plum.domain.LoginTokenData
 import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.RecruitModel
+import kgb.plum.domain.model.ResumeModel
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
-class RecruitDataSource @Inject constructor()  {
-  fun getRecruitList(): List<CompanyModel> {
-    return listOf<CompanyModel>(
-      CompanyModel(
-        id = 2,
-        applicationDate = "2023-01-31 00:00:00",
-        recruitmentPeriod = "2023-02-28",
-        companyName = "(주)서한",
-        recruitmentType = "총무 및 일반 사무원",
-        typeOfEmployment = "계약직",
-        formOfWages = "월급",
-        wage = "2100000",
-        entryForm = "무관",
-        requiredExperience = "무관",
-        requiredEducation = "고졸",
-        majorField = "",
-        requiredCredentials = "",
-        businessAddress = "대구광역시 수성구 명덕로 415 (수성동2가)",
-        companyType = "중소",
-        responsibleAgency = "대구지역본부",
-        contactNumber = "1588-1519",
-        countOfMemberWish = 1,
-        registrationDate = "2023-01-31",
-        addedWishlist = true
-      ),
-      CompanyModel(
-        id = 2,
-        applicationDate = "2023-01-31 00:00:00",
-        recruitmentPeriod = "2023-06-28",
-        companyName = "(주)서한",
-        recruitmentType = "총무 및 일반 사무원",
-        typeOfEmployment = "계약직",
-        formOfWages = "월급",
-        wage = "2100000",
-        entryForm = "무관",
-        requiredExperience = "무관",
-        requiredEducation = "고졸",
-        majorField = "",
-        requiredCredentials = "",
-        businessAddress = "대구광역시 수성구 명덕로 415 (수성동2가)",
-        companyType = "중소",
-        responsibleAgency = "대구지역본부",
-        contactNumber = "1588-1519",
-        countOfMemberWish = 1,
-        registrationDate = "2023-01-31",
-        addedWishlist = true
-      ),
-      CompanyModel(
-        id = 2,
-        applicationDate = "2023-01-31 00:00:00",
-        recruitmentPeriod = "2023-04-28",
-        companyName = "(주)서한",
-        recruitmentType = "총무 및 일반 사무원",
-        typeOfEmployment = "계약직",
-        formOfWages = "월급",
-        wage = "2100000",
-        entryForm = "무관",
-        requiredExperience = "무관",
-        requiredEducation = "고졸",
-        majorField = "",
-        requiredCredentials = "",
-        businessAddress = "대구광역시 수성구 명덕로 415 (수성동2가)",
-        companyType = "중소",
-        responsibleAgency = "대구지역본부",
-        contactNumber = "1588-1519",
-        countOfMemberWish = 1,
-        registrationDate = "2023-01-31",
-        addedWishlist = true
-      )
+class RecruitDataSource @Inject constructor(
+  private val networkRequestFactory: NetworkRequestFactory
+): RecruitApi  {
+  override suspend fun getRecruitList(page: Int, sort: String): ApiResult<List<CompanyModel>> {
+    return networkRequestFactory.create(
+      url = "announcement?page=${page}&size=10&sort=${sort}",
+      type = object : TypeToken<List<CompanyModel>>(){}.type,
+      requestInfo = NetworkRequestInfo.Builder(RequestType.GET).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
   }
 
-  fun addWishList(companyModelId: Int) {
-
+  override suspend fun addWishList(jobAnnouncementId: Int): ApiResult<ResponseBody> {
+    return networkRequestFactory.create(
+      url = "announcement/wish?jobAnnoucemnetId=${jobAnnouncementId}",
+      type = object: TypeToken<ResponseBody>(){}.type,
+      requestInfo = NetworkRequestInfo.Builder(RequestType.POST).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
+    )
   }
 
-  fun deleteWishList(companyModelId: Int) {
-
+  override suspend fun deleteWishList(jobAnnouncementId: Int): ApiResult<ResponseBody> {
+    return networkRequestFactory.create(
+      url = "announcement/wish?jobAnnoucemnetId=${jobAnnouncementId}",
+      type = object: TypeToken<ResponseBody>(){}.type,
+      requestInfo = NetworkRequestInfo.Builder(RequestType.DELETE).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
+    )
   }
 }

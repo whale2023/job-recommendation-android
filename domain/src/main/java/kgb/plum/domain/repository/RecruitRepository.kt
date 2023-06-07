@@ -1,10 +1,10 @@
 package kgb.plum.domain.repository
 
 import kgb.plum.domain.model.CompanyModel
+import kgb.plum.domain.model.EntityWrapper
 
 interface RecruitRepository {
-  fun getRecruitList(): List<CompanyModel>
-
-  fun addWishList(companyModelId: Int)
-  fun deleteWishList(companyModelId: Int)
+  suspend fun addWishList(jobAnnouncementId: Int): Int
+  suspend fun deleteWishList(jobAnnouncementId: Int): Int
+  suspend fun getRecruitList(page: Int, sort: String): EntityWrapper<List<CompanyModel>>
 }

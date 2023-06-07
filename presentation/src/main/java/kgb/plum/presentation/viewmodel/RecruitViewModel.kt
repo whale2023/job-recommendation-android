@@ -1,12 +1,22 @@
 package kgb.plum.presentation.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.domain.model.CompanyModel
+import kgb.plum.domain.model.EntityWrapper
+import kgb.plum.domain.model.state.MyPageState
+import kgb.plum.domain.model.state.RecruitState
 import kgb.plum.domain.usecase.RecruitUseCase
 import kgb.plum.presentation.model.SortType
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,12 +24,42 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   ViewModel() {
   private lateinit var _navController: NavHostController
 
+  private var page by mutableStateOf(0)
+
+  private val _recruitState: MutableStateFlow<RecruitState> = MutableStateFlow(RecruitState.Loading)
+  val recruitState: StateFlow<RecruitState> = _recruitState
+
   fun init(navController: NavHostController) {
     this._navController = navController
+    viewModelScope.launch {
+      _recruitState.value = RecruitState.Loading
+      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
+    }
   }
 
-  val recruitList: List<CompanyModel>
-    get() = recruitUseCase.getRecruitList()
+  fun getRecruitList() {
+    viewModelScope.launch {
+      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
+    }
+  }
+
+  fun addRecruitList(result: EntityWrapper<List<CompanyModel>>) {
+    when (result) {
+      is EntityWrapper.Success -> {
+        val newRecruitList = if(_recruitState.value is RecruitState.Main) (_recruitState.value as RecruitState.Main).recruitList.toMutableList() else mutableListOf()
+        newRecruitList.addAll(result.entity)
+        _recruitState.value = RecruitState.Main(
+          newRecruitList
+        )
+      }
+
+      is EntityWrapper.Fail -> {
+        RecruitState.Failed(
+          reason = result.error.message ?: "Unknown error"
+        )
+      }
+    }
+  }
 
   val sortDropdownMenuController = CustomDropdownMenuController(
     SortType.NEWEST,
@@ -33,11 +73,20 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   )
 
   fun onIsWishedChange(companyModel: CompanyModel) {
-    recruitUseCase.changeIsWished(companyModel)
+    viewModelScope.launch {
+      recruitUseCase.changeIsWished(companyModel)
+    }
   }
 
   fun showDetail(companyModel: CompanyModel) {
-    _navController.currentBackStackEntry?.savedStateHandle?.set(key = "companyModel", value = companyModel)
+    _navController.currentBackStackEntry?.savedStateHandle?.set(
+      key = "companyModel",
+      value = companyModel
+    )
     _navController.navigate("detail")
+  }
+
+  fun resetRecruitState() {
+    _recruitState.value = RecruitState.Loading
   }
 }
