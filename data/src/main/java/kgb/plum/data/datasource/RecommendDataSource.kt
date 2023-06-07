@@ -1,9 +1,18 @@
 package kgb.plum.data.datasource
 
+import com.google.gson.reflect.TypeToken
+import kgb.plum.data.library.model.ApiResult
+import kgb.plum.data.library.model.NetworkRequestInfo
+import kgb.plum.data.library.model.RecommendRequest
+import kgb.plum.data.library.retrofit.NetworkRecommendFactory
+import kgb.plum.data.model.CompanyResponse
+import kgb.plum.data.network.RecommendApi
 import kgb.plum.domain.model.RecommendItemData
 import javax.inject.Inject
 
-class RecommendDataSource @Inject constructor() {
+class RecommendDataSource @Inject constructor(
+    private val networkRecommendFactory: NetworkRecommendFactory
+) : RecommendApi {
     val recommendItems = listOf(
         RecommendItemData(1, "금오컴퍼니", "사무직", listOf("10년 이상 무사고", "집이랑 가까워요", "연봉이 높아요", "주변에 건강 센터가 있어요"),82.6),
         RecommendItemData(2,"대광스카이", "영업직", listOf("10년 이상 무사고", "집이랑 가까워요", "연봉이 높아요", "주변에 건강 센터가 있어요"),78.8),
@@ -18,5 +27,13 @@ class RecommendDataSource @Inject constructor() {
     )
     fun getRecommendList() : List<RecommendItemData> {
         return recommendItems
+    }
+
+    override suspend fun getWishListBasedRecommendList(id: String): ApiResult<List<CompanyResponse>> {
+        return networkRecommendFactory.create(
+            url = "reco/wish",
+            type = object : TypeToken<List<CompanyResponse>>(){}.type,
+            requestInfo = NetworkRequestInfo.Builder().withBody(RecommendRequest(id)).build()
+        )
     }
 }

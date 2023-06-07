@@ -7,6 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kgb.plum.data.library.Api.ApiService
+import kgb.plum.data.library.Api.RecommendService
+import kgb.plum.data.library.retrofit.NetworkRecommendFactory
+import kgb.plum.data.library.retrofit.NetworkRecommendFactoryImpl
 import kgb.plum.data.library.retrofit.NetworkRequestFactory
 import kgb.plum.data.library.retrofit.NetworkRequestFactoryImpl
 import kgb.plum.data.library.retrofit.StringConverterFactory
@@ -18,6 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import timber.log.Timber
 import java.io.IOException
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -53,6 +57,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    @Named("INFO_RETROFIT")
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         gson: Gson
@@ -64,6 +69,21 @@ class NetworkModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    @Named("RECOMMEND_RETROFIT")
+    fun provideRetrofitRecommend(
+        okHttpClient: OkHttpClient,
+        gson: Gson
+    ) : Retrofit {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(logBaseUrl(baseUrl = "http://172.30.87.170:8888/" ))
+            .addConverterFactory(StringConverterFactory(gson))
+            .build()
+
+    }
+
     private fun logBaseUrl(baseUrl: String): String {
         Timber.d("baseUrl $baseUrl")
         return baseUrl
@@ -71,12 +91,21 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+    fun provideApiService(@Named("INFO_RETROFIT")retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideRecommendService(@Named("RECOMMEND_RETROFIT")retrofit: Retrofit): RecommendService = retrofit.create(RecommendService::class.java)
 
     @Provides
     @Singleton
     fun bindNetworkRequestFactory(networkRequestFactory: NetworkRequestFactoryImpl): NetworkRequestFactory =
         networkRequestFactory
+
+    @Provides
+    @Singleton
+    fun bindNetworkRecommendFactory(networkRecommendFactory: NetworkRecommendFactoryImpl) : NetworkRecommendFactory = networkRecommendFactory
 
 }
 

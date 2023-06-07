@@ -33,7 +33,7 @@ class SignUpDataSource @Inject constructor(
                     encryptedPwd = encryptedPwd,
                     addressInfo = addressInfo,
                     addressDetails = addressDetails,
-                    disabilityType = "VISUAL_IMPAIRMENT"
+                    disabilityType = disabilityType
             )).build()
         )
     }

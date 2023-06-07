@@ -3,10 +3,9 @@ package kgb.plum.data.mapper
 import kgb.plum.data.model.CompanyResponse
 import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.EntityWrapper
-import kgb.plum.domain.model.RankItem
 import javax.inject.Inject
 
-class WishMapper @Inject constructor(
+class CompanyMapper @Inject constructor(
 
 ) :BaseMapper<List<CompanyResponse>, List<CompanyModel>>(){
     override fun getSuccess(
