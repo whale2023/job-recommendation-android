@@ -29,4 +29,6 @@ class WishMapper @Inject constructor(
         return EntityWrapper.Fail(error)
     }
 
+
+
 }

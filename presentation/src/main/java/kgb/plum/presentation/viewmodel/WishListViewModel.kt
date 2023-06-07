@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase) : ViewModel() {
-    val wishList = mutableStateListOf<WishItemData>()
     val eventList = mutableStateListOf<KalendarEvent>()
 
     private val _wishState: MutableStateFlow<WishState> = MutableStateFlow(WishState.Loading)
@@ -28,9 +28,6 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
         getWishList()
     }
 
-    private fun getWishListItem(){
-        wishList.addAll(wishUseCase.getWishListItem())
-    }
 
     private fun getWishList() {
         viewModelScope.launch {
@@ -38,7 +35,6 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
             val result = wishUseCase.getWishList()
             _wishState.value = when(result) {
                 is EntityWrapper.Success -> {
-                    updateEventList()
                     WishState.Main(
                         wishList = result.entity
                     )
@@ -49,6 +45,11 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
                     )
                 }
             }
+            Log.d("위시리스트", _wishState.value.toString())
+            if(_wishState.value is WishState.Main) {
+                Timber.tag("위시리스트").d((_wishState.value as WishState.Main).wishList.toString())
+            }
+            updateEventList()
         }
     }
 

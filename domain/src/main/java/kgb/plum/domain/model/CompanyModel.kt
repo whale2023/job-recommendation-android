@@ -21,4 +21,5 @@ data class CompanyModel(
     val contactNumber: String,
     val countOfMemberWish: Int,
     val addedWishlist: Boolean = false,
+    var dDay: String = ""
 )

@@ -210,17 +210,17 @@ fun HomeScreen(navController: NavHostController){
                     WishItem(MaterialTheme.colors.background,
                         if(wishList.isNotEmpty()) wishList[0].companyName else null,
                         if(wishList.isNotEmpty()) wishList[0].recruitmentType else null,
-                        if(wishList.isNotEmpty()) wishList[0].recruitmentPeriod else null)
+                        if(wishList.isNotEmpty()) wishList[0].dDay else null)
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.secondary,
                         if(wishList.size>1) wishList[1].companyName else null,
                         if(wishList.size>1) wishList[1].recruitmentType else null,
-                        if(wishList.size>1) wishList[1].recruitmentPeriod else null)
+                        if(wishList.size>1) wishList[1].dDay else null)
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.background,
                         if(wishList.size>2) wishList[2].companyName else null,
                         if(wishList.size>2) wishList[2].recruitmentType else null,
-                        if(wishList.size>2) wishList[2].recruitmentPeriod else null)
+                        if(wishList.size>2) wishList[2].dDay else null)
                 }
 
 

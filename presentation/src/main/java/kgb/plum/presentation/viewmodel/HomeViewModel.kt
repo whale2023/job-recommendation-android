@@ -35,7 +35,6 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase, pr
 
 
     val popularCompany = mutableStateListOf<RankItem>()
-    val wishList = mutableStateListOf<WishItemData>()
 
     init {
         //getRankItemList()

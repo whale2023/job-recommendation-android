@@ -102,7 +102,7 @@ fun WishListForListScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     itemsIndexed(wishListState.wishList) { index, item ->
-                        WishItem(color = if(index%2==0) MaterialTheme.colors.background else MaterialTheme.colors.secondary, company = item.companyName, occupation = item.recruitmentType, dDay = item.recruitmentPeriod)
+                        WishItem(color = if(index%2==0) MaterialTheme.colors.background else MaterialTheme.colors.secondary, company = item.companyName, occupation = item.recruitmentType, dDay = item.dDay)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package kgb.plum.data.datasource
 
+import android.util.Log
 import com.google.gson.reflect.TypeToken
 import kgb.plum.data.library.model.ApiResult
 import kgb.plum.data.library.model.NetworkRequestInfo
@@ -16,25 +17,21 @@ class WishDataSource @Inject constructor(
 ) : WishApi {
 
 
-
-  fun getWishListItem(): List<CompanyResponse> {
-    return emptyList()
-  }
-
   override suspend fun addWishItem(
+    jobAnnouncementId: Int
   ): ApiResult<ResponseBody> {
     return networkRequestFactory.create(
-      url = "wish",
+      url = "announcement/wish?jobAnnoucemnetId=${jobAnnouncementId}",
       type = object: TypeToken<ResponseBody>(){}.type,
       requestInfo = NetworkRequestInfo.Builder(RequestType.POST).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
   }
 
   override suspend fun deleteWishItem(
-
+    jobAnnouncementId: Int
   ): ApiResult<ResponseBody> {
     return networkRequestFactory.create(
-      url = "wish",
+      url = "announcement/wish?jobAnnoucemnetId=${jobAnnouncementId}",
       type = object: TypeToken<ResponseBody>(){}.type,
       requestInfo = NetworkRequestInfo.Builder(RequestType.DELETE).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
@@ -42,9 +39,9 @@ class WishDataSource @Inject constructor(
 
   override suspend fun getWishList(): ApiResult<List<CompanyResponse>> {
     return networkRequestFactory.create(
-      url = "wish",
-      type = object: TypeToken<CompanyResponse>(){}.type,
-      requestInfo = NetworkRequestInfo.Builder().withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
+      url = "announcement/wish",
+      type = object: TypeToken<List<CompanyResponse>>(){}.type,
+      requestInfo = NetworkRequestInfo.Builder(RequestType.GET).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
   }
 }

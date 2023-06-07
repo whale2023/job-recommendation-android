@@ -5,6 +5,7 @@ import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.model.WishItemData
 
 interface WishRepository {
-    fun getWishListItem() : List<WishItemData>
     suspend fun getWishList() : EntityWrapper<List<CompanyModel>>
+    suspend fun addWishItem(jobAnnouncementId: Int) : Int
+    suspend fun deleteWishItem(jobAnnouncementId: Int) : Int
 }

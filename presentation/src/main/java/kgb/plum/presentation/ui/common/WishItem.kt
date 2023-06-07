@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kgb.plum.presentation.ui.theme.Padding
@@ -40,14 +42,18 @@ fun WishItem(
                 style = MaterialTheme.typography.bodyMedium
             )
         } else {
-            Column(){
+            Column(
+                modifier = Modifier.fillMaxWidth(0.7f)
+            ){
                 Text(
                     text = company,
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
                     text = occupation ?: "",
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.labelMedium,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -63,6 +69,6 @@ fun WishItem(
 @Composable
 fun WishItemPreview() {
     WhaleTheme {
-        WishItem(color = MaterialTheme.colors.background, "금오컴퍼니", "영업직", "D-7")
+        WishItem(color = MaterialTheme.colors.background, "금오컴퍼니", "영업직rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", "D-7")
     }
 }

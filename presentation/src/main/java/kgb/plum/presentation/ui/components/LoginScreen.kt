@@ -92,15 +92,15 @@ fun LoginScreen(contextActivity: Context, navController : NavHostController, log
     Surface {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().clickable(enabled = !isLock) {
-                if (doubleClick!!) {
-                    SpeechTool.isSupported = !SpeechTool.isSupported
-                }
-                doubleClick = true
-                Handler().postDelayed({ doubleClick = false }, 2000) }
+            modifier = Modifier.fillMaxSize()
                 ){
             Image(
-                modifier = Modifier.fillMaxSize(0.6f),
+                modifier = Modifier.fillMaxSize(0.6f).clickable(enabled = !isLock) {
+                    if (doubleClick!!) {
+                        SpeechTool.isSupported = !SpeechTool.isSupported
+                    }
+                    doubleClick = true
+                    Handler().postDelayed({ doubleClick = false }, 2000) },
                 painter = painterResource(id = R.drawable.whale_logo),
                 contentDescription = "Whale logo"
             )
@@ -112,6 +112,7 @@ fun LoginScreen(contextActivity: Context, navController : NavHostController, log
                 },
                 label = { Text("Email") },
                 singleLine = true,
+                enabled = true,
                 colors = TextFieldDefaults.outlinedTextFieldColors(unfocusedBorderColor = MaterialTheme.colors.primary, focusedBorderColor = MaterialTheme.colors.background),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
@@ -119,6 +120,7 @@ fun LoginScreen(contextActivity: Context, navController : NavHostController, log
             OutlinedTextField(
                 colors = TextFieldDefaults.outlinedTextFieldColors(unfocusedBorderColor = MaterialTheme.colors.primary, focusedBorderColor = MaterialTheme.colors.background),
                 label = { Text("PW") },
+                enabled = true,
                 value = loginViewModel.pw.observeAsState(initial = "").value,
                 onValueChange = { pw ->
                     loginViewModel.setPw(pw)
