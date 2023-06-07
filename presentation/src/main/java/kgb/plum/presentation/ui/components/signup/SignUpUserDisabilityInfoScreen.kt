@@ -110,6 +110,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                         DropdownMenuItem(
                             onClick = {
                                 selectedTypeItem = item
+                                viewModel.setDisabilityType(selectedTypeItem)
                                 expandedType = false
                             },
                             text = { Text( text = item)}
@@ -158,6 +159,7 @@ fun SignUpUserDisabilityInfoScreen(navController: NavHostController, viewModel: 
                         DropdownMenuItem(
                             onClick = {
                                 selectedLevelItem = disabilityLevel
+                                viewModel.setDisabilityLevel(selectedLevelItem)
                                 expandedLevel = false
                             },
                             text = { Text( text = disabilityLevel)}

@@ -136,7 +136,7 @@ fun HomeScreen(navController: NavHostController){
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(150.dp).clickable {
+                        modifier = Modifier.height(200.dp).clickable {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(images[index]))
                             context.startActivity(intent)
                         }

@@ -39,10 +39,10 @@ class SignUpViewModel @Inject constructor(private val signUpUseCase: SignUpUseCa
     private val _addressDetail = MutableLiveData("")
     val addressDetail: LiveData<String> = _addressDetail
 
-    private val _disabilityType = MutableLiveData("")
+    private val _disabilityType = MutableLiveData("시각장애")
     val disabilityType: LiveData<String> = _disabilityType
 
-    private val _disabilityLevel = MutableLiveData("")
+    private val _disabilityLevel = MutableLiveData("경증")
     val disabilityLevel: LiveData<String> = _disabilityLevel
 
     private val _signUpState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState.Loading)

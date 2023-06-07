@@ -78,7 +78,7 @@ class NetworkModule {
     ) : Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(logBaseUrl(baseUrl = "http://172.30.87.170:8888/" ))
+            .baseUrl(logBaseUrl(baseUrl = "http://192.168.170.3:8888/" ))
             .addConverterFactory(StringConverterFactory(gson))
             .build()
 
