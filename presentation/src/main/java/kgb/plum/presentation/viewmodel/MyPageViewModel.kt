@@ -26,7 +26,7 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
 
   val resumeDialogController = CustomDialogController()
   val resumeMajorDropdownMenuController = CustomDropdownMenuController(
-    MajorType.NEWEST,
+    MajorType.ETC,
     MajorType.values().toList(),
   )
   val resumeEducationDropdownMenuController = CustomDropdownMenuController(
@@ -34,7 +34,7 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     EducationType.values().toList(),
   )
   val resumeWorkTypeDropdownMenuController = CustomDropdownMenuController(
-    WorkType.NEWEST,
+    WorkType.ETC,
     WorkType.values().toList(),
   )
   val resumePreferIncomeTextFieldController = CustomTextFieldController()
@@ -54,8 +54,16 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
   private val _certificationList = mutableStateListOf<CertificationType>()
   val certificationList: List<CertificationType> = _certificationList
 
-  fun editUserInfo() {
-
+  fun editResume() {
+    resumeDialogController.close()
+    myPageUseCase.saveResume(
+      resumeModel.copy(
+        major = resumeMajorDropdownMenuController.currentValue.toString(),
+        education = resumeMajorDropdownMenuController.currentValue.toString(),
+        preferIncome = resumePreferIncomeTextFieldController.text.toLong(),
+        workType = resumeWorkTypeDropdownMenuController.currentValue.toString()
+      )
+    )
   }
 
   fun initCertificationList() {

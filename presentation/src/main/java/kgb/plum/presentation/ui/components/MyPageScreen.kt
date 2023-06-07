@@ -59,7 +59,8 @@ fun MyPageScreen() {
           majorDropdownMenuController = viewModel.resumeMajorDropdownMenuController,
           educationDropdownMenuController = viewModel.resumeEducationDropdownMenuController,
           preferIncomeTextFieldController = viewModel.resumePreferIncomeTextFieldController,
-          workTypeDropdownMenuController = viewModel.resumeWorkTypeDropdownMenuController
+          workTypeDropdownMenuController = viewModel.resumeWorkTypeDropdownMenuController,
+          onEditButtonClicked = viewModel::editResume
         )
       },
     )
