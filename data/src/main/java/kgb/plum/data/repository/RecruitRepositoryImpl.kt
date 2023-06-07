@@ -1,20 +1,27 @@
 package kgb.plum.data.repository
 
-import kgb.plum.data.datasource.RecruitDataSource
+import kgb.plum.data.mapper.RecruitMapper
+import kgb.plum.data.network.RecruitApi
 import kgb.plum.domain.model.CompanyModel
+import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.repository.RecruitRepository
 import javax.inject.Inject
 
-class RecruitRepositoryImpl @Inject constructor(private val recruitDataSource: RecruitDataSource) : RecruitRepository {
-  override fun getRecruitList(): List<CompanyModel> {
-    return recruitDataSource.getRecruitList()
+class RecruitRepositoryImpl @Inject constructor(
+  private val recruitApi: RecruitApi,
+  private val recruitMapper: RecruitMapper
+) : RecruitRepository {
+  override suspend fun getRecruitList(page: Int, sort: String): EntityWrapper<List<CompanyModel>> {
+    return recruitMapper.mapFromResult(result = recruitApi.getRecruitList(page, sort))
   }
 
-  override fun addWishList(companyModelId: Int) {
-    recruitDataSource.addWishList(companyModelId)
+  override suspend fun addWishList(jobAnnouncementId: Int): Int {
+    val result = recruitApi.addWishList(jobAnnouncementId)
+    return result.code
   }
 
-  override fun deleteWishList(companyModelId: Int) {
-    recruitDataSource.deleteWishList(companyModelId)
+  override suspend fun deleteWishList(jobAnnouncementId: Int): Int {
+    val result = recruitApi.addWishList(jobAnnouncementId)
+    return result.code
   }
 }
