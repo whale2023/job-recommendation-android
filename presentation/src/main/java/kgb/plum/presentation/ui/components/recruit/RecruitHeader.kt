@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,6 +28,7 @@ fun RecruitHeader(
   totalCount: Int,
   sortDropdownMenuController: CustomDropdownMenuController<SortType>,
   filterDropdownMenuController: CustomDropdownMenuController<String>,
+  addList: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Row(
@@ -41,24 +46,28 @@ fun RecruitHeader(
       controller = sortDropdownMenuController,
       modifier = Modifier.wrapContentSize()
     )
+    Spacer(modifier = Modifier.width(Padding.medium))
+    IconButton(onClick = addList) {
+      Icon(Icons.Rounded.Add, "추가 버튼")
+    }
   }
 }
 
-@Preview
-@Composable
-fun Preview() {
-  Surface(
-    modifier = Modifier.fillMaxSize(),
-    color = MaterialTheme.colorScheme.background
-  ) {
-    RecruitHeader(
-      0, CustomDropdownMenuController(
-        SortType.NEWEST,
-        SortType.values().toList(),
-      ), CustomDropdownMenuController(
-        "필터",
-        listOf("필터")
-      )
-    )
-  }
-}
+//@Preview
+//@Composable
+//fun Preview() {
+//  Surface(
+//    modifier = Modifier.fillMaxSize(),
+//    color = MaterialTheme.colorScheme.background
+//  ) {
+//    RecruitHeader(
+//      0, CustomDropdownMenuController(
+//        SortType.NEWEST,
+//        SortType.values().toList(),
+//      ), CustomDropdownMenuController(
+//        "필터",
+//        listOf("필터")
+//      )
+//    )
+//  }
+//}

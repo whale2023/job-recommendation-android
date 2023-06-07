@@ -32,10 +32,6 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
 
   fun init(navController: NavHostController) {
     this._navController = navController
-    viewModelScope.launch {
-      _recruitState.value = RecruitState.Loading
-      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
-    }
   }
 
   fun getRecruitList() {

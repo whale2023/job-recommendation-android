@@ -69,7 +69,8 @@ fun RecruitScreen() {
               RecruitHeader(
                 recruitList.size,
                 viewModel.sortDropdownMenuController,
-                viewModel.filterDropdownMenuController
+                viewModel.filterDropdownMenuController,
+                viewModel::getRecruitList
               )
               Spacer(modifier = Modifier.height(24.dp))
               LazyColumn(
