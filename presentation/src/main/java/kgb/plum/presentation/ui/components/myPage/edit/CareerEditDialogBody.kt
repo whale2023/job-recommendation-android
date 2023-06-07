@@ -23,6 +23,7 @@ import kgb.plum.domain.model.CareerModel
 import kgb.plum.presentation.model.CareerMajorType
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
 import kgb.plum.presentation.ui.common.dropdown.CustomTextDropdownMenu
+import kgb.plum.presentation.ui.common.dropdown.CustomTitledTextDropdownMenu
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.colors
 
@@ -38,27 +39,30 @@ fun CareerEditDialogBody(
   )
   Column() {
     Spacer(modifier = Modifier.height(Padding.large))
-    CustomTextDropdownMenu(
+    CustomTitledTextDropdownMenu(
       controller = majorCategoryDropdownMenuController,
       offset = DpOffset((-70).dp, 10.dp),
+      title = "대분류",
       modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(Padding.large))
-    CustomTextDropdownMenu(
+    CustomTitledTextDropdownMenu(
       controller = middleCategoryDropdownMenuController,
       offset = DpOffset((-70).dp, 10.dp),
+      title = "중분류",
       modifier = Modifier.fillMaxWidth()
     )
     Spacer(modifier = Modifier.height(Padding.large))
     Row(
-      verticalAlignment = Alignment.Top,
+      verticalAlignment = Alignment.Bottom,
       horizontalArrangement = Arrangement.SpaceBetween,
       modifier = Modifier.fillMaxWidth()
     ) {
       Box(modifier = Modifier.weight(1f)) {
-        CustomTextDropdownMenu(
+        CustomTitledTextDropdownMenu(
           controller = yearDropdownMenuController,
           offset = DpOffset((-70).dp, 10.dp),
+          title = "연차",
           modifier = Modifier.fillMaxWidth()
         )
       }
