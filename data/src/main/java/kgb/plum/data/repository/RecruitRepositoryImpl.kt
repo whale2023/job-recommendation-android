@@ -1,5 +1,6 @@
 package kgb.plum.data.repository
 
+import android.util.Log
 import kgb.plum.data.mapper.RecruitMapper
 import kgb.plum.data.network.RecruitApi
 import kgb.plum.domain.model.CompanyModel
@@ -17,11 +18,13 @@ class RecruitRepositoryImpl @Inject constructor(
 
   override suspend fun addWishList(jobAnnouncementId: Int): Int {
     val result = recruitApi.addWishList(jobAnnouncementId)
+    Log.d("RecruitRepositoryImpl.addWishList()", result.code.toString())
     return result.code
   }
 
   override suspend fun deleteWishList(jobAnnouncementId: Int): Int {
-    val result = recruitApi.addWishList(jobAnnouncementId)
+    val result = recruitApi.deleteWishList(jobAnnouncementId)
+    Log.d("RecruitRepositoryImpl.addWishList()", result.code.toString())
     return result.code
   }
 }

@@ -53,16 +53,30 @@ fun RecruitScreen() {
     composable("recruit") {
       Surface {
         Column(modifier = Modifier.padding(10.dp)) {
-          RecruitHeader(
-            0,//recruitList.size,
-            viewModel.sortDropdownMenuController,
-            viewModel.filterDropdownMenuController,
-            viewModel::getRecruitList
-          )
+          when (recruitState) {
+            is RecruitState.Main -> {
+              val recruitList = (recruitState as RecruitState.Main).recruitList
+              RecruitHeader(
+                recruitList.size,
+                viewModel.sortDropdownMenuController,
+                viewModel.filterDropdownMenuController,
+                viewModel::getRecruitList
+              )
+            }
+
+            else -> {
+              RecruitHeader(
+                0,//recruitList.size,
+                viewModel.sortDropdownMenuController,
+                viewModel.filterDropdownMenuController,
+                viewModel::getRecruitList
+              )
+            }
+          }
           Spacer(modifier = Modifier.height(24.dp))
-          when(recruitState) {
+          when (recruitState) {
             is RecruitState.Loading -> {
-              Box (
+              Box(
                 modifier = Modifier.fillMaxSize()
               ) {
                 CircularProgressIndicator(
@@ -70,6 +84,7 @@ fun RecruitScreen() {
                 )
               }
             }
+
             is RecruitState.Main -> {
               val recruitList = (recruitState as RecruitState.Main).recruitList
               LazyColumn(
@@ -79,16 +94,21 @@ fun RecruitScreen() {
                 items(items = recruitList) {
                   RecruitListItem(
                     recruitModel = RecruitModel(
+                      it.id,
                       "[${it.typeOfEmployment}] ${it.recruitmentType}",
                       it.companyName,
                       listOf(it.requiredEducation, it.companyType),
                       it.addedWishlist,
                     ),
-                    onWishChange = { viewModel.onIsWishedChange(it) },
+                    onWishChange = {
+                      viewModel.onIsWishedChange(it.id, it.addedWishlist)
+                      it.addedWishlist = !it.addedWishlist
+                    },
                     modifier = Modifier.clickable { viewModel.showDetail(it) })
                 }
               }
             }
+
             is RecruitState.Failed -> {
               showToast(context, "유저 정보를 불러올 수 없습니다. 새로 고침 해주세요.")
               viewModel.resetRecruitState()

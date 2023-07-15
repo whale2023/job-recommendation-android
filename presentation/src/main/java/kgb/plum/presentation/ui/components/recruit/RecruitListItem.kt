@@ -29,11 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kgb.plum.domain.model.RecruitModel
+import kgb.plum.presentation.R
 import kgb.plum.presentation.ui.common.TagItem
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.Shapes
@@ -46,6 +48,8 @@ fun RecruitListItem(
   recruitModel: RecruitModel,
   onWishChange: () -> Unit,
 ) {
+  var isWished by remember { mutableStateOf(recruitModel.isWished) }
+
   Card(
     shape = Shapes.large,
     elevation = CardDefaults.cardElevation(Padding.small),
@@ -98,11 +102,19 @@ fun RecruitListItem(
         )
       }
       IconButton(
-        onClick = onWishChange, modifier = Modifier
+        onClick = {
+          onWishChange()
+          isWished = !isWished
+        }, modifier = Modifier
           .size(30.dp)
           .padding(end = Padding.large)
       ) {
-        Icon(if (recruitModel.isWished) Icons.Filled.Star else Icons.Outlined.Star, "Title Icon")
+        Icon(
+          painter = painterResource(id = R.drawable.clober),
+          contentDescription = "찜하기",
+          tint = if (!isWished) MaterialTheme.colors.surface else Color.Black
+        )
+//        Icon(if (isWished) Icons.Filled.Star else Icons.Outlined.Star, "Title Icon")
       }
     }
   }
@@ -116,6 +128,7 @@ fun PreviewWidget() {
     Surface {
       RecruitListItem(
         recruitModel = RecruitModel(
+          id = 1,
           title = "Title",
           company = "Company",
           tag = listOf("Tag", "Tag", "Tag"),

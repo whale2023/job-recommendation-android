@@ -10,8 +10,8 @@ class RecruitUseCase @Inject constructor(private val recruitRepository: RecruitR
     return this.recruitRepository.getRecruitList(page, sort)
   }
 
-  suspend fun changeIsWished(companyModel: CompanyModel) {
-    if(!companyModel.addedWishlist) recruitRepository.addWishList(companyModel.id)
-    else recruitRepository.deleteWishList(companyModel.id)
+  suspend fun changeIsWished(companyId: Int, isWished: Boolean) {
+    if(!isWished) recruitRepository.addWishList(companyId)
+    else recruitRepository.deleteWishList(companyId)
   }
 }

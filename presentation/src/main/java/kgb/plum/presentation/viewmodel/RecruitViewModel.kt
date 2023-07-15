@@ -75,9 +75,9 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
     onClick = { _navController.navigate("filter") }
   )
 
-  fun onIsWishedChange(companyModel: CompanyModel) {
+  fun onIsWishedChange(id: Int, isWished: Boolean) {
     viewModelScope.launch {
-      recruitUseCase.changeIsWished(companyModel)
+      recruitUseCase.changeIsWished(id, isWished)
     }
   }
 

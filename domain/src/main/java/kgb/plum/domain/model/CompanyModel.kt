@@ -20,6 +20,6 @@ data class CompanyModel(
     val registrationDate: String,
     val contactNumber: String,
     val countOfMemberWish: Int,
-    val addedWishlist: Boolean = false,
+    var addedWishlist: Boolean = false,
     var dDay: String = ""
 )

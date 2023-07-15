@@ -22,6 +22,7 @@ fun DetailScreen(companyModel: CompanyModel, navController: NavHostController) {
     }
     DetailHeader(
       recruitModel = RecruitModel(
+        companyModel.id,
         "[${companyModel.typeOfEmployment}] ${companyModel.recruitmentType}",
         companyModel.companyName,
         listOf(companyModel.requiredEducation, companyModel.companyType),

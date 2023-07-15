@@ -19,7 +19,7 @@ class DetailViewModel @Inject constructor(private val recruitUseCase: RecruitUse
 
   fun onIsWishedChange(companyModel: CompanyModel) {
     viewModelScope.launch {
-      recruitUseCase.changeIsWished(companyModel)
+      recruitUseCase.changeIsWished(companyModel.id, companyModel.addedWishlist)
     }
   }
 
