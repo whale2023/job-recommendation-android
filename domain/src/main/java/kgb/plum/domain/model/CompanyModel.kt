@@ -1,5 +1,7 @@
 package kgb.plum.domain.model
 
+import java.io.Serializable
+
 data class CompanyModel(
     val id: Int,
     val applicationDate: String,
@@ -22,4 +24,4 @@ data class CompanyModel(
     val countOfMemberWish: Int,
     var addedWishlist: Boolean = false,
     var dDay: String = ""
-)
+): Serializable

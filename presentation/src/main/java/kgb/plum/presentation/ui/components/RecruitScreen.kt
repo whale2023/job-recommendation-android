@@ -101,8 +101,7 @@ fun RecruitScreen() {
                       it.addedWishlist,
                     ),
                     onWishChange = {
-                      viewModel.onIsWishedChange(it.id, it.addedWishlist)
-                      it.addedWishlist = !it.addedWishlist
+                      viewModel.onIsWishedChange(it)
                     },
                     modifier = Modifier.clickable { viewModel.showDetail(it) })
                 }
