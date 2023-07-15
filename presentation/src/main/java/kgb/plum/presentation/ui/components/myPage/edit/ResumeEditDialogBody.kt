@@ -13,16 +13,19 @@ import androidx.compose.material.icons.rounded.Money
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kgb.plum.domain.model.CareerModel
 import kgb.plum.domain.model.ResumeModel
 import kgb.plum.presentation.model.EducationType
 import kgb.plum.presentation.model.MajorType
 import kgb.plum.presentation.model.WorkType
+import kgb.plum.presentation.ui.common.dialog.CustomDialogController
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
 import kgb.plum.presentation.ui.common.dropdown.CustomTextDropdownMenu
 import kgb.plum.presentation.ui.common.dropdown.CustomTitledTextDropdownMenu
@@ -65,7 +68,7 @@ fun ResumeEditDialogBody(
     Spacer(modifier = Modifier.padding(Padding.large))
     CustomTitledTextDropdownMenu(
       controller = workTypeDropdownMenuController,
-      title = "선호 개약 방식",
+      title = "선호 계약 방식",
       modifier = Modifier.fillMaxWidth()
     )
     Row(
@@ -89,5 +92,34 @@ fun ResumeEditDialogBody(
         Text(text = "수정")
       }
     }
+  }
+}
+
+@Preview
+@Composable
+fun ResumeEditDialogBodyPreview() {
+  val resumeMajorDropdownMenuController = CustomDropdownMenuController(
+    MajorType.ETC,
+    MajorType.values().toList(),
+  )
+  val resumeEducationDropdownMenuController = CustomDropdownMenuController(
+    EducationType.MIDDLE,
+    EducationType.values().toList(),
+  )
+  val resumeWorkTypeDropdownMenuController = CustomDropdownMenuController(
+    WorkType.ETC,
+    WorkType.values().toList(),
+  )
+  val resumePreferIncomeTextFieldController = CustomTextFieldController()
+
+  Scaffold {
+    it
+    ResumeEditDialogBody(
+      majorDropdownMenuController = resumeMajorDropdownMenuController,
+      educationDropdownMenuController = resumeEducationDropdownMenuController,
+      workTypeDropdownMenuController = resumeWorkTypeDropdownMenuController,
+      preferIncomeTextFieldController = resumePreferIncomeTextFieldController,
+      onEditButtonClicked = {}
+    )
   }
 }
