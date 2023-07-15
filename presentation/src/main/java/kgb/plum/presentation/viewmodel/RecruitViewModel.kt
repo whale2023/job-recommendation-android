@@ -1,6 +1,7 @@
 package kgb.plum.presentation.viewmodel
 
 import android.util.Log
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,12 +31,19 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private val _recruitState: MutableStateFlow<RecruitState> = MutableStateFlow(RecruitState.Loading)
   val recruitState: StateFlow<RecruitState> = _recruitState
 
-  init{
+  init {
     getRecruitList()
   }
 
   fun init(navController: NavHostController) {
     this._navController = navController
+  }
+
+  fun refreshRecruitList() {
+    page = 0
+    viewModelScope.launch {
+      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
+    }
   }
 
   fun getRecruitList() {
@@ -47,16 +55,21 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private fun addRecruitList(result: EntityWrapper<List<CompanyModel>>) {
     when (result) {
       is EntityWrapper.Success -> {
-        Log.d("??", "recruit success")
-        val newRecruitList = if(_recruitState.value is RecruitState.Main) (_recruitState.value as RecruitState.Main).recruitList.toMutableList() else mutableListOf()
-        newRecruitList.addAll(result.entity)
-        _recruitState.value = RecruitState.Main(
-          newRecruitList
-        )
+        if(page == 1) {
+          _recruitState.value = RecruitState.Main(
+            result.entity
+          )
+        } else {
+          val newRecruitList =
+            if (_recruitState.value is RecruitState.Main) (_recruitState.value as RecruitState.Main).recruitList.toMutableList() else mutableListOf()
+          newRecruitList.addAll(result.entity)
+          _recruitState.value = RecruitState.Main(
+            newRecruitList
+          )
+        }
       }
 
       is EntityWrapper.Fail -> {
-        Log.d("??", "recruit error")
         RecruitState.Failed(
           reason = result.error.message ?: "Unknown error"
         )

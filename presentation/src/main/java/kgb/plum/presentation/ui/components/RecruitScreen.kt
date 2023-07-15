@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +37,8 @@ import kgb.plum.presentation.ui.components.recruit.DetailScreen
 import kgb.plum.presentation.ui.components.recruit.FilterScreen
 import kgb.plum.presentation.ui.components.recruit.RecruitHeader
 import kgb.plum.presentation.ui.components.recruit.RecruitListItem
+import kgb.plum.presentation.util.isAtBottom
+import kgb.plum.presentation.util.isAtTop
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.RecruitViewModel
 
@@ -46,6 +49,21 @@ fun RecruitScreen() {
   viewModel.init(navController)
 
   val recruitState by viewModel.recruitState.collectAsStateWithLifecycle()
+
+  val recruitListState = rememberLazyListState()
+  val isAtBottom = recruitListState.isAtBottom()
+  val isAtTop = recruitListState.isAtTop()
+  LaunchedEffect(isAtBottom, isAtTop) {
+    if(isAtBottom) {
+      Log.d("RecruitScreen", "isAtBottom")
+      viewModel.getRecruitList()
+    }
+    if(isAtTop) {
+      Log.d("RecruitScreen", "isAtTop")
+      viewModel.refreshRecruitList()
+
+    }
+  }
 
   val context = LocalContext.current
 
@@ -60,7 +78,7 @@ fun RecruitScreen() {
                 recruitList.size,
                 viewModel.sortDropdownMenuController,
                 viewModel.filterDropdownMenuController,
-                viewModel::getRecruitList
+                viewModel::refreshRecruitList
               )
             }
 
@@ -69,7 +87,7 @@ fun RecruitScreen() {
                 0,//recruitList.size,
                 viewModel.sortDropdownMenuController,
                 viewModel.filterDropdownMenuController,
-                viewModel::getRecruitList
+                viewModel::refreshRecruitList
               )
             }
           }
@@ -89,7 +107,8 @@ fun RecruitScreen() {
               val recruitList = (recruitState as RecruitState.Main).recruitList
               LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                state = recruitListState
               ) {
                 items(items = recruitList) {
                   RecruitListItem(

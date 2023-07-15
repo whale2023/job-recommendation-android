@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,7 +49,7 @@ fun RecruitHeader(
     )
     Spacer(modifier = Modifier.width(Padding.medium))
     IconButton(onClick = addList) {
-      Icon(Icons.Rounded.Add, "추가 버튼")
+      Icon(Icons.Rounded.Search, "검색 버튼")
     }
   }
 }
