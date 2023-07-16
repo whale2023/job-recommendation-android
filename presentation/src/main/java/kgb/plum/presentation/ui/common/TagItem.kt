@@ -2,6 +2,7 @@ package kgb.plum.presentation.ui.common
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import kgb.plum.presentation.ui.theme.colors
 fun TagItem(
   modifier: Modifier = Modifier,
   backgroundColor: Color,
+  borderColor: Color = backgroundColor,
   tag: String,
   onClick: (() -> Unit)? = null
 ) {
@@ -32,7 +34,8 @@ fun TagItem(
       .wrapContentSize()
       .clip(Shapes.extraLarge)
       .background(color = backgroundColor)
-      .clickable(onClick = onClick ?: {})
+      .border(width = 1.dp, color = borderColor, shape = Shapes.extraLarge)
+      .clickable(enabled = onClick != null, onClick = onClick ?: {})
   ) {
     Text(
       text = tag,

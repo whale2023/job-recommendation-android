@@ -1,6 +1,5 @@
 package kgb.plum.presentation.ui.components.recruit
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,12 +45,32 @@ fun FilterScreen(navController: NavHostController) {
       )
       Spacer(modifier = Modifier.height(Padding.xlarge))
       FlowRow(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+        viewModel.filterList.filter { viewModel.selectedFilterMap[it.toString()] ?: false }
+          .forEach { it ->
+            TagItem(
+              backgroundColor = MaterialTheme.colors.background,
+              tag = it.toString(),
+              modifier = Modifier.padding(Padding.small),
+              onClick = { viewModel.updateIsFilterSelect(it.toString()) }
+            )
+          }
+      }
+      Spacer(modifier = Modifier.height(Padding.xlarge))
+      FlowRow(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
         viewModel.filterList.forEach { it ->
-          TagItem(
+          if (viewModel.selectedFilterMap[it.toString()] == false)
+            TagItem(
+              backgroundColor = MaterialTheme.colors.surface,
+              borderColor = MaterialTheme.colors.background,
+              tag = it.toString(),
+              modifier = Modifier.padding(Padding.small),
+              onClick = { viewModel.updateIsFilterSelect(it.toString()) }
+            )
+          else TagItem(
             backgroundColor = MaterialTheme.colors.background,
             tag = it.toString(),
             modifier = Modifier.padding(Padding.small),
-            onClick = { Log.d("FilterScreen", "$it clicked") }
+            onClick = { viewModel.updateIsFilterSelect(it.toString()) }
           )
         }
       }

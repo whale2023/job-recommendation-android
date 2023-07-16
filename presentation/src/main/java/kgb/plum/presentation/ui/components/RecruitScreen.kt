@@ -69,12 +69,12 @@ fun RecruitScreen() {
   val swipeTopRefreshState = rememberPullRefreshState(
     refreshing = isRefreshing,
     onRefresh = {
-      viewModel.refreshRecruitList()
+      viewModel.refreshRecruitList(viewModel.sortDropdownMenuController.currentValue.toQueryString())
     })
 
   LaunchedEffect(isAtBottom) {
     if (isAtBottom) {
-      viewModel.getRecruitList()
+      viewModel.getRecruitList(viewModel.sortDropdownMenuController.currentValue.toQueryString())
     }
   }
 

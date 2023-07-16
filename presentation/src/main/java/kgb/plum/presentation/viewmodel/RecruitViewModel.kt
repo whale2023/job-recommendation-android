@@ -13,7 +13,6 @@ import kgb.plum.domain.model.state.RecruitState
 import kgb.plum.domain.usecase.RecruitUseCase
 import kgb.plum.presentation.model.SortType
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,8 +31,6 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
 
   private val _isRefreshing = MutableStateFlow(false)
   val isRefreshing = _isRefreshing.asStateFlow()
-  private val _isGetting = MutableStateFlow(false)
-  val isGetting = _isGetting.asStateFlow()
 
 
   init {
@@ -44,20 +41,18 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
     this._navController = navController
   }
 
-  fun refreshRecruitList() {
+  fun refreshRecruitList(sort: String = "desc") {
     page = 0
     viewModelScope.launch {
       _isRefreshing.value = true
-      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
+      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = sort))
       _isRefreshing.value = false
     }
   }
 
-  fun getRecruitList() {
+  fun getRecruitList(sort: String = "desc") {
     viewModelScope.launch {
-      _isGetting.value = true
-      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
-      _isGetting.value = false
+      addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = sort))
     }
   }
 
@@ -87,7 +82,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   }
 
   val sortDropdownMenuController = CustomDropdownMenuController(
-    SortType.NEWEST,
+    SortType.DESC,
     SortType.values().toList(),
   )
 
