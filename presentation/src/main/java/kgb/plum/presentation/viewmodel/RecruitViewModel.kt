@@ -1,6 +1,9 @@
 package kgb.plum.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -12,7 +15,9 @@ import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.model.state.RecruitState
 import kgb.plum.domain.usecase.RecruitUseCase
 import kgb.plum.presentation.model.SortType
+import kgb.plum.presentation.model.TagType
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
+import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,9 +37,23 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private val _isRefreshing = MutableStateFlow(false)
   val isRefreshing = _isRefreshing.asStateFlow()
 
+  private val _filterList = mutableStateListOf<TagType>()
+  val filterList: List<TagType> = _filterList
+
+  private val _selectedFilterMap = mutableStateMapOf<String, Boolean>()
+  val selectedFilterMap: Map<String, Boolean> = _selectedFilterMap
+
+  val searchTextFieldController: CustomTextFieldController =
+    CustomTextFieldController(::updateFilterList)
+
+  var isFilterOpen: Boolean by mutableStateOf(false)
 
   init {
     refreshRecruitList()
+    updateFilterList()
+    _filterList.map {
+      _selectedFilterMap[it.toString()] = false
+    }
   }
 
   fun init(navController: NavHostController) {
@@ -59,7 +78,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private fun addRecruitList(result: EntityWrapper<List<CompanyModel>>) {
     when (result) {
       is EntityWrapper.Success -> {
-        if(page == 1) {
+        if (page == 1) {
           _recruitState.value = RecruitState.Main(
             result.entity
           )
@@ -89,7 +108,7 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   val filterDropdownMenuController = CustomDropdownMenuController(
     "필터",
     listOf("필터"),
-    onClick = { _navController.navigate("filter") }
+    onClick = ::setIsFilterOpen
   )
 
   fun onIsWishedChange(companyModel: CompanyModel) {
@@ -109,5 +128,21 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
 
   fun resetRecruitState() {
     _recruitState.value = RecruitState.Loading
+  }
+
+  private fun updateFilterList() {
+    _filterList.clear()
+    _filterList.addAll(TagType.values().filter {
+      it.toString().contains(searchTextFieldController.text)
+    })
+  }
+
+  fun updateIsFilterSelect(value: String) {
+    _selectedFilterMap[value] = !(_selectedFilterMap[value] ?: true)
+  }
+
+  fun setIsFilterOpen() {
+    isFilterOpen = !isFilterOpen
+    Log.d("RecruitViewModel.setIsFilterOpen", isFilterOpen.toString())
   }
 }
