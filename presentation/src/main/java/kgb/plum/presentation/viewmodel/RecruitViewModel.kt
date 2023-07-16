@@ -1,7 +1,5 @@
 package kgb.plum.presentation.viewmodel
 
-import android.util.Log
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,13 +9,14 @@ import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.EntityWrapper
-import kgb.plum.domain.model.state.MyPageState
 import kgb.plum.domain.model.state.RecruitState
 import kgb.plum.domain.usecase.RecruitUseCase
 import kgb.plum.presentation.model.SortType
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,8 +30,14 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   private val _recruitState: MutableStateFlow<RecruitState> = MutableStateFlow(RecruitState.Loading)
   val recruitState: StateFlow<RecruitState> = _recruitState
 
+  private val _isRefreshing = MutableStateFlow(false)
+  val isRefreshing = _isRefreshing.asStateFlow()
+  private val _isGetting = MutableStateFlow(false)
+  val isGetting = _isGetting.asStateFlow()
+
+
   init {
-    getRecruitList()
+    refreshRecruitList()
   }
 
   fun init(navController: NavHostController) {
@@ -42,13 +47,17 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
   fun refreshRecruitList() {
     page = 0
     viewModelScope.launch {
+      _isRefreshing.value = true
       addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
+      _isRefreshing.value = false
     }
   }
 
   fun getRecruitList() {
     viewModelScope.launch {
+      _isGetting.value = true
       addRecruitList(recruitUseCase.getRecruitList(page = page++, sort = "desc"))
+      _isGetting.value = false
     }
   }
 

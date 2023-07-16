@@ -12,11 +12,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,11 +46,13 @@ import kgb.plum.presentation.ui.components.recruit.DetailScreen
 import kgb.plum.presentation.ui.components.recruit.FilterScreen
 import kgb.plum.presentation.ui.components.recruit.RecruitHeader
 import kgb.plum.presentation.ui.components.recruit.RecruitListItem
+import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.util.isAtBottom
 import kgb.plum.presentation.util.isAtTop
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.RecruitViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecruitScreen() {
   val viewModel = hiltViewModel<RecruitViewModel>()
@@ -52,16 +63,18 @@ fun RecruitScreen() {
 
   val recruitListState = rememberLazyListState()
   val isAtBottom = recruitListState.isAtBottom()
-  val isAtTop = recruitListState.isAtTop()
-  LaunchedEffect(isAtBottom, isAtTop) {
-    if(isAtBottom) {
-      Log.d("RecruitScreen", "isAtBottom")
-      viewModel.getRecruitList()
-    }
-    if(isAtTop) {
-      Log.d("RecruitScreen", "isAtTop")
-      viewModel.refreshRecruitList()
 
+  val isRefreshing by viewModel.isRefreshing.collectAsState()
+
+  val swipeTopRefreshState = rememberPullRefreshState(
+    refreshing = isRefreshing,
+    onRefresh = {
+      viewModel.refreshRecruitList()
+    })
+
+  LaunchedEffect(isAtBottom) {
+    if (isAtBottom) {
+      viewModel.getRecruitList()
     }
   }
 
@@ -105,25 +118,35 @@ fun RecruitScreen() {
 
             is RecruitState.Main -> {
               val recruitList = (recruitState as RecruitState.Main).recruitList
-              LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.fillMaxSize(),
-                state = recruitListState
+              Box(
+                Modifier
+                  .pullRefresh(swipeTopRefreshState)
               ) {
-                items(items = recruitList) {
-                  RecruitListItem(
-                    recruitModel = RecruitModel(
-                      it.id,
-                      "[${it.typeOfEmployment}] ${it.recruitmentType}",
-                      it.companyName,
-                      listOf(it.requiredEducation, it.companyType),
-                      it.addedWishlist,
-                    ),
-                    onWishChange = {
-                      viewModel.onIsWishedChange(it)
-                    },
-                    modifier = Modifier.clickable { viewModel.showDetail(it) })
+                LazyColumn(
+                  verticalArrangement = Arrangement.spacedBy(10.dp),
+                  modifier = Modifier.fillMaxSize(),
+                  state = recruitListState
+                ) {
+                  items(items = recruitList) {
+                    RecruitListItem(
+                      recruitModel = RecruitModel(
+                        it.id,
+                        "[${it.typeOfEmployment}] ${it.recruitmentType}",
+                        it.companyName,
+                        listOf(it.requiredEducation, it.companyType),
+                        it.addedWishlist,
+                      ),
+                      onWishChange = {
+                        viewModel.onIsWishedChange(it)
+                      },
+                      modifier = Modifier.clickable { viewModel.showDetail(it) })
+                  }
                 }
+                PullRefreshIndicator(
+                  refreshing = isRefreshing,
+                  state = swipeTopRefreshState,
+                  modifier = Modifier.align(Alignment.TopCenter)
+                )
               }
             }
 

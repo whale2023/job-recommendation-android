@@ -40,7 +40,7 @@ fun LazyListState.isAtTop(): Boolean {
         val viewportHeight = layoutInfo.viewportEndOffset + layoutInfo.viewportStartOffset
 
         (firstVisibleItem.index == 0 &&
-            firstVisibleItem.offset + firstVisibleItem.size <= viewportHeight)
+            firstVisibleItem.offset >= 0)
       }
     }
   }.value
