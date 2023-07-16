@@ -5,5 +5,6 @@ data class RecommendItemData(
     val company: String,
     val occupation: String,
     val recommendReason: List<String>,
-    val score: Double
+    val score: Double,
+    val isWish: Boolean =false
 )

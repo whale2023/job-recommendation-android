@@ -67,6 +67,8 @@ import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.ui.theme.nameMedium
 import kgb.plum.presentation.util.showToast
 import kgb.plum.presentation.viewmodel.HomeViewModel
+import kgb.plum.presentation.viewmodel.WishListViewModel
+import kgb.plum.presentation.viewmodel.WishListViewModel_Factory
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
@@ -81,6 +83,7 @@ val images = listOf(
 @Composable
 fun HomeScreen(navController: NavHostController){
     val viewModel = hiltViewModel<HomeViewModel>()
+    val wishViewModel = hiltViewModel<WishListViewModel>()
     var name by remember { mutableStateOf("")}
     val userState by viewModel.userState.collectAsStateWithLifecycle()
     val rankState by viewModel.rankState.collectAsStateWithLifecycle()
@@ -136,10 +139,12 @@ fun HomeScreen(navController: NavHostController){
                             .build(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(200.dp).clickable {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(images[index]))
-                            context.startActivity(intent)
-                        }
+                        modifier = Modifier
+                            .height(200.dp)
+                            .clickable {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(images[index]))
+                                context.startActivity(intent)
+                            }
                     )
                 }
             )
@@ -201,26 +206,42 @@ fun HomeScreen(navController: NavHostController){
             ){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(Padding.large).clickable {
-                        navController.navigate(MainMenu.WishList.name) {
-                            popUpTo(MainMenu.Home.name) {inclusive = true}
+                    modifier = Modifier
+                        .padding(Padding.large)
+                        .clickable {
+                            navController.navigate(MainMenu.WishList.name) {
+                                popUpTo(MainMenu.Home.name) { inclusive = true }
+                            }
                         }
-                    }
                 ) {
                     WishItem(MaterialTheme.colors.background,
                         if(wishList.isNotEmpty()) wishList[0].companyName else null,
                         if(wishList.isNotEmpty()) wishList[0].recruitmentType else null,
-                        if(wishList.isNotEmpty()) wishList[0].dDay else null)
+                        if(wishList.isNotEmpty()) wishList[0].dDay else null,
+                        if(wishList.isNotEmpty()) wishList[0] else null,
+                        if(wishList.isNotEmpty()) wishViewModel else null,
+                        isHome = true
+                        )
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.secondary,
                         if(wishList.size>1) wishList[1].companyName else null,
                         if(wishList.size>1) wishList[1].recruitmentType else null,
-                        if(wishList.size>1) wishList[1].dDay else null)
+                        if(wishList.size>1) wishList[1].dDay else null,
+                        if(wishList.size>1) wishList[1] else null,
+                        if(wishList.size>1) wishViewModel else null,
+                        isHome = true
+                    )
+
+
                     Spacer(modifier = Modifier.size(Padding.large))
                     WishItem(MaterialTheme.colors.background,
                         if(wishList.size>2) wishList[2].companyName else null,
                         if(wishList.size>2) wishList[2].recruitmentType else null,
-                        if(wishList.size>2) wishList[2].dDay else null)
+                        if(wishList.size>2) wishList[2].dDay else null,
+                        if(wishList.size>2) wishList[2] else null,
+                        if(wishList.size>2) wishViewModel else null,
+                        isHome = true
+                    )
                 }
 
 

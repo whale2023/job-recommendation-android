@@ -10,13 +10,14 @@ import kgb.plum.domain.model.RecommendItemData
 import kgb.plum.domain.model.UserInfo
 import kgb.plum.domain.model.state.WishRecommendState
 import kgb.plum.domain.usecase.RecommendUseCase
+import kgb.plum.domain.usecase.WishUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecommendViewModel @Inject constructor(private val recommendUseCase: RecommendUseCase) : ViewModel()  {
+class RecommendViewModel @Inject constructor(private val recommendUseCase: RecommendUseCase, private val wishUseCase: WishUseCase) : ViewModel()  {
     val recommendList = mutableStateListOf<RecommendItemData>()
     private val _wishListBaseRecommendState: MutableStateFlow<WishRecommendState> = MutableStateFlow(WishRecommendState.Loading)
     val wishListBaseRecommendState : StateFlow<WishRecommendState> = _wishListBaseRecommendState
@@ -27,6 +28,16 @@ class RecommendViewModel @Inject constructor(private val recommendUseCase: Recom
 
     private fun getRecommendList() {
         recommendList.addAll(recommendUseCase.getRecommendList())
+    }
+
+    fun changeWishStatus(isWish: Boolean, id: Int){
+        viewModelScope.launch {
+            if(isWish){
+                wishUseCase.addWishItem(id)
+            }else{
+                wishUseCase.deleteWishItem(id)
+            }
+        }
     }
 
     fun getWishListBaseRecommend(){
