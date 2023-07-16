@@ -1,5 +1,6 @@
 package kgb.plum.data.repository
 
+import android.util.Log
 import kgb.plum.data.mapper.CompanyMapper
 import kgb.plum.data.network.WishApi
 import kgb.plum.domain.model.CompanyModel
@@ -25,6 +26,7 @@ class WishRepositoryImpl @Inject constructor(
 
     override suspend fun deleteWishItem(jobAnnouncementId: Int): Int {
         val result = wishApi.deleteWishItem(jobAnnouncementId)
+        Log.d("테스트", "result.toString()")
         return result.code
     }
 }

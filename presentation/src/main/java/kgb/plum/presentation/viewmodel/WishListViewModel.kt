@@ -4,8 +4,11 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.himanshoe.kalendar.KalendarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.EntityWrapper
 import kgb.plum.domain.model.WishItemData
 import kgb.plum.domain.model.state.WishState
@@ -21,13 +24,34 @@ import javax.inject.Inject
 class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase) : ViewModel() {
     val eventList = mutableStateListOf<KalendarEvent>()
 
+    private val _isChanged: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isChanged: StateFlow<Boolean> = _isChanged
+
     private val _wishState: MutableStateFlow<WishState> = MutableStateFlow(WishState.Loading)
     val wishState: StateFlow<WishState> = _wishState
+
+    private lateinit var _navController: NavHostController
 
     init {
         getWishList()
     }
 
+
+    fun changeWishStatus(isWish: Boolean, item: CompanyModel) {
+        viewModelScope.launch {
+            if (!isWish) {
+                wishUseCase.addWishItem(item.id)
+            } else {
+                wishUseCase.deleteWishItem(item.id)
+                Log.d("테스트", "위시리스트 삭제 요청")
+                if(_wishState.value is WishState.Main){
+                    (_wishState.value as WishState.Main).wishList.remove(item)
+                    Log.d("테스트", "위시리스트에서 제거")
+                }
+            }
+            _isChanged.value = !_isChanged.value
+        }
+    }
 
     private fun getWishList() {
         viewModelScope.launch {
@@ -36,7 +60,7 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
             _wishState.value = when(result) {
                 is EntityWrapper.Success -> {
                     WishState.Main(
-                        wishList = result.entity
+                        wishList = result.entity.toMutableList()
                     )
                 }
                 is EntityWrapper.Fail -> {
@@ -52,6 +76,7 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
             updateEventList()
         }
     }
+
 
     private fun updateEventList() {
         eventList.clear()

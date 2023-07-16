@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.himanshoe.kalendar.Kalendar
 import com.himanshoe.kalendar.KalendarEvents
 import com.himanshoe.kalendar.KalendarType
@@ -46,10 +47,12 @@ import com.himanshoe.kalendar.color.KalendarColor
 import com.himanshoe.kalendar.color.KalendarColors
 import com.himanshoe.kalendar.ui.component.header.KalendarTextKonfig
 import com.himanshoe.kalendar.ui.firey.DaySelectionMode
+import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.state.WishState
 import kgb.plum.presentation.R
 import kgb.plum.presentation.model.MainMenu
 import kgb.plum.presentation.ui.common.WishItem
+import kgb.plum.presentation.ui.components.recruit.DetailScreen
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
@@ -61,11 +64,13 @@ import kotlinx.datetime.LocalDate
 fun WishListScreen() {
     val viewModel = hiltViewModel<WishListViewModel>()
     val isCalendar = remember { mutableStateOf(false)}
+    val isDetail = remember { mutableStateOf(false) }
+    val isChanged by viewModel.isChanged.collectAsStateWithLifecycle()
     val wishListState by viewModel.wishState.collectAsStateWithLifecycle()
     if(isCalendar.value){
         WishListForCalendar(isCalendar, viewModel, wishListState)
     } else {
-        WishListForListScreen(isCalendar, viewModel, wishListState)
+        WishListForListScreen(isCalendar, viewModel, wishListState, isChanged, isDetail)
     }
 }
 
@@ -73,59 +78,90 @@ fun WishListScreen() {
 fun WishListForListScreen(
     isCalendar : MutableState<Boolean>,
     viewModel : WishListViewModel,
-    wishListState : WishState
+    wishListState : WishState,
+    isChanged: Boolean,
+    isDetail: MutableState<Boolean>
 ) {
-    Column(
-        modifier = Modifier
-            .background(MaterialTheme.colors.surface)
-            .fillMaxSize()
-            .padding(Padding.large)
-    ){
-        Text(
-            text = "위시리스트",
-            style = MaterialTheme.typography.headlineSmall
+    val company = remember { mutableStateOf(
+        CompanyModel(
+            id = 0,
+            applicationDate = "",
+            recruitmentPeriod = "",
+            companyName = "",
+            recruitmentType = "",
+            typeOfEmployment = "",
+            formOfWages = "",
+            wage = "",
+            entryForm = "",
+            requiredExperience = "",
+            requiredEducation = "",
+            majorField = "",
+            requiredCredentials = "",
+            businessAddress = "",
+            companyType = "",
+            responsibleAgency = "",
+            contactNumber = "",
+            countOfMemberWish = 0,
+            registrationDate = "",
+            addedWishlist = false
         )
-        Spacer(modifier = Modifier.size(Padding.large))
-        when(wishListState){
-            is WishState.Loading -> {
-                Box (
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-            is WishState.Main -> {
-                LazyColumn(
-                    contentPadding = PaddingValues(vertical = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    itemsIndexed(wishListState.wishList) { index, item ->
-                        WishItem(color = if(index%2==0) MaterialTheme.colors.background else MaterialTheme.colors.secondary, company = item.companyName, occupation = item.recruitmentType, dDay = item.dDay)
+    ) }
+    if(!isDetail.value){
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colors.surface)
+                .fillMaxSize()
+                .padding(Padding.large)
+        ){
+            Text(
+                text = "위시리스트",
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Spacer(modifier = Modifier.size(Padding.large))
+            when(wishListState){
+                is WishState.Loading -> {
+                    Box (
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
-            }
-            is WishState.Failed -> {
+                is WishState.Main -> {
+                    LazyColumn(
+                        contentPadding = PaddingValues(vertical = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        itemsIndexed(wishListState.wishList) { index, item ->
+                            WishItem(color = if(index%2==0) MaterialTheme.colors.background else MaterialTheme.colors.secondary, company = item.companyName, occupation = item.recruitmentType, dDay = item.dDay, item = item, viewModel = viewModel, isDetail = isDetail, detailInfo  = company)
+                        }
+                    }
+                }
+                is WishState.Failed -> {
 
+                }
             }
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Row {
             Spacer(modifier = Modifier.weight(1f))
-            FloatingActionButton(
-                onClick = { isCalendar.value = true },
-                shape = CircleShape,
-                containerColor = MaterialTheme.colors.primary,
-                contentColor = MaterialTheme.colors.surface,
-                elevation = FloatingActionButtonDefaults.elevation(10.dp),
-                modifier = Modifier
-                    .size(70.dp),
-            ) {
-                Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "달력", modifier = Modifier.fillMaxSize(0.7f))
+            Row {
+                Spacer(modifier = Modifier.weight(1f))
+                FloatingActionButton(
+                    onClick = { isCalendar.value = true },
+                    shape = CircleShape,
+                    containerColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.surface,
+                    elevation = FloatingActionButtonDefaults.elevation(10.dp),
+                    modifier = Modifier
+                        .size(70.dp),
+                ) {
+                    Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "달력", modifier = Modifier.fillMaxSize(0.7f))
+                }
             }
         }
+    } else {
+        DetailScreen(companyModel = company.value, navController = rememberNavController(), isDetail = isDetail, isRecruit = false)
     }
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)

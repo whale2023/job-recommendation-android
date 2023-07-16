@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase, pr
             _wishState.value = when(result) {
                 is EntityWrapper.Success -> {
                     WishState.Main(
-                        wishList = result.entity
+                        wishList = result.entity.toMutableList()
                     )
                 }
                 is EntityWrapper.Fail -> {
