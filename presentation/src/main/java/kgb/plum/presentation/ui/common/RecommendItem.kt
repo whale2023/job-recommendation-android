@@ -132,13 +132,7 @@ fun RecommendItem(
                 )
             }
         }   
-    }
 }
 
-@Preview
-@Composable
-fun RecommendItemPreview() {
-    WhaleTheme{
-        RecommendItem(MaterialTheme.colors.background, "금오컴피니", "영업직", listOf("10년 이상 무사고", "집이랑 가까우요", "연봉이 높아요", "주변에 건강센터가 있어요"), 82.6)
-    }
-}
+
+
