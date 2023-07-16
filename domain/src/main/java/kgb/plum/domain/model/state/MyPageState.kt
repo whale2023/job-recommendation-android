@@ -5,7 +5,7 @@ import kgb.plum.domain.model.ResumeModel
 sealed class MyPageState {
   object Loading: MyPageState()
   class Main(
-    val resumeModel: ResumeModel
+    var resumeModel: ResumeModel
   ) : MyPageState()
   class Failed(
     val reason: String

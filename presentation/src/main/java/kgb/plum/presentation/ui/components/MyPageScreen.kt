@@ -16,6 +16,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,6 +40,8 @@ import kgb.plum.presentation.ui.components.myPage.edit.CareerEditDialogBody
 import kgb.plum.presentation.ui.components.myPage.edit.CareerEditDialogHeader
 import kgb.plum.presentation.ui.components.myPage.edit.CertificationEditDialogBody
 import kgb.plum.presentation.ui.components.myPage.edit.CertificationEditDialogHeader
+import kgb.plum.presentation.ui.components.myPage.edit.PreferKeywordEditDialogBody
+import kgb.plum.presentation.ui.components.myPage.edit.PreferKeywordEditDialogHeader
 import kgb.plum.presentation.ui.components.myPage.edit.ResumeEditDialogBody
 import kgb.plum.presentation.ui.components.myPage.edit.ResumeEditDialogHeader
 import kgb.plum.presentation.ui.components.myPage.userInfo.UserInfoBody
@@ -54,9 +58,9 @@ fun MyPageScreen() {
   val resumeState by viewModel.resumeState.collectAsStateWithLifecycle()
 
   val context = LocalContext.current
-  when(resumeState){
+  when (resumeState) {
     is MyPageState.Loading -> {
-      Box (
+      Box(
         modifier = Modifier.fillMaxSize()
       ) {
         CircularProgressIndicator(
@@ -64,6 +68,7 @@ fun MyPageScreen() {
         )
       }
     }
+
     is MyPageState.Main -> {
       val resumeModel = (resumeState as MyPageState.Main).resumeModel
       val scrollState = rememberScrollState()
@@ -82,8 +87,22 @@ fun MyPageScreen() {
               educationDropdownMenuController = viewModel.resumeEducationDropdownMenuController,
               preferIncomeTextFieldController = viewModel.resumePreferIncomeTextFieldController,
               workTypeDropdownMenuController = viewModel.resumeWorkTypeDropdownMenuController,
-              onEditButtonClicked = { viewModel.editResume(resumeModel) }
+              preferJobMajorDropdownMenuController = viewModel.preferJobDropdownMenuController,
+              onEditButtonClicked = {preferJob -> viewModel.editResume(resumeModel, preferJob) }
             )
+          },
+        )
+        CustomDialog(
+          controller = viewModel.preferKeywordDialogController,
+          header = {
+            PreferKeywordEditDialogHeader(
+              textFieldController = viewModel.preferKeywordTextFieldController
+            )
+          },
+          body = {
+            PreferKeywordEditDialogBody(
+              preferKeywordList = viewModel.preferKeywordList,
+              onAddButtonClicked = { value -> viewModel.addPreferKeyword(resumeModel, value) })
           },
         )
         CustomDialog(
@@ -116,10 +135,13 @@ fun MyPageScreen() {
           IconButton(onClick = viewModel.resumeDialogController::show) {
             Icon(Icons.Rounded.Edit, "Edit Icon")
           }
+          IconButton(onClick = { viewModel.saveResume(resumeModel) }) {
+            Icon(Icons.Rounded.Save, "Save Icon")
+          }
         }
         UserInfoHeader(
           name = viewModel.userInfoModel.username,
-          description = "${resumeModel.major} 전공으로 연봉 ${resumeModel.preferIncome}정도의 ${resumeModel.workType}을 희망합니다.",
+          description = "${resumeModel.major} 전공으로 연봉 ${resumeModel.preferIncome}정도의 ${resumeModel.workType}인 ${resumeModel.preferJob}을 희망합니다.",
           modifier = Modifier.padding(Padding.large)
         )
         Spacer(modifier = Modifier.height(Padding.xlarge))
@@ -128,6 +150,17 @@ fun MyPageScreen() {
           address = viewModel.userInfoModel.addressInfo,
           email = viewModel.userInfoModel.email,
           phoneNumber = "010 2630 4097",
+          modifier = Modifier
+            .background(Color.White)
+            .padding(Padding.large)
+        )
+        Spacer(modifier = Modifier.height(Padding.small))
+        UserInfoBodyListItem(
+          title = "선호 키워드",
+          leading = Icons.Rounded.Bookmark,
+          valueList = resumeModel.preferKeywords,
+          onAddButtonClicked = { viewModel.preferKeywordDialogController.show(viewModel::initPreferKeywordList) },
+          onRemoveButtonClicked = { index -> viewModel.removePreferKeyword(resumeModel, index) },
           modifier = Modifier
             .background(Color.White)
             .padding(Padding.large)
@@ -147,9 +180,14 @@ fun MyPageScreen() {
         UserInfoBodyListItem(
           title = "경력",
           leading = Icons.Rounded.Bookmark,
-          valueList = resumeModel.careerList.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
+          valueList = resumeModel.careers.map { careerModel -> "${careerModel.category} ${careerModel.period}년" },
           onAddButtonClicked = { viewModel.careerDialogController.show() },
-          onRemoveButtonClicked = { careerModel -> viewModel.removeCareer(resumeModel, careerModel) },
+          onRemoveButtonClicked = { careerModel ->
+            viewModel.removeCareer(
+              resumeModel,
+              careerModel
+            )
+          },
           modifier = Modifier
             .clip(shape = RoundedCornerShape(bottomEnd = 12.dp, bottomStart = 12.dp))
             .background(Color.White)
@@ -157,9 +195,14 @@ fun MyPageScreen() {
         )
       }
     }
+
     is MyPageState.Failed -> {
       showToast(context, "유저 정보를 불러올 수 없습니다. 새로 고침 해주세요.")
-      viewModel.resetResumeState()
+      Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+        IconButton(onClick = viewModel::resetResumeState) {
+          Icon(Icons.Rounded.Refresh, "Refresh Icon")
+        }
+      }
     }
   }
 }

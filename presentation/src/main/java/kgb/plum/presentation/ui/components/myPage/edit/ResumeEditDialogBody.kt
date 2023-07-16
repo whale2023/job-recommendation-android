@@ -18,20 +18,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kgb.plum.domain.model.CareerModel
-import kgb.plum.domain.model.ResumeModel
+import kgb.plum.presentation.model.CareerMajorType
 import kgb.plum.presentation.model.EducationType
 import kgb.plum.presentation.model.MajorType
 import kgb.plum.presentation.model.WorkType
-import kgb.plum.presentation.ui.common.dialog.CustomDialogController
 import kgb.plum.presentation.ui.common.dropdown.CustomDropdownMenuController
-import kgb.plum.presentation.ui.common.dropdown.CustomTextDropdownMenu
 import kgb.plum.presentation.ui.common.dropdown.CustomTitledTextDropdownMenu
 import kgb.plum.presentation.ui.common.textField.CustomTextField
 import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import kgb.plum.presentation.ui.theme.Padding
+import kgb.plum.presentation.ui.theme.Typography
 import kgb.plum.presentation.ui.theme.colors
 
 @Composable
@@ -40,8 +39,13 @@ fun ResumeEditDialogBody(
   educationDropdownMenuController: CustomDropdownMenuController<EducationType>,
   preferIncomeTextFieldController: CustomTextFieldController,
   workTypeDropdownMenuController: CustomDropdownMenuController<WorkType>,
-  onEditButtonClicked: () -> Unit
+  preferJobMajorDropdownMenuController: CustomDropdownMenuController<CareerMajorType>,
+  onEditButtonClicked: (String) -> Unit
 ) {
+  val preferJobMiddleDropdownMenuController = CustomDropdownMenuController(
+    preferJobMajorDropdownMenuController.currentValue.getMiddleType()[0],
+    preferJobMajorDropdownMenuController.currentValue.getMiddleType(),
+  )
   Column {
     Spacer(modifier = Modifier.padding(Padding.large))
     Row(
@@ -71,6 +75,26 @@ fun ResumeEditDialogBody(
       title = "선호 계약 방식",
       modifier = Modifier.fillMaxWidth()
     )
+    Spacer(modifier = Modifier.padding(Padding.large))
+    CustomTitledTextDropdownMenu(
+      controller = preferJobMajorDropdownMenuController,
+      title = "선호 직종 - 대분류",
+      modifier = Modifier.fillMaxWidth()
+    )
+    Spacer(modifier = Modifier.padding(Padding.large))
+    CustomTitledTextDropdownMenu(
+      controller = preferJobMiddleDropdownMenuController,
+      title = "선호 직종 - 중분류",
+      modifier = Modifier.fillMaxWidth()
+    )
+    Spacer(modifier = Modifier.padding(Padding.large))
+    Text(
+      text = "선호 연봉",
+      style = Typography.bodySmall.copy(
+        color = MaterialTheme.colors.textSubColor,
+        fontWeight = FontWeight.Bold
+      )
+    )
     Row(
       verticalAlignment = Alignment.Bottom,
       horizontalArrangement = Arrangement.SpaceBetween,
@@ -84,12 +108,16 @@ fun ResumeEditDialogBody(
       }
       Spacer(modifier = Modifier.padding(Padding.large))
       Button(
-        onClick = onEditButtonClicked,
+        onClick = {
+          onEditButtonClicked(
+            if (preferJobMiddleDropdownMenuController.currentValue.toString() == "해당 없음") "${preferJobMajorDropdownMenuController.currentValue}/" else "${preferJobMajorDropdownMenuController.currentValue}/${preferJobMiddleDropdownMenuController.currentValue}"
+          )
+        },
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.tertiary),
         modifier = Modifier.padding(0.dp)
       ) {
-        Text(text = "수정")
+        Text(text = "저장")
       }
     }
   }
@@ -110,6 +138,10 @@ fun ResumeEditDialogBodyPreview() {
     WorkType.ETC,
     WorkType.values().toList(),
   )
+  val preferJobDropdownMenuController = CustomDropdownMenuController(
+    CareerMajorType.BUSINESS_ADMINISTRATION_CLERICAL,
+    CareerMajorType.values().toList(),
+  )
   val resumePreferIncomeTextFieldController = CustomTextFieldController()
 
   Scaffold {
@@ -119,6 +151,7 @@ fun ResumeEditDialogBodyPreview() {
       educationDropdownMenuController = resumeEducationDropdownMenuController,
       workTypeDropdownMenuController = resumeWorkTypeDropdownMenuController,
       preferIncomeTextFieldController = resumePreferIncomeTextFieldController,
+      preferJobMajorDropdownMenuController = preferJobDropdownMenuController,
       onEditButtonClicked = {}
     )
   }

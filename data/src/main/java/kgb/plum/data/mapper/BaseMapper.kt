@@ -6,7 +6,7 @@ import kgb.plum.domain.model.EntityWrapper
 
 abstract class BaseMapper<M, E> {
 
-    fun mapFromResult(result: ApiResult<M>, extra: Any? = null): EntityWrapper<E> =
+    open fun mapFromResult(result: ApiResult<M>, extra: Any? = null): EntityWrapper<E> =
         when (result.response) {
             is ApiResponse.Success -> getSuccess(model = result.response.data, extra = extra)
             is ApiResponse.Fail -> getFailure(error = result.response.error)

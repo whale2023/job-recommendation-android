@@ -1,7 +1,8 @@
 package kgb.plum.presentation.viewmodel
 
-import android.util.Log
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import kgb.plum.presentation.model.CareerMajorType
 import kgb.plum.presentation.model.CertificationType
 import kgb.plum.presentation.model.EducationType
 import kgb.plum.presentation.model.MajorType
+import kgb.plum.presentation.model.PreferKeywordType
 import kgb.plum.presentation.model.WorkType
 import kgb.plum.presentation.ui.common.textField.CustomTextFieldController
 import kgb.plum.presentation.ui.common.dialog.CustomDialogController
@@ -31,6 +33,9 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
 
   fun resetResumeState() {
     _resumeState.value = MyPageState.Loading
+    viewModelScope.launch {
+      setResume(myPageUseCase.getResume())
+    }
   }
 
   init {
@@ -40,19 +45,26 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
   }
 
   private fun setResume(result: EntityWrapper<ResumeModel>) {
-    when(result) {
+    when (result) {
       is EntityWrapper.Success -> {
-        Log.d("??", "resume success ${result.entity}")
         _resumeState.value = MyPageState.Main(
           result.entity
         )
       }
+
       is EntityWrapper.Fail -> {
-        Log.d("??", "resume error")
-        MyPageState.Failed(
+        _resumeState.value = MyPageState.Failed(
           reason = result.error.message ?: "Unknown error"
         )
       }
+    }
+  }
+
+  fun saveResume(resumeModel: ResumeModel) {
+    viewModelScope.launch {
+      myPageUseCase.deleteResume()
+      myPageUseCase.saveResume(resumeModel)
+//      setResume(myPageUseCase.getResume())
     }
   }
 
@@ -72,7 +84,12 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     WorkType.ETC,
     WorkType.values().toList(),
   )
-  val resumePreferIncomeTextFieldController = CustomTextFieldController()
+  val preferJobDropdownMenuController = CustomDropdownMenuController(
+    CareerMajorType.BUSINESS_ADMINISTRATION_CLERICAL,
+    CareerMajorType.values().toList(),
+  )
+  val resumePreferIncomeTextFieldController =
+    CustomTextFieldController(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
 
   val careerDialogController = CustomDialogController()
   val careerMajorDropdownMenuController = CustomDropdownMenuController(
@@ -84,24 +101,58 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     listOf(1, 2, 3, 4, 5),
   )
 
+  fun editResume(resumeModel: ResumeModel, preferJob: String) {
+    resumeDialogController.close()
+    _resumeState.value = MyPageState.Main(
+      resumeModel = resumeModel.copy(
+        major = resumeMajorDropdownMenuController.currentValue.toString(),
+        education = resumeEducationDropdownMenuController.currentValue.toString(),
+        preferIncome = resumePreferIncomeTextFieldController.text.toLong(),
+        workType = resumeWorkTypeDropdownMenuController.currentValue.toString(),
+        preferJob = preferJob,
+      )
+    )
+  }
+
+  val preferKeywordDialogController = CustomDialogController()
+  val preferKeywordTextFieldController = CustomTextFieldController(::updatePreferKeywordList)
+  private val _preferKeywordList = mutableStateListOf<PreferKeywordType>()
+  val preferKeywordList: List<PreferKeywordType> = _preferKeywordList
+
+  fun initPreferKeywordList() {
+    _preferKeywordList.clear()
+    preferKeywordTextFieldController.clearText()
+    _preferKeywordList.addAll(PreferKeywordType.values())
+  }
+
+  fun updatePreferKeywordList() {
+    _preferKeywordList.clear()
+    _preferKeywordList.addAll(PreferKeywordType.values().filter {
+      it.toString().contains(preferKeywordTextFieldController.text)
+    })
+  }
+
+  fun addPreferKeyword(resumeModel: ResumeModel, value: PreferKeywordType) {
+    preferKeywordDialogController.close()
+    val newPreferKeywords = resumeModel.preferKeywords.toMutableList()
+    newPreferKeywords.add(value.toString())
+    _resumeState.value = MyPageState.Main(
+      resumeModel.copy(preferKeywords = newPreferKeywords)
+    )
+  }
+
+  fun removePreferKeyword(resumeModel: ResumeModel, index: Int) {
+    val newPreferKeywords = resumeModel.preferKeywords.toMutableList()
+    newPreferKeywords.removeAt(index)
+    _resumeState.value = MyPageState.Main(
+      resumeModel.copy(preferKeywords = newPreferKeywords)
+    )
+  }
+
   val certificationDialogController = CustomDialogController()
   val certificationTextFieldController = CustomTextFieldController(::updateCertificationList)
   private val _certificationList = mutableStateListOf<CertificationType>()
   val certificationList: List<CertificationType> = _certificationList
-
-  fun editResume(resumeModel: ResumeModel) {
-    resumeDialogController.close()
-    viewModelScope.launch {
-      myPageUseCase.saveResume(
-        resumeModel.copy(
-          major = resumeMajorDropdownMenuController.currentValue.toString(),
-          education = resumeMajorDropdownMenuController.currentValue.toString(),
-          preferIncome = resumePreferIncomeTextFieldController.text.toLong(),
-          workType = resumeWorkTypeDropdownMenuController.currentValue.toString()
-        )
-      )
-    }
-  }
 
   fun initCertificationList() {
     _certificationList.clear()
@@ -120,33 +171,33 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     certificationDialogController.close()
     val newCertifications = resumeModel.certifications.toMutableList()
     newCertifications.add(value.toString())
-    viewModelScope.launch {
-      setResume(myPageUseCase.saveResume(resumeModel.copy(certifications = newCertifications)))
-    }
+    _resumeState.value = MyPageState.Main(
+      resumeModel.copy(certifications = newCertifications)
+    )
   }
 
   fun removeCertification(resumeModel: ResumeModel, index: Int) {
     val newCertifications = resumeModel.certifications.toMutableList()
     newCertifications.removeAt(index)
-    viewModelScope.launch {
-      setResume(myPageUseCase.saveResume(resumeModel.copy(certifications = newCertifications)))
-    }
+    _resumeState.value = MyPageState.Main(
+      resumeModel.copy(certifications = newCertifications)
+    )
   }
 
   fun addCareer(resumeModel: ResumeModel, careerModel: CareerModel) {
     careerDialogController.close()
-    val newCareers = resumeModel.careerList.toMutableList()
+    val newCareers = resumeModel.careers.toMutableList()
     newCareers.add(careerModel)
-    viewModelScope.launch {
-      setResume(myPageUseCase.saveResume(resumeModel.copy(careerList = newCareers)))
-    }
+    _resumeState.value = MyPageState.Main(
+      resumeModel.copy(careers = newCareers)
+    )
   }
 
   fun removeCareer(resumeModel: ResumeModel, index: Int) {
-    val newCareers = resumeModel.careerList.toMutableList()
+    val newCareers = resumeModel.careers.toMutableList()
     newCareers.removeAt(index)
-    viewModelScope.launch {
-      setResume(myPageUseCase.saveResume(resumeModel.copy(careerList = newCareers)))
-    }
+    _resumeState.value = MyPageState.Main(
+      resumeModel.copy(careers = newCareers)
+    )
   }
 }

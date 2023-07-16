@@ -13,4 +13,8 @@ class MyPageUseCase @Inject constructor(private val myPageRepository: MyPageRepo
   suspend fun saveResume(resumeModel: ResumeModel): EntityWrapper<ResumeModel> {
     return myPageRepository.saveResume(resumeModel)
   }
+
+  suspend fun deleteResume(): EntityWrapper<ResumeModel> {
+    return myPageRepository.deleteResume()
+  }
 }
