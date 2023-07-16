@@ -26,18 +26,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kgb.plum.domain.usecase.WishUseCase
 import kgb.plum.presentation.R
 import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.ui.theme.WhaleTheme
 import kgb.plum.presentation.ui.theme.colors
+import kgb.plum.presentation.viewmodel.RecommendViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun RecommendItem(
     color : Color,
+    id : Int,
     company: String,
     occupation: String,
     recommendReason: List<String>,
-    score: Double
+    score: Double,
+    isWished: Boolean = false,
+    viewModel: RecommendViewModel
 ) {
     Card(
         colors = CardDefaults.cardColors(color),
@@ -66,10 +74,10 @@ fun RecommendItem(
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(
-                    onClick = {}
+                    onClick = {viewModel.changeWishStatus(isWished, id)}
                 ){
                     Icon(
-                        painter = painterResource(id = R.drawable.clober),
+                        painter = if(isWished) painterResource(id = R.drawable.clober) else painterResource(id = R.drawable.selected_clover),
                         contentDescription = "찜하기",
                         tint = MaterialTheme.colors.surface
                     )
@@ -95,8 +103,9 @@ fun RecommendItem(
                                 painter = painterResource(id = R.drawable.thumb_up),
                                 contentDescription = "추천",
                                 tint = MaterialTheme.colors.primary,
-                                modifier = Modifier.size(18.dp)
+                                modifier = Modifier.size(18.dp),
                             )
+                            }
                             Spacer(modifier = Modifier.size(6.dp))
                             Text(
                                 text = item,
@@ -123,13 +132,7 @@ fun RecommendItem(
                 )
             }
         }   
-    }
 }
 
-@Preview
-@Composable
-fun RecommendItemPreview() {
-    WhaleTheme{
-        RecommendItem(MaterialTheme.colors.background, "금오컴피니", "영업직", listOf("10년 이상 무사고", "집이랑 가까우요", "연봉이 높아요", "주변에 건강센터가 있어요"), 82.6)
-    }
-}
+
+

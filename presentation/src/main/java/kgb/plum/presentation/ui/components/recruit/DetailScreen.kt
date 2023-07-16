@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -17,11 +18,13 @@ import kgb.plum.presentation.ui.theme.Padding
 import kgb.plum.presentation.viewmodel.DetailViewModel
 
 @Composable
-fun DetailScreen(companyModel: CompanyModel, navController: NavHostController) {
+fun DetailScreen(companyModel: CompanyModel, navController: NavHostController, isRecruit: Boolean = true, isDetail: MutableState<Boolean>?=null) {
   val viewModel = hiltViewModel<DetailViewModel>()
   viewModel.init(navController)
   Column {
-    IconButton(onClick = viewModel::navigatePop) {
+    IconButton(onClick = {
+      if(isRecruit) viewModel.navigatePop() else {isDetail?.value = false}
+    }) {
       Icon(Icons.Rounded.ArrowBack, "종료 버튼")
     }
     DetailHeader(

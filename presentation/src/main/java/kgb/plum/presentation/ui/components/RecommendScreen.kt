@@ -47,11 +47,14 @@ fun RecommendScreen() {
         ){
             items(viewModel.recommendList) { item ->
                 RecommendItem(
+                    id = item.id,
                     color = if(item.id%2==1) MaterialTheme.colors.background else MaterialTheme.colors.secondary,
                     company = item.company,
                     occupation = item.occupation,
                     recommendReason = item.recommendReason,
-                    score = item.score
+                    score = item.score,
+                    isWished = item.isWish,
+                    viewModel = viewModel
                 )
             }
         }
