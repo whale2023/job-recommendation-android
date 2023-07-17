@@ -125,7 +125,7 @@ class MyPageViewModel @Inject constructor(private val myPageUseCase: MyPageUseCa
     _preferKeywordList.addAll(PreferKeywordType.values())
   }
 
-  fun updatePreferKeywordList() {
+  private fun updatePreferKeywordList() {
     _preferKeywordList.clear()
     _preferKeywordList.addAll(PreferKeywordType.values().filter {
       it.toString().contains(preferKeywordTextFieldController.text)

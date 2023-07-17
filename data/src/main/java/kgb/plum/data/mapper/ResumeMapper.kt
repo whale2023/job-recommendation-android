@@ -10,7 +10,7 @@ class ResumeMapper @Inject constructor() : BaseMapper<ResumeModel, ResumeModel>(
   override fun getSuccess(model: ResumeModel?, extra: Any?): EntityWrapper.Success<ResumeModel> {
     return model?.let {
       EntityWrapper.Success(
-        entity = model
+        entity = if(model.careers == null) model.copy(careers = listOf()) else model
       )
     } ?: EntityWrapper.Success(
       entity = ResumeModel("", "", 0, "", listOf(), listOf(), listOf(), "")

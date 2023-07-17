@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kgb.plum.domain.model.RecruitModel
@@ -87,9 +88,11 @@ fun RecruitListItem(
         }
         Text(
           text = recruitModel.title,
+          maxLines = 2,
+          overflow = TextOverflow.Ellipsis,
           style = MaterialTheme.typography.displayMedium.copy(
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold
+            textAlign = TextAlign.Left,
+            fontWeight = FontWeight.Bold,
           )
         )
         Text(

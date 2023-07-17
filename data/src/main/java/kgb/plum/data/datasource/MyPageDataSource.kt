@@ -15,7 +15,6 @@ class MyPageDataSource @Inject constructor(
   private val networkRequestFactory: NetworkRequestFactory
 ): MyPageApi {
   override suspend fun saveResume(resumeModel: ResumeModel): ApiResult<ResumeModel> {
-    Log.d("MyPageDataSource.saveResume",NetworkRequestInfo.Builder(RequestType.POST).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).withBody(resumeModel).build().body.toString())
     return networkRequestFactory.create(
       url = "resumes",
       type = object : TypeToken<ResumeModel>(){}.type,
@@ -35,7 +34,7 @@ class MyPageDataSource @Inject constructor(
     return networkRequestFactory.create(
       url = "resumes",
       type = object : TypeToken<ResumeModel>(){}.type,
-      requestInfo = NetworkRequestInfo.Builder(RequestType.GET).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
+      requestInfo = NetworkRequestInfo.Builder(RequestType.DELETE).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
   }
 }
