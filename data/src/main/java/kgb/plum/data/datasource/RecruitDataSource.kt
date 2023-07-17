@@ -5,6 +5,7 @@ import kgb.plum.data.library.model.ApiResult
 import kgb.plum.data.library.model.NetworkRequestInfo
 import kgb.plum.data.library.model.RequestType
 import kgb.plum.data.library.retrofit.NetworkRequestFactory
+import kgb.plum.data.model.CompanyResponse
 import kgb.plum.data.network.RecruitApi
 import kgb.plum.domain.LoginTokenData
 import kgb.plum.domain.model.CompanyModel
@@ -16,10 +17,10 @@ import javax.inject.Inject
 class RecruitDataSource @Inject constructor(
   private val networkRequestFactory: NetworkRequestFactory
 ): RecruitApi  {
-  override suspend fun getRecruitList(page: Int, sort: String): ApiResult<List<CompanyModel>> {
+  override suspend fun getRecruitList(page: Int, sort: String): ApiResult<List<CompanyResponse>> {
     return networkRequestFactory.create(
       url = "announcement?page=${page}&size=10&sort=id,$sort",
-      type = object : TypeToken<List<CompanyModel>>(){}.type,
+      type = object : TypeToken<List<CompanyResponse>>(){}.type,
       requestInfo = NetworkRequestInfo.Builder(RequestType.GET).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
   }

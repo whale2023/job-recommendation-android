@@ -6,4 +6,5 @@ data class RecruitModel(
   val company: String,
   val tag: List<String>,
   val isWished: Boolean,
+  val dDay: String,
 )

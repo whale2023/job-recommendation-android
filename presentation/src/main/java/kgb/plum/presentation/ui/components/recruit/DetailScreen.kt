@@ -39,6 +39,7 @@ fun DetailScreen(companyModel: CompanyModel, navController: NavHostController, i
           companyModel.companyName,
           listOf(companyModel.requiredEducation, companyModel.companyType),
           companyModel.addedWishlist,
+          companyModel.registrationDate
         ),
         onWishChange = { viewModel.onIsWishedChange(companyModel) },
       )

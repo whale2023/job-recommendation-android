@@ -1,17 +1,21 @@
 package kgb.plum.data.mapper
 
+import kgb.plum.data.model.CompanyResponse
 import kgb.plum.domain.model.CompanyModel
 import kgb.plum.domain.model.EntityWrapper
 import javax.inject.Inject
 
-class RecruitMapper @Inject constructor() : BaseMapper<List<CompanyModel>, List<CompanyModel>>() {
+class RecruitMapper @Inject constructor() : BaseMapper<List<CompanyResponse>, List<CompanyModel>>() {
   override fun getSuccess(
-    model: List<CompanyModel>?,
+    model: List<CompanyResponse>?,
     extra: Any?
   ): EntityWrapper.Success<List<CompanyModel>> {
     return model?.let {
       EntityWrapper.Success(
-        entity = model
+        entity = mutableListOf<CompanyModel>()
+          .apply {
+            addAll(model.map { it.toCompanyModel() })
+          }
       )
     } ?: EntityWrapper.Success(
       entity = listOf()

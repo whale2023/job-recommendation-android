@@ -187,6 +187,7 @@ fun RecruitScreen() {
                         it.companyName,
                         listOf(it.requiredEducation, it.companyType),
                         it.addedWishlist,
+                        it.dDay
                       ),
                       onWishChange = {
                         viewModel.onIsWishedChange(it)
