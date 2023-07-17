@@ -61,8 +61,7 @@ import kotlinx.datetime.LocalDate
 
 
 @Composable
-fun WishListScreen() {
-    val viewModel = hiltViewModel<WishListViewModel>()
+fun WishListScreen(viewModel: WishListViewModel) {
     val isCalendar = remember { mutableStateOf(false)}
     val isDetail = remember { mutableStateOf(false) }
     val isChanged by viewModel.isChanged.collectAsStateWithLifecycle()

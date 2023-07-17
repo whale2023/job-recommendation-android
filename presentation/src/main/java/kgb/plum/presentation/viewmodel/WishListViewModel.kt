@@ -32,10 +32,6 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
 
     private lateinit var _navController: NavHostController
 
-    init {
-        getWishList()
-    }
-
 
     fun changeWishStatus(isWish: Boolean, item: CompanyModel) {
         viewModelScope.launch {
@@ -53,7 +49,7 @@ class WishListViewModel @Inject constructor(private val wishUseCase: WishUseCase
         }
     }
 
-    private fun getWishList() {
+    fun getWishList() {
         viewModelScope.launch {
             _wishState.value = WishState.Loading
             val result = wishUseCase.getWishList()

@@ -1,5 +1,6 @@
 package kgb.plum.presentation.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -25,10 +26,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kgb.plum.presentation.ui.theme.colors
 import kgb.plum.presentation.ui.theme.menuSmall
+import kgb.plum.presentation.viewmodel.WishListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,8 +113,10 @@ fun MainNavigationBar(navController: NavHostController) {
     }
 }
 
+
 @Composable
 fun MainNavigationScreen(navController : NavHostController, paddingValues: PaddingValues) {
+    val wishListViewModel = hiltViewModel<WishListViewModel>()
     NavHost(
         navController = navController,
         startDestination = MainMenu.Home.name,
@@ -120,7 +132,8 @@ fun MainNavigationScreen(navController : NavHostController, paddingValues: Paddi
             RecommendScreen()
         }
         composable(route = MainMenu.WishList.name){
-            WishListScreen()
+            wishListViewModel.getWishList()
+            WishListScreen(viewModel = wishListViewModel)
         }
         composable(route = MainMenu.MyPage.name){
             MyPageScreen()
