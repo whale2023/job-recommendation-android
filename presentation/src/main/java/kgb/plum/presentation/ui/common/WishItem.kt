@@ -95,7 +95,6 @@ fun WishItem(
             Spacer(modifier = Modifier.size(Padding.medium))
             IconButton(onClick = {
                 if(!isHome) viewModel!!.changeWishStatus(isWish.value, item!!)
-                Log.d("테스트", "아이템 클릭")
             }) {
                 Icon(
                     painter = if (isWish.value) painterResource(id = R.drawable.clober) else painterResource(

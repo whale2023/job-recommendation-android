@@ -98,9 +98,9 @@ fun DetailHeader(recruitModel: RecruitModel, onWishChange: () -> Unit) {
         .padding(end = Padding.large)
     ) {
       Icon(
-        painter = painterResource(id = R.drawable.clober),
+        painter = if (!isWished) painterResource(id = R.drawable.clober) else painterResource(id = R.drawable.selected_clover),
         contentDescription = "찜하기",
-        tint = if (!isWished) MaterialTheme.colors.surface else Color.Black
+        tint = if (isWished) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
       )
     }
   }

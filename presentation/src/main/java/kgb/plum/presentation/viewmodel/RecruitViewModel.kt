@@ -143,6 +143,5 @@ class RecruitViewModel @Inject constructor(private val recruitUseCase: RecruitUs
 
   fun setIsFilterOpen() {
     isFilterOpen = !isFilterOpen
-    Log.d("RecruitViewModel.setIsFilterOpen", isFilterOpen.toString())
   }
 }

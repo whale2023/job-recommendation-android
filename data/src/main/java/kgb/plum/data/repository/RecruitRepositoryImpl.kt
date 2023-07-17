@@ -18,13 +18,11 @@ class RecruitRepositoryImpl @Inject constructor(
 
   override suspend fun addWishList(jobAnnouncementId: Int): Int {
     val result = recruitApi.addWishList(jobAnnouncementId)
-    Log.d("RecruitRepositoryImpl.addWishList()", result.code.toString())
     return result.code
   }
 
   override suspend fun deleteWishList(jobAnnouncementId: Int): Int {
     val result = recruitApi.deleteWishList(jobAnnouncementId)
-    Log.d("RecruitRepositoryImpl.addWishList()", result.code.toString())
     return result.code
   }
 }

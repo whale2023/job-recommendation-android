@@ -94,7 +94,7 @@ fun RecruitScreen() {
                 recruitList.size,
                 viewModel.sortDropdownMenuController,
                 viewModel.filterDropdownMenuController,
-                viewModel::refreshRecruitList
+                { viewModel.refreshRecruitList(viewModel.sortDropdownMenuController.currentValue.toQueryString()) }
               )
             }
 

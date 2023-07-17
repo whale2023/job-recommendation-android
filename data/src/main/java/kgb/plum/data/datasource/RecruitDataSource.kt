@@ -18,7 +18,7 @@ class RecruitDataSource @Inject constructor(
 ): RecruitApi  {
   override suspend fun getRecruitList(page: Int, sort: String): ApiResult<List<CompanyModel>> {
     return networkRequestFactory.create(
-      url = "announcement?page=${page}&size=10&sort=${sort}",
+      url = "announcement?page=${page}&size=10&sort=id,$sort",
       type = object : TypeToken<List<CompanyModel>>(){}.type,
       requestInfo = NetworkRequestInfo.Builder(RequestType.GET).withHeaders(mapOf("Authorization" to "Bearer ${LoginTokenData.atk}")).build()
     )
